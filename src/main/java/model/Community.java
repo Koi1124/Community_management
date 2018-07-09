@@ -8,6 +8,7 @@ public class Community {
     private String Syn;
     private String cStartTime;
     private String cStuNum;
+    private int state;
 
     public String getcName() {
         return cName;
@@ -37,6 +38,10 @@ public class Community {
         return Syn;
     }
 
+    public int getState() {
+        return state;
+    }
+
     public void setcName(String cName) {
         this.cName = cName;
     }
@@ -63,5 +68,9 @@ public class Community {
 
     public void setSyn(String syn) {
         Syn = syn;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }

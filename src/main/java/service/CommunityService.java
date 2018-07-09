@@ -44,5 +44,27 @@ public class CommunityService {
         return cNum;
     }
 
+    public List<Community> getManCommByID(String stuNum){
+
+        List<Community> communities=communityDAO.getManCommByUID(stuNum);
+        return communities;
+    }
+
+
+    public int getCountByUser(User user){
+        return communityDAO.getCountByUser(user);
+    }
+
+    public String getIdenByNum(String stuNum,String cNum) {
+        return communityDAO.getIdenByNum(stuNum,cNum);
+    }
+
+    public boolean doDeleteMum(String cNum,String stuNum) {
+        if (communityDAO.deleteUserFromComm(cNum,stuNum)>0){
+            return true;
+        }
+        else return false;
+    }
+
 
 }

@@ -67,7 +67,7 @@ public class doLogin extends HttpServlet {
                 dispatcher.forward(request,response);
             }
             else{
-                response.sendRedirect("index.jsp?error=yes");
+                response.sendRedirect("Login.jsp?error=yes");
             }
 
         }

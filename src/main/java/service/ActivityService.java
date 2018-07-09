@@ -33,8 +33,16 @@ public class ActivityService {
         return activity;
     }
 
-    public boolean isOperate() {
-        return false;
+    public boolean doDeleteActivity(String aNum) {
+        if (activityDAO.deleteActivity(aNum)>0){
+            return true;
+        }else return false;
+    }
+
+    public boolean doAddActivity(Activity activity) {
+        if (activityDAO.addActivity(activity)>0) {
+            return true;
+        }else return false;
     }
 
 }

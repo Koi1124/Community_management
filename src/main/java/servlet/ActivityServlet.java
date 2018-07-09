@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +29,18 @@ public class ActivityServlet extends HttpServlet {
 
         //addActivity(req,resp);
         String aNum=req.getParameter("aNum");
-        passActivityInfo(aNum,req,resp);
+        if (aNum!=null) {
+            String op=req.getParameter("type");
+            if (op==null){
+                passActivityInfo(aNum,req,resp);
+            } else if (op.equals("manage")) {
+                deleteActivity(aNum,req,resp);
+            }
+        }else {
+            addActivity(req,resp);
+        }
+
+
 
 
 
@@ -40,6 +52,7 @@ public class ActivityServlet extends HttpServlet {
         doGet(req,resp);
     }
 
+
     // 根据活动号传递活动信息
     public void passActivityInfo(String aNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         Activity activity=activityService.getAcByID(aNum);
@@ -49,6 +62,8 @@ public class ActivityServlet extends HttpServlet {
     }
 
     public void addActivity(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+
+        PrintWriter out=resp.getWriter();
         String aNum= UUID.randomUUID().toString().replaceAll("-","");
         String aTitle=req.getParameter("aTitle");
         String aContent=req.getParameter("aContent");
@@ -60,8 +75,7 @@ public class ActivityServlet extends HttpServlet {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        HttpSession session=req.getSession();
-        String cName=(String) session.getAttribute("cName");
+        String cName=req.getParameter("cName");
 
         Activity activity=new Activity();
         activity.setaNum(aNum);
@@ -70,11 +84,18 @@ public class ActivityServlet extends HttpServlet {
         activity.setaDate(publishTime);
         activity.setcName(cName);
 
-        activityService.addActivity(activity);
 
-        activities=activityService.getAcFromDB();
-        session.setAttribute("activityList",activities);
-        resp.sendRedirect("activity.jsp");
+
+        if (activityService.doAddActivity(activity)) {
+            activities=activityService.getAcFromDB();
+            HttpSession session=req.getSession();
+            session.setAttribute("alist",activities);
+            out.println("<script language = javascript>alert('CREATE SUCCESS');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }else {
+            out.println("<script language = javascript>alert('CREATE FAILED');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }
 
     }
 
@@ -82,7 +103,14 @@ public class ActivityServlet extends HttpServlet {
 
     }
 
-    public void deleteActivity(HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
-
+    public void deleteActivity(String aNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
+        PrintWriter out=resp.getWriter();
+        if (activityService.doDeleteActivity(aNum)) {
+            out.println("<script language = javascript>alert('DELETE SUCCESS');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }else {
+            out.println("<script language = javascript>alert('DELETE FAILED');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }
     }
 }

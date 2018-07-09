@@ -243,7 +243,13 @@
                                         <tr>
                                             <td><a href=User?stuNum=<%=user.getStuNum()%>><%=user.getuName()%></a></td>
                                             <td><%=user.getStuName()%></td>
-                                            <td><%=user.getStuNumber()%></td>
+                                            <%
+                                                String iden=communityService.getIdenByNum(user.getStuNum(),cNum);
+                                                if (iden.equals("1")){
+                                                    iden="社长";
+                                                }else iden="成员";
+                                            %>
+                                            <td><%=iden%></td>
                                         </tr>
                                         <%
                                             }
@@ -267,6 +273,7 @@
 									<h1 class="panel-title">留言</h1>
 								</div>
                             <form method="post" action="Remark">
+                                <input type="hidden" name="type" value="normal">
                                 <div class="panel-body">
                                     <table class="table">
                                         <thead>
@@ -304,7 +311,7 @@
                                     <textarea class="form-control" placeholder="请输入留言" rows="4" name="rContent"></textarea>
                                     <br>
                                     <input type="hidden" name="cNum" value="<%=cNum%>">
-                                    <input type="submit" name="type" class="btn btn-default" value="提交留言">
+                                    <input type="submit" name="submit" class="btn btn-default" value="提交留言">
                                 </div>
                             </form>
 

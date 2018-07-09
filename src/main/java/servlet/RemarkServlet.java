@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -26,14 +27,21 @@ public class RemarkServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
 
-        String rNum=req.getParameter("rNum");
-        if (rNum!=null) {
-            passRemarkerInfo(rNum,req,resp);
-            return;
-        }
+
         String op=req.getParameter("type");
-        if (op.equals("提交留言")) {
-            addRemark(req,resp);
+        if (op==null||op.equals("normal")) {
+            String rNum=req.getParameter("rNum");
+            if (rNum!=null) {
+                passRemarkerInfo(rNum,req,resp);
+                return;
+            }
+            if (req.getParameter("submit").equals("提交留言")) {
+                addRemark(req,resp);
+            }
+        }
+        if (op.equals("manage")) {
+            String rNum=req.getParameter("remarkDel");
+            deleteRemark(rNum,req,resp);
         }
 
     }
@@ -86,5 +94,16 @@ public class RemarkServlet extends HttpServlet {
 
         remarkService.addRemark(remark);
         resp.sendRedirect("remark.jsp");
+    }
+
+    public void deleteRemark(String rNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
+        PrintWriter out=resp.getWriter();
+        if (remarkService.doDeleteRemark(rNum)) {
+            out.println("<script language = javascript>alert('DELETE SUCCESS');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }else {
+            out.println("<script language = javascript>alert('DELETE FAILED');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }
     }
 }

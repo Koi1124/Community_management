@@ -1,4 +1,5 @@
-<%@ page import="model.User" %><%--
+<%@ page import="model.User" %>
+<%@ page import="service.CommunityService" %><%--
   Created by IntelliJ IDEA.
   User: Administrator
   Date: 2018/7/5
@@ -9,6 +10,8 @@
 <%
     User user=(User) request.getAttribute("UserInfo");
     User client=(User) session.getAttribute("curUser");
+    CommunityService communityService=new CommunityService();
+    int commCount=communityService.getCountByUser(user);
 %>
 <!doctype html>
 <html lang="en">
@@ -150,7 +153,7 @@
                                 <div class="row">
                                     <div class="col-md-4 stat-item">	</div>
                                     <div class="col-md-4 stat-item">
-                                        6 <span>参加的社团</span>
+                                        <%=commCount%> <span>参加的社团</span>
                                     </div>
                                     <div class="col-md-4 stat-item"></div>
                                 </div>

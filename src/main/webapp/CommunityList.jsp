@@ -161,6 +161,7 @@
                             <div align="right">
                                 <button type="button" class="btn btn-success">
                                     加入</button>
+                                <input type="hidden" name="type" value="normal">
                                 <button type="submit" name="getCNum" class="btn btn-info" value="<%=community.getcNum()%>">
                                     更多</button>
                             </div>

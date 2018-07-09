@@ -80,4 +80,36 @@ public interface CommunityDAO {
 
     String getCommIDByCName(String cName);
 
+    /**
+     *@Discription: 根据学号获取学生管理的社团列表（管理社团页用）
+     *@Param: [stuNum]
+     *@Return: java.util.List<model.Community>
+     *@Author:
+     */
+    List<Community> getManCommByUID(String stuNum);
+    
+    
+    /**
+     *@Discription: 根据社团号与学号删除指定社团的用户（管理社团页用）
+     *@Param: [cNum, stuNum]
+     *@Return: int
+     *@Author: 
+     */
+    int deleteUserFromComm(String cNum,String stuNum);
+
+    /**
+     *@Discription: 根据用户获取用户加入社团数量
+     *@Param: [user]
+     *@Return: int
+     *@Author:
+     */
+    int getCountByUser(User user);
+    
+    /**
+     *@Discription: 根据学号和社团号获取用户身份
+     *@Param: [stuNum, cNum]
+     *@Return: java.lang.String
+     *@Author: 
+     */
+    String getIdenByNum(String stuNum,String cNum);
 }

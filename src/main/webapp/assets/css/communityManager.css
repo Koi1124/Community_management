@@ -1,0 +1,24 @@
+.newact{
+
+	text-align:right; 
+	font-size:18px;
+}
+
+
+.newact a{
+
+	color:#00AAFF;
+}
+
+.newact a:hover{
+
+	color:#3287B2;
+}
+
+.trans{
+
+	color:#00AAFF;
+	background:transparent;
+	border:none;
+}
+

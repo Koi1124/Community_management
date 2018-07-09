@@ -9,6 +9,7 @@
     User client=(User)session.getAttribute("curUser");
     String stuNum=client.getStuNum();
     List<Community>communities=communityService.getCommByUID(stuNum);
+    List<Community>communityList=communityService.getManCommByID(stuNum);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html> 
@@ -155,7 +156,7 @@
                             </li>
                             <li>
                                 <a href="Community.jsp" class="active">
-                                    <i class="lnr lnr-code"></i>
+                                    <i class="lnr lnr-location"></i>
                                      <span>我的社团</span></a>
                             </li>
                           <li>
@@ -187,9 +188,10 @@
 
 							</ul>
 						</div>
-				<form action="Community">
+
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="join">
+                            <form action="Community">
                             <% 	for(int i=0;i<communities.size();i++){
 
                                 Community community=communities.get(i);
@@ -204,6 +206,7 @@
                                             <div align="right">
                                                 <button type="button" class="btn btn-danger">
                                                     <i class="btn-danger"></i>退出</button>
+                                                <input type="hidden" name="type" value="normal">
                                                 <button type="submit" name="getCNum" value="<%=community.getcNum()%>" class="btn btn-info">
                                                     更多</button>
                                             </div>
@@ -230,52 +233,55 @@
                                     </div>
                                 </div>
                             </div>
-                            <%
+                                    <%
                                 }
                             %>
+                            </form>
                         </div>
-                    </div>
-                </form>
+
 
                         <div class="tab-pane fade" id="manage">
                         <div class="row">
                             <!--一行-->
-                            
+
                             <div class="col-md-6"><!--我管理的-->
-                                <!--一行两个-->
-                                <div class="panel" style="border-radius: 5px 5px 0 0;">
-                                    <div style="background-color: #CCCCCC ;border-radius: 5px 5px 0 0;">
-                                        <div align="right">
-                                            <button type="button" class="btn btn-warning">
-                                                <i class="btn-warning"></i>管理</button>
-                                            <button type="button" class="btn btn-info">
-                                                <i class="fa fa-info-circle"></i>更多</button>
+                                <form action="Community">
+                                    <% 	for(int i=0;i<communityList.size();i++){
+
+                                        Community community=communityList.get(i);
+                                    %>
+                                    <!--一行两个-->
+                                    <div class="panel" style="border-radius: 5px 5px 0 0;">
+                                        <div style="background-color: #CCCCCC ;border-radius: 5px 5px 0 0;">
+                                            <div align="right">
+                                                <input type="hidden" name="type" value="manage">
+                                                <button type="submit" name="getCNum" value="<%=community.getcNum()%>" class="btn btn-warning">
+                                                    <i class="btn-warning"></i>管理</button>
+                                            </div>
+                                        </div>
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title"><%=community.getcName()%></h3></div>
+                                        <div class="panel-body">
+                                            <div style="display: inline-block ">
+                                                <img src="<%=community.getcSrc()%>" height="120" width="120" style="vertical-align: -120%" /></div>
+                                            <div style="display: inline-block  " align="left" >
+                                                <span class="label label-success">类型</span>
+                                                <a><%=community.getcType()%></a>
+                                                </br>
+                                                <span class="label label-warning">成立时间</span>
+                                                <a><%=community.getcStartTime()%></a>
+                                                </br>
+                                            </div>
+                                            <div></br>
+                                                <span class="label label-info">简介</span>
+                                                <a><%=community.getSyn()%></a>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">武汉大学</h3></div>
-                                    <div class="panel-body">
-                                        <div style="display: inline-block ">
-                                            <img src="assets/img/symbol.jpg" height="120" width="120" style="vertical-align: -120%" /></div>
-                                        <div style="display: inline-block  " align="left" >
-                                            <span class="label label-primary">编号</span>
-                                            <a>13456</a>
-                                            </br>
-                                            <span class="label label-success">类型</span>
-                                            <a>123456</a>
-                                            </br>
-                                            <span class="label label-warning">成立时间</span>
-                                            <a>2018年7月1日</a>
-                                            </br>
-                                            <span class="label label-danger">社长编号</span>
-                                            <a>123456</a>
-                                        </div>
-                                        <div></br>
-                                            <span class="label label-info">简介</span>
-                                            <a>武汉大学（Wuhan University），简称“武大”， 是一所中国著名的综合研究型大学,也是近代中 国建立最早的国立大学。1893年，湖广总督张 之洞上奏清政府设立自强学堂片，由此揭开了 近代中国高等教育的序幕。1896年更名方言学堂 1913年为六大国立高师之一的国立武昌高等师范 学校，1926年更名国立武昌中山大学，1928年定 名国立武汉大学，是民国四大名校之一。1949年 更为现名。至今已有125年办学历史。</a>
-                                        </div>
-                                    </div>
-                                </div>
+                                    <%
+                                        }
+                                    %>
+                                </form>
                             </div>
                         </div>
                         </div>

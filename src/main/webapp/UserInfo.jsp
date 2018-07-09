@@ -1,7 +1,8 @@
 <%@ page import="model.User" %>
 <%@ page import="dao.UserDAO" %>
 <%@ page import="dao.UserDAOImp" %>
-<%@ page import="service.UserService" %><%--
+<%@ page import="service.UserService" %>
+<%@ page import="service.CommunityService" %><%--
   Created by IntelliJ IDEA.
   User: ThinkPad
   Date: 2018/7/8
@@ -12,8 +13,10 @@
 <%
     User client=(User)session.getAttribute("curUser");
     UserService userService=new UserService();
+    CommunityService communityService=new CommunityService();
     String stuNum=client.getStuNum();
     User user=userService.getUserByID(stuNum);
+    int commCount=communityService.getCountByUser(client);
 %>
 <!doctype html>
 <html lang="en">
@@ -153,7 +156,7 @@
                                 <div class="row">
                                     <div class="col-md-4 stat-item">	</div>
                                     <div class="col-md-4 stat-item">
-                                        6 <span>参加的社团</span>
+                                        <%=commCount%> <span>参加的社团</span>
                                     </div>
                                     <div class="col-md-4 stat-item"></div>
                                 </div>

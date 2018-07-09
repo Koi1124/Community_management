@@ -204,7 +204,7 @@
                                                          {
                                                     %>
                                                     <li>
-                                                        <a href="Activity?aNum=<%=temp.getaNum()%>" target="_blank"><%=temp.getaContent()%></a>
+                                                        <a href="Activity?aNum=<%=temp.getaNum()%>" target="_blank"><%=temp.getaTitle()%></a>
                                                         <span><%=temp.getaDate()%></span></li>
                                                     <%
                                                         }

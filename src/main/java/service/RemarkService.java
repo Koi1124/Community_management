@@ -28,6 +28,12 @@ public class RemarkService {
         return user;
     }
 
+    public boolean doDeleteRemark(String rNum) {
+        if (remarkDAO.deleteRemark(rNum)>0) {
+            return true;
+        }else return false;
+    }
+
     public void addRemark(Remark remark){
         remarkDAO.addRemark(remark);
     }

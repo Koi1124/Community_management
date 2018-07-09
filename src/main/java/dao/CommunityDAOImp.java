@@ -168,4 +168,81 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
         }
         return cNum;
     }
+
+    @Override
+    public List<Community> getManCommByUID(String stuNum) {
+
+        String sql="select c.* from community c,stu_comm sc where c.cNum=sc.cNum and stuIden='1' and c.stuNum=?";
+        List<Community> commlist=new ArrayList<>();
+        try{
+            getConnection();
+            PreparedStatement preparedStatement=conn.prepareStatement(sql);
+            preparedStatement.setString(1, stuNum);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            while (resultSet.next()){
+                Community comm =new Community();
+                comm.setcName(resultSet.getString("cName"));
+                comm.setcNum(resultSet.getString("cNum"));
+                comm.setcSrc(resultSet.getString("cSrc"));
+                comm.setcStuNum(resultSet.getString("stuNum"));
+                comm.setcStartTime(resultSet.getString("cStartTime"));
+                comm.setcType(resultSet.getString("cType"));
+                comm.setSyn(resultSet.getString("Syn"));
+                commlist.add(comm);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return commlist;
+    }
+
+    @Override
+    public int deleteUserFromComm(String cNum, String stuNum) {
+
+        String sql="delete from stu_comm where cNum=? and stuNum=?";
+        Object[] objects=new Object[2];
+        objects[0]=cNum;
+        objects[1]=stuNum;
+
+        return executeUpdata(sql,objects);
+    }
+
+    @Override
+    public int getCountByUser(User user) {
+        String sql="select count(*) commCount from stu_comm where stuNum=?";
+        int count=0;
+        try {
+            getConnection();
+            PreparedStatement preparedStatement=conn.prepareStatement(sql);
+            preparedStatement.setString(1,user.getStuNum());
+            ResultSet resultSet=preparedStatement.executeQuery();
+            while (resultSet.next()){
+                count=resultSet.getInt("commCount");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return count;
+    }
+
+    @Override
+    public String getIdenByNum(String stuNum, String cNum) {
+
+        String sql="select stuIden from stu_comm where stuNum=? and cNum=?";
+        String identity="";
+        try{
+            getConnection();
+            PreparedStatement preparedStatement=conn.prepareStatement(sql);
+            preparedStatement.setString(1,stuNum);
+            preparedStatement.setString(2,cNum);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            while (resultSet.next()){
+                identity=resultSet.getString("stuIden");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return identity;
+    }
 }
