@@ -133,12 +133,27 @@ public class doLogin extends HttpServlet {
             dispatcher.forward(request,response);
         }
 
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
-    
+    private boolean createApply(HttpServletRequest request, HttpServletResponse response,CommunityService communityService) throws ServletException, IOException{
+        Community comm = new Community();
+        comm.setcName(request.getParameter("cname"));
+        UUID uuid = UUID.randomUUID();
+        String cNum=uuid.toString().replaceAll("-","");
+        comm.setcNum(cNum);
+        comm.setcType(request.getParameter("ctype"));
+        comm.setSyn(request.getParameter("syn"));
+        comm.setState(0);
+        HttpSession session = request.getSession();
+        User cur = (User)request.getAttribute("curUser");
+        comm.setcStuNum(cur.getStuNum());
+
+        return communityService.createApply(comm);
+    }
 
     private boolean adminLogin(HttpServletRequest request, HttpServletResponse response,User user) throws ServletException, IOException {
         String userName = request.getParameter("username");
