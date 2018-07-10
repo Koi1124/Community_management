@@ -40,6 +40,10 @@ public interface CommunityDAO {
      */
     List<Community> communityInformation(String keyword);
 
+    boolean isHave(Community comm);    //检查该社团是否存在
+
+    boolean createApply(Community comm);    //提交社团申请
+
 
     /**
      *@Discription: 根据用户ID获取用户加入的社团列表
