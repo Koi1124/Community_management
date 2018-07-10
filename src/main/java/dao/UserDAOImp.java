@@ -29,6 +29,66 @@ public class UserDAOImp extends DBconnImp implements UserDAO {
         return checkisHave(sql,obj,user,0);
     }
 
+     public void initUserList(List<User> ulist)
+    {
+        String sql = "select * from userforcomm order by uName DESC ";
+        getConnection();
+        try {
+            ps = conn.prepareStatement(sql);
+            ResultSet rs;
+            rs = ps.executeQuery();
+            while (rs.next())
+            {
+                User tUser = new User();
+                tUser.setStuNum(rs.getString("stuNum"));
+                tUser.setuName(rs.getString("uName"));
+                tUser.setStuName(rs.getString("stuName"));
+                ulist.add(tUser);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public int deleteUser(String deleteNum) {
+        String sql="delete from userforcomm where stuNum=?";
+        Object[] obj=new Object[1];
+        obj[0]=deleteNum;
+
+        String sql2="delete from stu_comm where stuNum=?";
+        Object[] obj2 =new Object[1];
+        obj[0]=deleteNum;
+        executeUpdata(sql2,obj2);
+
+        return executeUpdata(sql,obj);
+    }
+    
+
+    public void searchUser(List<User>searchList,String uName)
+    {
+        String sql = "select * from userforcomm WHERE uName='"+uName+"'"+"or stuName='"+uName+"'";
+        getConnection();
+        try {
+            ps = conn.prepareStatement(sql);
+            ResultSet rs;
+            rs = ps.executeQuery();
+            while (rs.next())
+            {
+                User tUser = new User();
+                tUser.setStuNum(rs.getString("stuNum"));
+                tUser.setuName(rs.getString("uName"));
+                tUser.setStuName(rs.getString("stuName"));
+                searchList.add(tUser);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
     @Override
     public int addUser(User user) {
         String sql="insert into userforcomm values(?,?,?,?,?,?,?,?,?,?)";
