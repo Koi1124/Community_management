@@ -48,11 +48,11 @@
                             <i class="lnr lnr-arrow-left-circle"></i>
                         </button>
                     </div>
-                    <form class="navbar-form navbar-left">
+                    <form class="navbar-form navbar-left" action="Search" method="post">
                         <div class="input-group">
-                            <input type="text" value="" class="form-control" placeholder="Search dashboard...">
+                            <input type="text" value="" name="search" class="form-control" placeholder="请输入要查询的内容">
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-primary">Go</button></span>
+                                <button type="submit" class="btn btn-primary">搜索</button></span>
                         </div>
                     </form>
                     <div class="navbar-btn navbar-btn-right">
@@ -181,11 +181,11 @@
                 <div class="main-content">
                     <div class="container-fluid">
                         <h3 class="page-title">我的社团</h3>
-                        <div class="newact" style="text-align:right; font-size:18px;">          
-                        <a href="createCom.jsp" style="color:#00AAFF;" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='#00AAFF';">
-                        <i class="lnr lnr-leaf"></i>&nbsp创建社团</a>                    
-                             
-                            </div>
+                        <div class="newact" style="text-align:right; font-size:18px;">
+                            <a href="createCom.jsp" style="color:#00AAFF;" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='#00AAFF';">
+                                <i class="lnr lnr-leaf"></i>&nbsp创建社团</a>
+
+                        </div>
                         <div class="custom-tabs-line tabs-line-bottom left-aligned">
 							<ul class="nav" role="tablist">
 								<li class="active"><a href="#join" role="tab" data-toggle="tab">我加入的社团</a></li>
@@ -200,6 +200,9 @@
                             <% 	for(int i=0;i<communities.size();i++){
 
                                 Community community=communities.get(i);
+                                String identity=communityService.getIdenByNum(stuNum,community.getcNum());
+                                int state=community.getState();
+                                if (state==1) {
                             %>
                             <div class="join">
 
@@ -209,9 +212,21 @@
                                     <div class="panel" style="border-radius: 5px 5px 0 0;">
                                         <div style="background-color: #CCCCCC ;border-radius: 5px 5px 0 0;">
                                             <div align="right">
-                                                <button type="button" class="btn btn-danger">
-                                                    <i class="btn-danger"></i>退出</button>
                                                 <input type="hidden" name="type" value="normal">
+                                                <%
+                                                    if (identity.equals("2")) {
+                                                %>
+                                                <button type="submit" name="quit" value="<%=community.getcNum()%>&<%=stuNum%>" class="btn btn-danger">
+                                                    <i class="btn-danger"></i>退出</button>
+                                                <%
+                                                    } else if (identity.equals("1")) {
+                                                %>
+                                                <button type="button" class="btn btn-danger">
+                                                    <i class="btn-danger"></i>解散</button>
+                                                </button>
+                                                <%
+                                                    }
+                                                %>
                                                 <button type="submit" name="getCNum" value="<%=community.getcNum()%>" class="btn btn-info">
                                                     更多</button>
                                             </div>
@@ -239,6 +254,7 @@
                                 </div>
                             </div>
                                     <%
+                                    }
                                 }
                             %>
                             </form>
@@ -246,22 +262,33 @@
 
 
                         <div class="tab-pane fade" id="manage">
+                            <form action="Community">
+                                <% 	for(int i=0;i<communityList.size();i++){
+
+                                    Community community=communityList.get(i);
+                                %>
                         <div class="row">
                             <!--一行-->
 
                             <div class="col-md-6"><!--我管理的-->
-                                <form action="Community">
-                                    <% 	for(int i=0;i<communityList.size();i++){
 
-                                        Community community=communityList.get(i);
-                                    %>
                                     <!--一行两个-->
                                     <div class="panel" style="border-radius: 5px 5px 0 0;">
                                         <div style="background-color: #CCCCCC ;border-radius: 5px 5px 0 0;">
                                             <div align="right">
                                                 <input type="hidden" name="type" value="manage">
+                                                <%
+                                                    if (community.getState()==1){
+                                                %>
                                                 <button type="submit" name="getCNum" value="<%=community.getcNum()%>" class="btn btn-warning">
                                                     <i class="btn-warning"></i>管理</button>
+                                                <%
+                                                    } else if (community.getState()==0) {
+                                                %>
+                                                <button type="button" class="btn btn-warning" disabled="disabled">申请审核中</button>
+                                                <%
+                                                    }
+                                                %>
                                             </div>
                                         </div>
                                         <div class="panel-heading">
@@ -283,12 +310,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <%
-                                        }
-                                    %>
-                                </form>
+
                             </div>
                         </div>
+                                <%
+                                    }
+                                %>
+                            </form>
                         </div>
 
                         </div>

@@ -66,10 +66,11 @@
                 <button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
             </div>
 
-            <form class="navbar-form navbar-left">
+            <form class="navbar-form navbar-left" action="Search" method="get">
                 <div class="input-group">
-                    <input type="text" value="" class="form-control" placeholder="Search dashboard...">
-                    <span class="input-group-btn"><button type="button" class="btn btn-primary">Go</button></span>
+                    <input type="text" value="" name="search" class="form-control" placeholder="请输入要查询的内容">
+                    <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">搜索</button></span>
                 </div>
             </form>
 
@@ -239,6 +240,8 @@
                                         <%
                                             for (int i=0;i<users.size();i++) {
                                                 User user=users.get(i);
+                                                int state=communityService.getUStateByNum(user.getStuNum(),cNum);
+                                                if (state==1) {
                                         %>
                                         <tr>
                                             <td><a href=User?stuNum=<%=user.getStuNum()%>><%=user.getuName()%></a></td>
@@ -252,6 +255,7 @@
                                             <td><%=iden%></td>
                                         </tr>
                                         <%
+                                                }
                                             }
                                         %>
                                         </tbody>

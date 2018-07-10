@@ -2,11 +2,8 @@ package dao;
 
 import model.Activity;
 import model.Community;
-import model.User;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +24,14 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
         try {
             getConnection();
             Statement statement=conn.createStatement();
-            ResultSet resultSet=statement.executeQuery(sql);
-            while (resultSet.next()){
+            rs=statement.executeQuery(sql);
+            while (rs.next()){
                 Activity activity=new Activity();
-                activity.setaNum(resultSet.getString(1));
-                activity.setaContent(resultSet.getString(2));
-                activity.setaDate(resultSet.getString(3));
-                activity.setaTitle(resultSet.getString(4));
-                activity.setcName(resultSet.getString(5));
+                activity.setaNum(rs.getString("aNum"));
+                activity.setaContent(rs.getString("aContent"));
+                activity.setaDate(rs.getString("aDate"));
+                activity.setaTitle(rs.getString("aTitle"));
+                activity.setcName(rs.getString("cName"));
                 activities.add(activity);
             }
         }catch (Exception e){
@@ -50,16 +47,16 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
         List<Activity> activities=new ArrayList<>();
         try {
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,cName);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,cName);
+            rs=ps.executeQuery();
+            while (rs.next()){
                 Activity activity=new Activity();
-                activity.setaNum(resultSet.getString(1));
-                activity.setaContent(resultSet.getString(2));
-                activity.setaDate(resultSet.getString(3));
-                activity.setaTitle(resultSet.getString(4));
-                activity.setcName(resultSet.getString(5));
+                activity.setaNum(rs.getString("aNum"));
+                activity.setaContent(rs.getString("aContent"));
+                activity.setaDate(rs.getString("aDate"));
+                activity.setaTitle(rs.getString("aTitle"));
+                activity.setcName(rs.getString("cName"));
                 activities.add(activity);
             }
         }catch (Exception e){
@@ -75,15 +72,15 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
         Activity activity=new Activity();
         try {
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,aNum);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                activity.setaNum(resultSet.getString(1));
-                activity.setaContent(resultSet.getString(2));
-                activity.setaDate(resultSet.getString(3));
-                activity.setaTitle(resultSet.getString(4));
-                activity.setcName(resultSet.getString(5));
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,aNum);
+            rs=ps.executeQuery();
+            while (rs.next()) {
+                activity.setaNum(rs.getString("aNum"));
+                activity.setaContent(rs.getString("aContent"));
+                activity.setaDate(rs.getString("aDate"));
+                activity.setaTitle(rs.getString("aTitle"));
+                activity.setcName(rs.getString("cName"));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -135,17 +132,18 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
         Connection connection=getConn();
         Community community=new Community();
         try{
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,aNum);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
-                String cNum=resultSet.getString(1);
-                String cName=resultSet.getString(2);
-                String cType=resultSet.getString(3);
-                String cSrc=resultSet.getString(4);
-                String Syn=resultSet.getString(5);
-                String cStartTime=resultSet.getString(6);
-                String stuNum=resultSet.getString(7);
+            ps=connection.prepareStatement(sql);
+            ps.setString(1,aNum);
+            rs=ps.executeQuery();
+            while (rs.next()){
+                String cNum=rs.getString("cNum");
+                String cName=rs.getString("cName");
+                String cType=rs.getString("cType");
+                String cSrc=rs.getString("cSrc");
+                String Syn=rs.getString("Syn");
+                String cStartTime=rs.getString("cStartTime");
+                String stuNum=rs.getString("stuNum");
+                int state=rs.getInt("state");
                 community.setcNum(cNum);
                 community.setcName(cName);
                 community.setcType(cType);
@@ -153,6 +151,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
                 community.setSyn(Syn);
                 community.setcStartTime(cStartTime);
                 community.setcStuNum(stuNum);
+                community.setState(state);
             }
 
         }catch (Exception e){

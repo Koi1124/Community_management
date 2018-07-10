@@ -1,9 +1,13 @@
+<%@ page import="model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+	User client=(User) session.getAttribute("curUser");
+%>
 <!doctype html>
 <html lang="en">
 
 <head>
-	<title>createCom</title>
+	<title>社团部落-创建社团</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -33,10 +37,11 @@
 				<div class="navbar-btn">
 					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
 				</div>
-				<form class="navbar-form navbar-left">
+				<form class="navbar-form navbar-left" action="Search" method="post">
 					<div class="input-group">
-						<input type="text" value="" class="form-control" placeholder="Search dashboard...">
-						<span class="input-group-btn"><button type="button" class="btn btn-primary">Go</button></span>
+						<input type="text" value="" name="search" class="form-control" placeholder="请输入要查询的内容">
+						<span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">搜索</button></span>
 					</div>
 				</form>
 				<div class="navbar-btn navbar-btn-right">
@@ -68,7 +73,7 @@
 							</ul>
 						</li>
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="assets/img/user.png" class="img-circle" alt="Avatar"> <span>Samuel</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="assets/img/user.png" class="img-circle" alt="Avatar"> <span><%=client.getuName()%></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
 								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
@@ -87,25 +92,25 @@
                     <nav>
                         <ul class="nav">
                             <li>
-                                <a href="homepage.html" class="">
+                                <a href="homepage.jsp" class="">
                                     <i class="lnr lnr-home"></i>
                                     <span>主页</span></a>
                             </li>
 
                              <li>
-                                <a href="community.html" class="">
+                                <a href="Community.jsp" class="">
                                     <i class="lnr lnr-location"></i>
                                     <span>我的社团</span></a>
                             </li>
 
                             <li>
-                                <a href="userInfo.html" class="">
+                                <a href="UserInfo.jsp" class="">
                                     <i class="lnr lnr-cog"></i>
                                     <span>个人信息</span></a>
                             </li>
 
                             <li>
-                                <a href="communityList.html" class="">
+                                <a href="CommunityList.jsp" class="">
                                     <i class="lnr lnr-dice"></i>
                                     <span>社团列表</span></a>
                             </li>

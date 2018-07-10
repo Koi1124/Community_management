@@ -40,10 +40,6 @@ public interface CommunityDAO {
      */
     List<Community> communityInformation(String keyword);
 
-    boolean isHave(Community comm);    //检查该社团是否存在
-
-    boolean createApply(Community comm);    //提交社团申请
-
 
     /**
      *@Discription: 根据用户ID获取用户加入的社团列表
@@ -61,7 +57,10 @@ public interface CommunityDAO {
      *@Author:
      */
     List<Community> getCommunities();
-    
+
+    boolean isHave(Community comm);    //检查该社团是否存在
+
+    boolean createApply(Community comm);    //提交社团申请
     
     /**
      *@Discription: 根据社团ID获得此社团信息
@@ -100,6 +99,14 @@ public interface CommunityDAO {
      *@Author: 
      */
     int deleteUserFromComm(String cNum,String stuNum);
+    
+    /**
+     *@Discription: 根据社团号与学号更改用户状态（管理社团页用）
+     *@Param: [cNum, stuNum]
+     *@Return: int
+     *@Author: 
+     */
+    int updateUState(String cNum,String stuNum);
 
     /**
      *@Discription: 根据用户获取用户加入社团数量
@@ -116,4 +123,23 @@ public interface CommunityDAO {
      *@Author: 
      */
     String getIdenByNum(String stuNum,String cNum);
+
+    /**
+     *@Discription: 根据学号和社团号获取用户状态
+     *@Param: [stuNum, cNum]
+     *@Return: int
+     *@Author:
+     */
+    int getUStateBy(String stuNum,String cNum);
+
+
+
+
+    /**
+     *@Discription: 根据社团号和学号添加用户（加入社团页用）
+     *@Param: [cNum, stuNum]
+     *@Return: int
+     *@Author: 
+     */
+    int addMum(String cNum,String stuNum);
 }

@@ -1,3 +1,13 @@
+.intro{
+
+	overflow:hidden;
+	background:transparent;
+	border:none;
+	resize:none;
+	padding: 0;
+}
+
+
 .newact{
 
 	text-align:right; 
@@ -21,4 +31,13 @@
 	background:transparent;
 	border:none;
 }
+
+
+.btn-agree{
+
+	color:#41B314;
+	background:transparent;
+	border:none;
+}
+
 

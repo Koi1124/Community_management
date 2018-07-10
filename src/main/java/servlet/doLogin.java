@@ -29,7 +29,7 @@ public class doLogin extends HttpServlet {
     //static Connection conn = null;
     UserService userService = new UserService();
     ActivityService activityService = new ActivityService();
-    CommunityService communityService = new CommunityService();
+    CommunityService communityService=new CommunityService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //UserDAOImp muImp = new UserDAOImp();
         response.setContentType("text/html;charset=utf-8");
@@ -73,9 +73,7 @@ public class doLogin extends HttpServlet {
             else{
                 response.sendRedirect("Login.jsp?error=yes");
             }
-
         }
-
         if(op.equals("reflash"))
         {
             initUlist(request,response,ulist,userService);
@@ -86,25 +84,19 @@ public class doLogin extends HttpServlet {
             dispatcher.forward(request,response);
         }
 
-        if(op.equals("管理员登录"))
-        {
-            boolean isAdmin = adminLogin(request,response,user);
-            if(isAdmin)
-            {
-                initUlist(request,response,ulist,userService);
+        if(op.equals("管理员登录")) {
+            boolean isAdmin = adminLogin(request, response, user);
+            if (isAdmin) {
+                initUlist(request, response, ulist, userService);
                 HttpSession session = request.getSession();
-                session.setAttribute("curUser",user);
-                session.setAttribute("ulist",ulist);
+                session.setAttribute("curUser", user);
+                session.setAttribute("ulist", ulist);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("userList.jsp");
-                dispatcher.forward(request,response);
-            }
-            else{
+                dispatcher.forward(request, response);
+            } else {
                 response.sendRedirect("Login.jsp?error=yes");
             }
         }
-
-
-
         if(op.equals("out"))
         {
             HttpSession session=request.getSession();
@@ -112,30 +104,28 @@ public class doLogin extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("Login.jsp");
             dispatcher.forward(request,response);
         }
+            if(op.equals("delete"))
+            {
+                String deleteNum = request.getParameter("deleteNum");
+                userService.deleteUser(deleteNum);
+                initUlist(request,response,ulist,userService);
+                HttpSession session= request.getSession();
+                session.setAttribute("ulist",ulist);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("userList.jsp");
+                dispatcher.forward(request,response);
 
-        if(op.equals("delete"))
-        {
-            String deleteNum = request.getParameter("deleteNum");
-            userService.deleteUser(deleteNum);
-            initUlist(request,response,ulist,userService);
-            HttpSession session= request.getSession();
-            session.setAttribute("ulist",ulist);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("userList.jsp");
-            dispatcher.forward(request,response);
-
-        }
-        if(op.equals("search"))
-        {
-            List<User> searchList = new ArrayList<>();
-            String uName = request.getParameter("searchUname");
-            userService.searchUser(searchList,uName);
-            HttpSession session= request.getSession();
-            session.setAttribute("ulist",searchList);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("userList.jsp");
-            dispatcher.forward(request,response);
-        }
-
-         if(op.equals("createComm"))
+            }
+            if(op.equals("search"))
+            {
+                List<User> searchList = new ArrayList<>();
+                String uName = request.getParameter("searchUname");
+                userService.searchUser(searchList,uName);
+                HttpSession session= request.getSession();
+                session.setAttribute("ulist",searchList);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("userList.jsp");
+                dispatcher.forward(request,response);
+            }
+        if(op.equals("createComm"))
         {
             boolean createResult = createApply(request,response,communityService);
             if(createResult)
@@ -147,39 +137,11 @@ public class doLogin extends HttpServlet {
 
         }
 
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
-    private boolean createApply(HttpServletRequest request, HttpServletResponse response,CommunityService communityService) throws ServletException, IOException{
-        Community comm = new Community();
-        comm.setcName(request.getParameter("cname"));
-        UUID uuid = UUID.randomUUID();
-        String cNum=uuid.toString().replaceAll("-","");
-        comm.setcNum(cNum);
-        comm.setcType(request.getParameter("ctype"));
-        comm.setSyn(request.getParameter("syn"));
-        comm.setState(0);
-        HttpSession session = request.getSession();
-        User cur = (User)request.getAttribute("curUser");
-        comm.setcStuNum(cur.getStuNum());
-
-        return communityService.createApply(comm);
-    }
-
-    private boolean adminLogin(HttpServletRequest request, HttpServletResponse response,User user) throws ServletException, IOException {
-        String userName = request.getParameter("username");
-        String passWord = request.getParameter("password");
-        if(userName.equals("Admin")&&passWord.equals("community")){
-            user.setuName(userName);
-            user.setuPassword(passWord);
-            return true;
-        }
-        else return false;
-    }
-
 
     private boolean signUp(HttpServletRequest request, HttpServletResponse response,User user,UserService userService) throws ServletException, IOException{
         String username = request.getParameter("username");
@@ -208,12 +170,6 @@ public class doLogin extends HttpServlet {
         else return false;
 
     }
-
-    public void initUlist(HttpServletRequest request, HttpServletResponse response,List<User> ulist,UserService userService)throws ServletException, IOException
-    {
-        userService.initUserList(ulist);
-    }
-    
     public void initAlist(HttpServletRequest request, HttpServletResponse response,List<Activity> alist,ActivityService activityService)throws ServletException, IOException
     {
         activityService.initActivityList(alist);
@@ -227,4 +183,41 @@ public class doLogin extends HttpServlet {
         return userService.doLogin(user);
 
     }
+
+    private boolean adminLogin(HttpServletRequest request, HttpServletResponse response,User user) throws ServletException, IOException {
+        String userName = request.getParameter("username");
+        String passWord = request.getParameter("password");
+        if(userName.equals("Admin")&&passWord.equals("community")){
+            user.setuName(userName);
+            user.setuPassword(passWord);
+            return true;
+        }
+        else return false;
+    }
+
+
+
+
+    public void initUlist(HttpServletRequest request, HttpServletResponse response,List<User> ulist,UserService userService)throws ServletException, IOException
+    {
+        userService.initUserList(ulist);
+    }
+
+    private boolean createApply(HttpServletRequest request, HttpServletResponse response, CommunityService communityService) throws ServletException, IOException{
+        Community comm = new Community();
+        comm.setcName(request.getParameter("cname"));
+        UUID uuid = UUID.randomUUID();
+        String cNum=uuid.toString().replaceAll("-","");
+        comm.setcNum(cNum);
+        comm.setcType(request.getParameter("ctype"));
+        comm.setSyn(request.getParameter("syn"));
+        comm.setState(0);
+        HttpSession session = request.getSession();
+        User cur = (User)session.getAttribute("curUser");
+        comm.setcStuNum(cur.getStuNum());
+
+        return communityService.createApply(comm);
+    }
+
+
 }

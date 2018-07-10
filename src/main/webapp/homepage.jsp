@@ -44,11 +44,11 @@
                             <i class="lnr lnr-arrow-left-circle"></i>
                         </button>
                     </div>
-                    <form class="navbar-form navbar-left">
+                    <form class="navbar-form navbar-left" action="Search" method="post">
                         <div class="input-group">
-                            <input type="text" value="" class="form-control" placeholder="Search dashboard...">
+                            <input type="text" value="" name="search" class="form-control" placeholder="请输入要查询的内容">
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-primary">Go</button></span>
+                                <button type="submit" class="btn btn-primary">搜索</button></span>
                         </div>
                     </form>
                     <div class="navbar-btn navbar-btn-right">

@@ -26,20 +26,6 @@ public class UserService {
         userDAO.addUser(userI);
         return true;
     }
-    
-    public void searchUser(List<User> searchList, String uName)
-    {
-        userDAO.searchUser(searchList,uName);
-
-    }
-    public void deleteUser(String deleteNum)
-    {
-        userDAO.deleteUser(deleteNum);
-    }
-    public void initUserList(List<User>ulist)
-    {
-        userDAO.initUserList(ulist);
-    }
 
     public boolean doRevise(User userI) {
 
@@ -56,4 +42,23 @@ public class UserService {
             }
         }
     }
+
+    public void searchUser(List<User> searchList, String uName)
+    {
+        userDAO.searchUser(searchList,uName);
+
+    }
+    public void deleteUser(String deleteNum)
+    {
+        userDAO.deleteUser(deleteNum);
+    }
+    public void initUserList(List<User>ulist)
+    {
+        userDAO.initUserList(ulist);
+    }
+    public List<User> searchUser(String keyword){
+        List<User> users=userDAO.userInformation(keyword);
+        return users;
+    }
+
 }

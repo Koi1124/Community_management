@@ -3,10 +3,6 @@ package dao;
 import model.Remark;
 import model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,20 +46,20 @@ public class RemarkDAOImp extends DBconnImp implements RemarkDAO {
         User user=new User();
         try {
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,rNum);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
-                String stuNum=resultSet.getString(1);
-                String stuName=resultSet.getString(2);
-                String stuSchool=resultSet.getString(3);
-                String stuBirth=resultSet.getString(4);
-                String stuSex=resultSet.getString(5);
-                String stuProfess=resultSet.getString(6);
-                String uName=resultSet.getString(7);
-                String uPassword=resultSet.getString(8);
-                String stuSrc=resultSet.getString(9);
-                String stuNumber=resultSet.getString(10);
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,rNum);
+            rs=ps.executeQuery();
+            while (rs.next()){
+                String stuNum=rs.getString("stuNum");
+                String stuName=rs.getString("stuName");
+                String stuSchool=rs.getString("stuSchool");
+                String stuBirth=rs.getString("stuBirth");
+                String stuSex=rs.getString("stuSex");
+                String stuProfess=rs.getString("stuProfess");
+                String uName=rs.getString("uName");
+                String uPassword=rs.getString("uPassword");
+                String stuSrc=rs.getString("stuSrc");
+                String stuNumber=rs.getString("stuNumber");
                 user.setStuNum(stuNum);
                 user.setStuName(stuName);
                 user.setStuSchool(stuSchool);
@@ -89,16 +85,16 @@ public class RemarkDAOImp extends DBconnImp implements RemarkDAO {
         List<Remark> remarks=new ArrayList<>();
         try {
             getConnection(); // need revising
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,cNum);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,cNum);
+            rs=ps.executeQuery();
+            while (rs.next()){
                 Remark remark=new Remark();
-                remark.setrNum(resultSet.getString(1));
-                remark.setrContent(resultSet.getString(2));
-                remark.setStuNum(resultSet.getString(3));
-                remark.setrDate(resultSet.getString(4));
-                remark.setcNum(resultSet.getString(5));
+                remark.setrNum(rs.getString("rNum"));
+                remark.setrContent(rs.getString("rContent"));
+                remark.setStuNum(rs.getString("stuNum"));
+                remark.setrDate(rs.getString("rDate"));
+                remark.setcNum(rs.getString("cNum"));
                 remarks.add(remark);
             }
         }catch (Exception e){

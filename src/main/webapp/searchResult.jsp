@@ -1,23 +1,21 @@
-<%@ page import="java.util.List" %>
-<%@ page import="model.Community" %>
-<%@ page import="service.CommunityService" %>
-<%@ page import="model.User" %><%--
+<%--
   Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 2018/7/8
-  Time: 15:28
+  User: 林
+  Date: 2018/7/10
+  Time: 11:27
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="model.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="service.CommunityService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     User client=(User)session.getAttribute("curUser");
     CommunityService communityService=new CommunityService();
-    List<Community>communityList=communityService.getCommFromDB();
 %>
-<!DOCTYPE html>
 <html>
 <head>
-    <title>社团部落-社团列表</title>
+    <title>社团部落-查询结果</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
@@ -45,7 +43,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="brand">
-            <a href="index.html"><img src="assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo"></a>
+            <a href="#"><img src="assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo"></a>
         </div>
 
         <div class="container-fluid">
@@ -66,7 +64,6 @@
                     <i class="fa fa-rocket"></i>
                     <span>退出登录</span></a>
             </div>
-
             <div id="navbar-menu">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
@@ -93,7 +90,6 @@
                             <li><a href="#">Troubleshooting</a></li>
                         </ul>
                     </li>
-
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="assets/img/user.png" class="img-circle" alt="Avatar"> <span><%=client.getuName()%></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
                         <ul class="dropdown-menu">
@@ -119,7 +115,6 @@
                             <i class="lnr lnr-home"></i>
                             <span>主页</span></a>
                     </li>
-
                     <li>
                         <a href="Community.jsp" class="">
                             <i class="lnr lnr-location"></i>
@@ -131,9 +126,8 @@
                             <i class="lnr lnr-cog"></i>
                             <span>个人信息</span></a>
                     </li>
-
                     <li>
-                        <a href="CommunityList.jsp" class="active">
+                        <a href="CommunityList.jsp" class="">
                             <i class="lnr lnr-dice"></i>
                             <span>社团列表</span></a>
                     </li>
@@ -147,82 +141,116 @@
         <!-- MAIN CONTENT -->
         <div class="main-content">
             <div class="container-fluid">
-                <h3 class="page-title">社团列表</h3>
-
-                <div class="col-md-10"><!--社团列表-->
-
-                    <form action="Community">
-                        <input type="hidden" name="type" value="normal">
-                    <%
-                        for (int i=0;i<communityList.size();i++) {
-                            Community community=communityList.get(i);
-                            int state=communityService.getUStateByNum(client.getStuNum(),community.getcNum());
-                            if (state==3){}
-                            else {
-                    %>
-                    <div class="panel" style="border-radius: 5px 5px 0 0;">
-                        <div style="background-color: #CCCCCC ;border-radius: 5px 5px 0 0;">
-
-                            <div align="right">
-                                <%
-                                    if (state==2){
-                                %>
-                                <button type="submit" name="join" value="<%=client.getStuNum()%>&<%=community.getcNum()%>" class="btn btn-success">
-                                    加入</button>
-                                <%
-                                    }else if (state==1){
-                                %>
-                                <button type="button" class="btn btn-default" disabled="disabled">已加入</button>
-                                <%
-                                    }else if (state==0){
-                                %>
-                                <button type="button" class="btn btn-default" disabled="disabled">申请审核中</button>
-                                <%
-                                    }
-                                %>
-                                <button type="submit" name="getCNum" class="btn btn-info" value="<%=community.getcNum()%>">
-                                    更多</button>
+                <h3 class="page-title">搜索结果</h3>
+                <!-- 搜索到的用户 -->
+                <div class="col-md-10">
+                    <h4>用户</h4></br>
+                    <form method="post" action="User">
+                        <div class="panel">
+                            <div class="panel-body">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th >用户名</th>
+                                        <th >姓名</th>
+                                        <th style="width:200px;">学校</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <%
+                                        for(int j=0;j<(Integer) request.getAttribute("usercount");j++){
+                                    %>
+                                    <tr>
+                                        <td>
+                                            <a href=User?stuNum=<%=request.getAttribute("num"+j)%>> <%=request.getAttribute("username"+j)%></a>
+                                        </td>
+                                        <td><%=request.getAttribute("name"+j)%></td>
+                                        <td><%=request.getAttribute("school"+j)%></td>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><%=community.getcName()%></h3>
-                        </div>
-
-                        <div class="panel-body" style="display: none;">
-                            <div style="display: inline-block ">
-                                <img src=<%=community.getcSrc()%> height="120" width="120" style="vertical-align: -120%" />
-                            </div>
-
-                            <div style="display: inline-block  " align="left" >
-                                <span class="label label-primary">编号</span>
-                                <a><%=community.getcNum()%></a>
-                                </br>
-                                <span class="label label-success">类型</span>
-                                <a><%=community.getcType()%></a>
-                                </br>
-                                <span class="label label-warning">成立时间</span>
-                                <a><%=community.getcStartTime()%></a>
-                                </br>
-                            </div>
-
-                            <div></br>
-                                <span class="label label-info">简介</span>
-                                <a><%=community.getSyn()%></a>
-                            </div>
-                        </div>
-                        <div id="arrow<%=i%>" class="arrow">
-                            <button type="button" id="btn-arrow<%=i%>" class=" btn-arrow" >
-                                <i id="ico-arrow<%=i%>" class="lnr lnr-chevron-down "></i>
-                            </button>
-                        </div>
-                    </div>
-                    <%
-                        }
-                        }
-                    %>
                     </form>
                 </div>
+                <!-- 搜索到的社团 -->
+
+                <div class="col-md-10">
+                    <h4>社团</h4></br>
+                    <form action="Community">
+                        <input type="hidden" name="type" value="normal">
+                     <%
+                         for(int m=0;m<(Integer) request.getAttribute("comcount");m++){
+                             int state=communityService.getUStateByNum(client.getStuNum(),(String) request.getAttribute("cNum"+m));
+
+                             if (state==3){}
+                             else {
+                     %>
+
+                        <div class="panel" style="border-radius: 5px 5px 0 0;">
+                            <div style="background-color: #CCCCCC ;border-radius: 5px 5px 0 0;">
+
+                                <div align="right">
+                                    <%
+                                        if (state==2){
+                                    %>
+                                    <button type="button" class="btn btn-success">
+                                        加入</button>
+                                    <%
+                                        } else if (state==1) {
+                                    %>
+                                    <button type="button" class="btn btn-default" disabled="disabled">已加入</button>
+                                    <%
+                                    }else if (state==0){
+                                    %>
+                                    <button type="button" class="btn btn-default" disabled="disabled">申请审核中</button>
+                                    <%
+                                        }
+                                    %>
+                                    <button type="submit" name="getCNum" class="btn btn-info" value="<%=(String) request.getAttribute("cNum"+m)%>">
+                                        更多</button>
+                                </div>
+                            </div>
+
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><%=request.getAttribute("cName"+m)%></h3>
+                            </div>
+
+                            <div class="panel-body" style="display: none;">
+                                <div style="display: inline-block ">
+                                    <img src="<%=request.getAttribute("cSrc"+m)%>" height="120" width="120" style="vertical-align: -120%" />
+                                </div>
+                                <div style="display: inline-block  " align="left" >
+                                    <span class="label label-success">类型</span>
+                                    <a><%=request.getAttribute("cType"+m)%></a>
+                                    </br>
+                                    <span class="label label-warning">成立时间</span>
+                                    <a><%=request.getAttribute("cStartTime"+m)%></a>
+                                    </br>
+                                </div>
+
+                                <div></br>
+                                    <span class="label label-info">简介</span>
+                                    <a><%=request.getAttribute("Syn"+m)%></a>
+                                </div>
+                            </div>
+
+                            <div id="arrow<%=m%>" class="arrow">
+                                <button type="button" id="btn-arrow<%=m%>" class=" btn-arrow" >
+                                    <i id="ico-arrow<%=m%>" class="lnr lnr-chevron-down "></i>
+                                </button>
+                            </div>
+                        </div><!-- END PANEL -->
+                        <%
+                                }
+                         }
+                        %>
+                    </form>
+                </div>
+            </div>
             </div>
         </div>
     </div>
@@ -237,8 +265,8 @@
     <script src="assets/scripts/klorofil-common.js"></script>
     <script>
         <%
-        for (int i=0;i<communityList.size();i++) {
-        %>
+         for (int i=0;i<(Integer) request.getAttribute("comcount");i++) {
+         %>
         $("#btn-arrow<%=i%>").click(function(){
 
             $("#arrow<%=i%>").prev().toggle();
@@ -250,7 +278,6 @@
         <%
         }
         %>
-
     </script>
 </body>
 </html>

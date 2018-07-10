@@ -49,11 +49,8 @@ public interface UserDAO {
      *@Return: model.User
      *@Author:
      */
-    User userInformation(String keyword);
+    List<User> userInformation(String keyword);
 
-    void initUserList(List<User> ulist);
-    int deleteUser(String deleteNum);
-    void searchUser(List<User>searchList,String uName);
     /**
      *@Discription: 根据用户得到加入社团信息
      *@Param: [stuNum]
@@ -69,6 +66,12 @@ public interface UserDAO {
      *@Author: 
      */
     User getUserInfoByID(String stuNum);
+
+
+    void initUserList(List<User> ulist);
+    int deleteUser(String deleteNum);
+    void searchUser(List<User>searchList,String uName);
+
 
 
 }

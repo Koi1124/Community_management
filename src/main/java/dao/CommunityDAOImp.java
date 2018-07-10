@@ -3,8 +3,7 @@ package dao;
 import model.Community;
 import model.User;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +18,16 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
         try {
             getConnection();
             Statement statement=conn.createStatement();
-            ResultSet resultSet=statement.executeQuery(sql);
-            while (resultSet.next()){
+            rs=statement.executeQuery(sql);
+            while (rs.next()){
                 Community community=new Community();
-                community.setcNum(resultSet.getString(1));
-                community.setcName(resultSet.getString(2));
-                community.setcType(resultSet.getString(3));
-                community.setcSrc(resultSet.getString(4));
-                community.setSyn(resultSet.getString(5));
-                community.setcStartTime(resultSet.getString(6));
-                community.setcStuNum(resultSet.getString(7));
+                community.setcNum(rs.getString(1));
+                community.setcName(rs.getString(2));
+                community.setcType(rs.getString(3));
+                community.setcSrc(rs.getString(4));
+                community.setSyn(rs.getString(5));
+                community.setcStartTime(rs.getString(6));
+                community.setcStuNum(rs.getString(7));
                 communities.add(community);
             }
         }catch (Exception e){
@@ -37,48 +36,7 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
 
         return communities;
     }
-    public boolean isHave(Community comm) {
-        String sql = "select count(*)mycount from community where cName='"+comm.getcName()+"'";
-        boolean isHave=false;
-        try
-        {
-            getConnection();
-            ps=conn.prepareStatement(sql);
-            rs=ps.executeQuery();
-            if(rs.next())
-            {
-                int rowCount=rs.getInt("mycount");
-                if(rowCount!=0)isHave=true;
-            }
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 
-        return isHave;
-
-    }
-
-    public boolean createApply(Community comm)
-    {
-        boolean createResult=false;
-        if(!isHave(comm))
-        {
-            String sql="insert into community(cNum,cName,cType,cSrc,Syn,cStartTime,stuNum,state)values(?,?,?,?,?,?,?,?)";
-            Object[] obj=new Object[8];
-            obj[0]=comm.getcNum();
-            obj[1]=comm.getcName();
-            obj[2]=comm.getcType();
-            obj[3]=comm.getcSrc();
-            obj[4]=comm.getSyn();
-            obj[5]=comm.getcStartTime();
-            obj[6]=comm.getcStuNum();
-            obj[7]=comm.getState();
-            if(executeUpdata(sql,obj)!=0)createResult=true;
-
-        }
-        return createResult;
-    }
     @Override
     public int addCommunity(Community community) {
         String sql="insert into Community values(?,?,?,?,?,?,?)";
@@ -106,28 +64,52 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
 
     @Override
     public List<Community> communityInformation(String keyword) {
-        return null;
+        List<Community> commlist=new ArrayList<>();
+        String sql="SELECT * from community where cName like ?";
+        try{
+            getConnection();
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,"%"+keyword+"%");
+            rs=ps.executeQuery();
+            while(rs.next()){
+                Community comm =new Community();
+                comm.setcName(rs.getString("cName"));
+                comm.setcNum(rs.getString("cNum"));
+                comm.setcSrc(rs.getString("cSrc"));
+                comm.setcStuNum(rs.getString("stuNum"));
+                comm.setcStartTime(rs.getString("cStartTime"));
+                comm.setcType(rs.getString("cType"));
+                comm.setSyn(rs.getString("Syn"));
+                comm.setState(rs.getInt("state"));
+                commlist.add(comm);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return commlist;
+
     }
 
     @Override
     public List<Community> getCommByUID(String stuNum) {
         List<Community> commlist=new ArrayList<>();
-        String sql="SELECT c.* from community c,stu_comm sc where c.cNum=sc.cNum and sc.stuNum=?";
+        String sql="SELECT c.* from community c,stu_comm sc where c.cNum=sc.cNum and sc.stuNum=? and sc.state=1";
         try {
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,stuNum);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while(resultSet.next())
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,stuNum);
+            rs=ps.executeQuery();
+            while(rs.next())
             {
                 Community comm =new Community();
-                comm.setcName(resultSet.getString("cName"));
-                comm.setcNum(resultSet.getString("cNum"));
-                comm.setcSrc(resultSet.getString("cSrc"));
-                comm.setcStuNum(resultSet.getString("stuNum"));
-                comm.setcStartTime(resultSet.getString("cStartTime"));
-                comm.setcType(resultSet.getString("cType"));
-                comm.setSyn(resultSet.getString("Syn"));
+                comm.setcName(rs.getString("cName"));
+                comm.setcNum(rs.getString("cNum"));
+                comm.setcSrc(rs.getString("cSrc"));
+                comm.setcStuNum(rs.getString("stuNum"));
+                comm.setcStartTime(rs.getString("cStartTime"));
+                comm.setcType(rs.getString("cType"));
+                comm.setSyn(rs.getString("Syn"));
+                comm.setState(rs.getInt("state"));
                 commlist.add(comm);
             }
 
@@ -144,17 +126,17 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
         Community comm=new Community();
         try{
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,cNum);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                comm.setcName(resultSet.getString("cName"));
-                comm.setcNum(resultSet.getString("cNum"));
-                comm.setcSrc(resultSet.getString("cSrc"));
-                comm.setcStuNum(resultSet.getString("stuNum"));
-                comm.setcStartTime(resultSet.getString("cStartTime"));
-                comm.setcType(resultSet.getString("cType"));
-                comm.setSyn(resultSet.getString("Syn"));
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,cNum);
+            rs=ps.executeQuery();
+            while (rs.next()) {
+                comm.setcName(rs.getString("cName"));
+                comm.setcNum(rs.getString("cNum"));
+                comm.setcSrc(rs.getString("cSrc"));
+                comm.setcStuNum(rs.getString("stuNum"));
+                comm.setcStartTime(rs.getString("cStartTime"));
+                comm.setcType(rs.getString("cType"));
+                comm.setSyn(rs.getString("Syn"));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -168,21 +150,21 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
         List<User> users=new ArrayList<>();
         try{
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,cNum);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,cNum);
+            rs=ps.executeQuery();
+            while (rs.next()){
                 User user=new User();
-                user.setStuNum(resultSet.getString(1));
-                user.setStuName(resultSet.getString(2));
-                user.setStuSchool(resultSet.getString(3));
-                user.setStuBirth(resultSet.getString(4));
-                user.setStuSex(resultSet.getString(5));
-                user.setStuProfess(resultSet.getString(6));
-                user.setuName(resultSet.getString(7));
-                user.setuPassword(resultSet.getString(8));
-                user.setStuSrc(resultSet.getString(9));
-                user.setStuNumber(resultSet.getString(10));
+                user.setStuNum(rs.getString(1));
+                user.setStuName(rs.getString(2));
+                user.setStuSchool(rs.getString(3));
+                user.setStuBirth(rs.getString(4));
+                user.setStuSex(rs.getString(5));
+                user.setStuProfess(rs.getString(6));
+                user.setuName(rs.getString(7));
+                user.setuPassword(rs.getString(8));
+                user.setStuSrc(rs.getString(9));
+                user.setStuNumber(rs.getString(10));
                 users.add(user);
             }
         }catch (Exception e){
@@ -198,11 +180,11 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
         String cNum="";
         try{
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,cName);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                cNum=resultSet.getString("cNum");
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,cName);
+            rs=ps.executeQuery();
+            while (rs.next()) {
+                cNum=rs.getString("cNum");
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -217,18 +199,19 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
         List<Community> commlist=new ArrayList<>();
         try{
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1, stuNum);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
+            ps=conn.prepareStatement(sql);
+            ps.setString(1, stuNum);
+            rs=ps.executeQuery();
+            while (rs.next()){
                 Community comm =new Community();
-                comm.setcName(resultSet.getString("cName"));
-                comm.setcNum(resultSet.getString("cNum"));
-                comm.setcSrc(resultSet.getString("cSrc"));
-                comm.setcStuNum(resultSet.getString("stuNum"));
-                comm.setcStartTime(resultSet.getString("cStartTime"));
-                comm.setcType(resultSet.getString("cType"));
-                comm.setSyn(resultSet.getString("Syn"));
+                comm.setcName(rs.getString("cName"));
+                comm.setcNum(rs.getString("cNum"));
+                comm.setcSrc(rs.getString("cSrc"));
+                comm.setcStuNum(rs.getString("stuNum"));
+                comm.setcStartTime(rs.getString("cStartTime"));
+                comm.setcType(rs.getString("cType"));
+                comm.setSyn(rs.getString("Syn"));
+                comm.setState(rs.getInt("state"));
                 commlist.add(comm);
             }
         }catch(Exception e){
@@ -249,16 +232,26 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
     }
 
     @Override
+    public int updateUState(String cNum, String stuNum) {
+        String sql="update stu_comm set state=1 where cNum=? and stuNum=?";
+        Object[] objects=new Object[2];
+        objects[0]=cNum;
+        objects[1]=stuNum;
+
+        return executeUpdata(sql,objects);
+    }
+
+    @Override
     public int getCountByUser(User user) {
-        String sql="select count(*) commCount from stu_comm where stuNum=?";
+        String sql="select count(*) commCount from stu_comm where stuNum=? and state=1";
         int count=0;
         try {
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,user.getStuNum());
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
-                count=resultSet.getInt("commCount");
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,user.getStuNum());
+            rs=ps.executeQuery();
+            while (rs.next()){
+                count=rs.getInt("commCount");
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -268,22 +261,109 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
     }
 
     @Override
+    public boolean isHave(Community comm) {
+        String sql = "select count(*)mycount from community where cName='"+comm.getcName()+"'";
+        boolean isHave=false;
+        try
+        {
+            getConnection();
+            ps=conn.prepareStatement(sql);
+            rs=ps.executeQuery();
+            if(rs.next())
+            {
+                int rowCount=rs.getInt("mycount");
+                if(rowCount!=0)isHave=true;
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return isHave;
+
+    }
+
+    @Override
+    public boolean createApply(Community comm)
+    {
+        boolean createResult=false;
+        if(!isHave(comm))
+        {
+            String sql="insert into community(cNum,cName,cType,cSrc,Syn,cStartTime,stuNum,state)values(?,?,?,?,?,?,?,?)";
+            Object[] obj=new Object[8];
+            obj[0]=comm.getcNum();
+            obj[1]=comm.getcName();
+            obj[2]=comm.getcType();
+            obj[3]=comm.getcSrc();
+            obj[4]=comm.getSyn();
+            obj[5]=comm.getcStartTime();
+            obj[6]=comm.getcStuNum();
+            obj[7]=comm.getState();
+            if(executeUpdata(sql,obj)!=0)createResult=true;
+
+            // 创建社团同时插入社长与社团信息
+            String sql2="insert into stu_comm(stuNum,cNum,stuIden,state)values(?,?,?,?)";
+            Object[] obj2=new Object[4];
+            obj2[0]=comm.getcStuNum();
+            obj2[1]=comm.getcNum();
+            obj2[2]="1";// 默认创建者为社长
+            obj2[3]=3;// 默认状态为3
+            executeUpdata(sql2,obj2);
+
+        }
+        return createResult;
+    }
+
+    @Override
     public String getIdenByNum(String stuNum, String cNum) {
 
-        String sql="select stuIden from stu_comm where stuNum=? and cNum=?";
+        String sql="select stuIden from stu_comm where stuNum=? and cNum=? and state=1";
         String identity="";
         try{
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,stuNum);
-            preparedStatement.setString(2,cNum);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
-                identity=resultSet.getString("stuIden");
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,stuNum);
+            ps.setString(2,cNum);
+            rs=ps.executeQuery();
+            while (rs.next()){
+                identity=rs.getString("stuIden");
             }
         }catch (Exception e){
             e.printStackTrace();
         }
         return identity;
+    }
+
+    @Override
+    public int getUStateBy(String stuNum, String cNum) {
+        String sql="select state from stu_comm where stuNum=? and cNum=?";
+        int state=0;
+        try{
+            getConnection();
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,stuNum);
+            ps.setString(2,cNum);
+            rs=ps.executeQuery();
+
+            if (rs.next()){
+                state=rs.getInt("state");
+            }else{
+                state=2;
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return state;
+    }
+
+    @Override
+    public int addMum(String cNum, String stuNum) {
+        String sql="insert into stu_comm values(?,?,?,?)";
+        Object[] objects=new Object[4];
+        objects[0]=stuNum;
+        objects[1]=cNum;
+        objects[2]="2";// 默认身份为2
+        objects[3]="0";// 默认状态为0，即申请状态
+        return executeUpdata(sql,objects);
     }
 }

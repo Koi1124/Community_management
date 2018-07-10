@@ -69,10 +69,11 @@
                 <button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
             </div>
 
-            <form class="navbar-form navbar-left">
+            <form class="navbar-form navbar-left" action="Search" method="post">
                 <div class="input-group">
-                    <input type="text" value="" class="form-control" placeholder="Search dashboard...">
-                    <span class="input-group-btn"><button type="button" class="btn btn-primary">Go</button></span>
+                    <input type="text" value="" name="search" class="form-control" placeholder="请输入要查询的内容">
+                    <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">搜索</button></span>
                 </div>
             </form>
 
@@ -249,22 +250,48 @@
                                                 for (int i=0;i<users.size();i++) {
                                                     User user=users.get(i);
                                             %>
+
+                                                <%
+                                                    int state=communityService.getUStateByNum(user.getStuNum(),cNum);
+                                                    if (state==1){
+                                                        String iden=communityService.getIdenByNum(user.getStuNum(),cNum);
+                                                        if (iden.equals("1")){
+                                                            iden="社长";
+                                                        }else iden="成员";
+                                                %>
+
                                             <tr>
                                                 <td><a href=User?stuNum=<%=user.getStuNum()%>><%=user.getuName()%></a></td>
                                                 <td><%=user.getStuName()%></td>
-                                                <%
-                                                    String iden=communityService.getIdenByNum(user.getStuNum(),cNum);
-                                                    if (iden.equals("1")){
-                                                        iden="社长";
-                                                    }else iden="成员";
-                                                %>
                                                 <td><%=iden%></td>
                                                 <td style="width:80px;">
+                                                <%
+                                                    if (iden.equals("成员")) {
+                                                %>
+
                                                     <button type="submit" name="memberDel" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';">删除
+                                                    </button>
+                                                <%
+                                                        }
+                                                %>
+                                                </td>
+                                            </tr>
+                                                    <%
+                                                    }else {
+                                                %>
+                                            <tr style="color:red;">
+                                                <td><a href=User?stuNum=<%=user.getStuNum()%>><%=user.getuName()%></a></td>
+                                                <td><%=user.getStuName()%></td>
+                                                <td>待审核</td>
+                                                <td style="width:120px;">
+                                                    <button type="submit" name="agree" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">同意
+                                                    </button>
+                                                    <button type="submit" name="memberDel" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';">拒绝
                                                     </button>
                                                 </td>
                                             </tr>
-                                            <%
+                                                <%
+                                                        }
                                                 }
                                             %>
                                             </tbody>

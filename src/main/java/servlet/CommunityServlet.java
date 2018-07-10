@@ -27,6 +27,22 @@ public class CommunityServlet extends HttpServlet {
                 passCommInfo(cNum,jsp,req,resp);
                 return;
             }
+            String join=req.getParameter("join");
+            if (join!=null) {
+                String[] temp=join.split("&");
+                String stuNum=temp[0];
+                String comNum=temp[1];
+                commApply(comNum,stuNum,req,resp);
+                return;
+            }
+            String quit=req.getParameter("quit");
+            if (quit!=null) {
+                String[] temp=quit.split("&");
+                String comNum=temp[0];
+                String stuNum=temp[1];
+                quitComm(comNum,stuNum,req,resp);
+                return;
+            }
         }
         if (op.equals("manage")) {
             String cNum=req.getParameter("getCNum");
@@ -41,6 +57,14 @@ public class CommunityServlet extends HttpServlet {
                 String comNum=temp[0];
                 String stuNum=temp[1];
                 memberDel(comNum,stuNum,req,resp);
+                return;
+            }
+            String agree=req.getParameter("agree");
+            if (agree!=null) {
+                String[] temp=agree.split("&");
+                String comNum=temp[0];
+                String stuNum=temp[1];
+                memberAgree(comNum,stuNum,req,resp);
                 return;
             }
         }
@@ -70,6 +94,39 @@ public class CommunityServlet extends HttpServlet {
         }else {
             out.println("<script language = javascript>alert('DELETE FAILED');");
             out.println("location.href='CommunityManage.jsp'</script>");
+        }
+    }
+
+    public void memberAgree(String cNum,String stuNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
+        PrintWriter out=resp.getWriter();
+        if (communityService.doAgreeMum(cNum,stuNum)){
+            out.println("<script language = javascript>alert('AGREE SUCCESS');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }else {
+            out.println("<script language = javascript>alert('AGREE FAILED');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }
+    }
+
+    public void commApply(String cNum,String stuNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
+        PrintWriter out=resp.getWriter();
+        if (communityService.doApply(cNum,stuNum)){
+            out.println("<script language = javascript>alert('APPLY SUCCESS');");
+            out.println("location.href='CommunityList.jsp'</script>");
+        }else {
+            out.println("<script language = javascript>alert('APPLY FAILED');");
+            out.println("location.href='CommunityList.jsp'</script>");
+        }
+    }
+
+    public void quitComm(String cNum,String stuNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
+        PrintWriter out=resp.getWriter();
+        if (communityService.doDeleteMum(cNum,stuNum)) {
+            out.println("<script language = javascript>alert('QUIT SUCCESS');");
+            out.println("location.href='Community.jsp'</script>");
+        }else {
+            out.println("<script language = javascript>alert('QUIT FAILED');");
+            out.println("location.href='Community.jsp'</script>");
         }
     }
 

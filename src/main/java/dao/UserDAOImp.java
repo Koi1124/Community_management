@@ -4,9 +4,8 @@ import com.sun.corba.se.spi.ior.ObjectKey;
 import model.Community;
 import model.User;
 
-import javax.xml.transform.Result;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAOImp extends DBconnImp implements UserDAO {
@@ -28,66 +27,6 @@ public class UserDAOImp extends DBconnImp implements UserDAO {
         obj[0]=user.getuName();
         return checkisHave(sql,obj,user,0);
     }
-
-     public void initUserList(List<User> ulist)
-    {
-        String sql = "select * from userforcomm order by uName DESC ";
-        getConnection();
-        try {
-            ps = conn.prepareStatement(sql);
-            ResultSet rs;
-            rs = ps.executeQuery();
-            while (rs.next())
-            {
-                User tUser = new User();
-                tUser.setStuNum(rs.getString("stuNum"));
-                tUser.setuName(rs.getString("uName"));
-                tUser.setStuName(rs.getString("stuName"));
-                ulist.add(tUser);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
-
-    public int deleteUser(String deleteNum) {
-        String sql="delete from userforcomm where stuNum=?";
-        Object[] obj=new Object[1];
-        obj[0]=deleteNum;
-
-        String sql2="delete from stu_comm where stuNum=?";
-        Object[] obj2 =new Object[1];
-        obj[0]=deleteNum;
-        executeUpdata(sql2,obj2);
-
-        return executeUpdata(sql,obj);
-    }
-    
-
-    public void searchUser(List<User>searchList,String uName)
-    {
-        String sql = "select * from userforcomm WHERE uName='"+uName+"'"+"or stuName='"+uName+"'";
-        getConnection();
-        try {
-            ps = conn.prepareStatement(sql);
-            ResultSet rs;
-            rs = ps.executeQuery();
-            while (rs.next())
-            {
-                User tUser = new User();
-                tUser.setStuNum(rs.getString("stuNum"));
-                tUser.setuName(rs.getString("uName"));
-                tUser.setStuName(rs.getString("stuName"));
-                searchList.add(tUser);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
 
     @Override
     public int addUser(User user) {
@@ -129,8 +68,33 @@ public class UserDAOImp extends DBconnImp implements UserDAO {
     }
 
     @Override
-    public User userInformation(String keyword) {
-        return null;
+    public List<User> userInformation(String keyword) {
+        String sql="Select * from userforcomm where stuName like ? OR uName like ?";
+        List<User> userlist=new ArrayList<>();
+        try{
+            getConnection();
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,"%"+keyword+"%");
+            ps.setString(2,"%"+keyword+"%");
+            rs =ps.executeQuery();
+            while(rs.next()){
+                User user=new User();
+                user.setStuNum(rs.getString(1));
+                user.setStuName(rs.getString(2));
+                user.setStuSchool(rs.getString(3));
+                user.setStuBirth(rs.getString(4));
+                user.setStuSex(rs.getString(5));
+                user.setStuProfess(rs.getString(6));
+                user.setuName(rs.getString(7));
+                user.setuPassword(rs.getString(8));
+                user.setStuSrc(rs.getString(9));
+                user.setStuNumber(rs.getString(10));
+                userlist.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userlist;
     }
 
 
@@ -146,20 +110,20 @@ public class UserDAOImp extends DBconnImp implements UserDAO {
         User user=new User();
         try{
             getConnection();
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
-            preparedStatement.setString(1,stuNum);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
-                user.setStuNum(resultSet.getString(1));
-                user.setStuName(resultSet.getString(2));
-                user.setStuSchool(resultSet.getString(3));
-                user.setStuBirth(resultSet.getString(4));
-                user.setStuSex(resultSet.getString(5));
-                user.setStuProfess(resultSet.getString(6));
-                user.setuName(resultSet.getString(7));
-                user.setuPassword(resultSet.getString(8));
-                user.setStuSrc(resultSet.getString(9));
-                user.setStuNumber(resultSet.getString(10));
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,stuNum);
+            rs=ps.executeQuery();
+            while (rs.next()){
+                user.setStuNum(rs.getString("stuNum"));
+                user.setStuName(rs.getString("stuName"));
+                user.setStuSchool(rs.getString("stuSchool"));
+                user.setStuBirth(rs.getString("stuBirth"));
+                user.setStuSex(rs.getString("stuSex"));
+                user.setStuProfess(rs.getString("stuProfess"));
+                user.setuName(rs.getString("uName"));
+                user.setuPassword(rs.getString("uPassword"));
+                user.setStuSrc(rs.getString("stuSrc"));
+                user.setStuNumber(rs.getString("stuNumber"));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -167,5 +131,63 @@ public class UserDAOImp extends DBconnImp implements UserDAO {
 
 
         return user;
+    }
+
+
+    @Override
+    public void initUserList(List<User> ulist)
+    {
+        String sql = "select * from userforcomm order by uName DESC ";
+        getConnection();
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next())
+            {
+                User tUser = new User();
+                tUser.setStuNum(rs.getString("stuNum"));
+                tUser.setuName(rs.getString("uName"));
+                tUser.setStuName(rs.getString("stuName"));
+                ulist.add(tUser);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public int deleteUser(String deleteNum) {
+        String sql="delete from userforcomm where stuNum=?";
+        Object[] obj=new Object[1];
+        obj[0]=deleteNum;
+
+        String sql2="delete from stu_comm where stuNum=?";
+        Object[] obj2 =new Object[1];
+        obj[0]=deleteNum;
+        executeUpdata(sql2,obj2);
+
+        return executeUpdata(sql,obj);
+    }
+
+    public void searchUser(List<User>searchList,String uName)
+    {
+        String sql = "select * from userforcomm WHERE uName LIKE '%"+uName+"%'"+"or stuName LIKE '%"+uName+"%'";
+        getConnection();
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next())
+            {
+                User tUser = new User();
+                tUser.setStuNum(rs.getString("stuNum"));
+                tUser.setuName(rs.getString("uName"));
+                tUser.setStuName(rs.getString("stuName"));
+                searchList.add(tUser);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }
