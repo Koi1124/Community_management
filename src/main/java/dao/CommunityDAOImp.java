@@ -37,7 +37,48 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
 
         return communities;
     }
+    public boolean isHave(Community comm) {
+        String sql = "select count(*)mycount from community where cName='"+comm.getcName()+"'";
+        boolean isHave=false;
+        try
+        {
+            getConnection();
+            ps=conn.prepareStatement(sql);
+            rs=ps.executeQuery();
+            if(rs.next())
+            {
+                int rowCount=rs.getInt("mycount");
+                if(rowCount!=0)isHave=true;
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
+        return isHave;
+
+    }
+
+    public boolean createApply(Community comm)
+    {
+        boolean createResult=false;
+        if(!isHave(comm))
+        {
+            String sql="insert into community(cNum,cName,cType,cSrc,Syn,cStartTime,stuNum,state)values(?,?,?,?,?,?,?,?)";
+            Object[] obj=new Object[8];
+            obj[0]=comm.getcNum();
+            obj[1]=comm.getcName();
+            obj[2]=comm.getcType();
+            obj[3]=comm.getcSrc();
+            obj[4]=comm.getSyn();
+            obj[5]=comm.getcStartTime();
+            obj[6]=comm.getcStuNum();
+            obj[7]=comm.getState();
+            if(executeUpdata(sql,obj)!=0)createResult=true;
+
+        }
+        return createResult;
+    }
     @Override
     public int addCommunity(Community community) {
         String sql="insert into Community values(?,?,?,?,?,?,?)";
