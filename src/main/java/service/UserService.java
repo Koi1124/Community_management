@@ -4,6 +4,8 @@ import dao.UserDAO;
 import dao.UserDAOImp;
 import model.User;
 
+import java.util.List;
+
 public class UserService {
     private UserDAO userDAO=new UserDAOImp();
 
@@ -25,7 +27,7 @@ public class UserService {
         return true;
     }
     
-    public void searchUser(List<User>searchList,String uName)
+    public void searchUser(List<User> searchList, String uName)
     {
         userDAO.searchUser(searchList,uName);
 

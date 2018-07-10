@@ -66,5 +66,9 @@ public class CommunityService {
         else return false;
     }
 
+    public boolean createApply(Community comm)
+    {
+        return communityDAO.createApply(comm);
+    }
 
 }

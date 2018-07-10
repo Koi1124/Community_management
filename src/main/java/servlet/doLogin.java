@@ -4,8 +4,10 @@ import dao.DBconn;
 import dao.DBconnImp;
 import dao.UserDAOImp;
 import model.Activity;
+import model.Community;
 import model.User;
 import service.ActivityService;
+import service.CommunityService;
 import service.UserService;
 
 import javax.servlet.RequestDispatcher;
@@ -35,7 +37,7 @@ public class doLogin extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String op = request.getParameter("action");
         List<Activity> alist = new ArrayList<>();
-        List<User> ulist = new ArrayList<>()
+        List<User> ulist = new ArrayList<>();
         User user = new User();
 
         if(op.equals("注册"))
