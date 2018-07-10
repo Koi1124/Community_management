@@ -28,6 +28,11 @@ public class CommunityService {
         return communities;
     }
 
+    public boolean createApply(Community comm)
+    {
+        return communityDAO.createApply(comm);
+    }
+
 
     public List<User> getUserByComm(String cNum){
         List<User> users=communityDAO.getMumbers(cNum);

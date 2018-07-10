@@ -181,6 +181,11 @@
                 <div class="main-content">
                     <div class="container-fluid">
                         <h3 class="page-title">我的社团</h3>
+                        <div class="newact" style="text-align:right; font-size:18px;">          
+                        <a href="createCom.jsp" style="color:#00AAFF;" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='#00AAFF';">
+                        <i class="lnr lnr-leaf"></i>&nbsp创建社团</a>                    
+                             
+                            </div>
                         <div class="custom-tabs-line tabs-line-bottom left-aligned">
 							<ul class="nav" role="tablist">
 								<li class="active"><a href="#join" role="tab" data-toggle="tab">我加入的社团</a></li>

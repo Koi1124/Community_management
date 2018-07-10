@@ -82,6 +82,7 @@
 									<span class="helper-text"> <button type="submit" name="action" value="点击注册" class="btn btn-primary btn-lg btn-block">
 									<font color="white" face="verdana,arial,sans-serif">点击注册</font>
 								</button></span>
+                                <button type="submit" name="action" class="" value="管理员登录" style="margin-top:20px;border:none;background: transparent;" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';">管理员登录</button>
                             </div>
                         </form>
                     </div>
