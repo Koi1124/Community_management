@@ -21,13 +21,14 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
             rs=statement.executeQuery(sql);
             while (rs.next()){
                 Community community=new Community();
-                community.setcNum(rs.getString(1));
-                community.setcName(rs.getString(2));
-                community.setcType(rs.getString(3));
-                community.setcSrc(rs.getString(4));
-                community.setSyn(rs.getString(5));
-                community.setcStartTime(rs.getString(6));
-                community.setcStuNum(rs.getString(7));
+                community.setcNum(rs.getString("cNum"));
+                community.setcName(rs.getString("cName"));
+                community.setcType(rs.getString("cType"));
+                community.setcSrc(rs.getString("cSrc"));
+                community.setSyn(rs.getString("Syn"));
+                community.setcStartTime(rs.getString("cStartTime"));
+                community.setcStuNum(rs.getString("stuNum"));
+                community.setState(rs.getInt("state"));
                 communities.add(community);
             }
         }catch (Exception e){

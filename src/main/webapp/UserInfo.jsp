@@ -175,7 +175,7 @@
                                             <li>昵称 <input class="myinput" type="text" value=<%=user.getuName()%> name="uName" /></li>
                                             <li>姓名 <input class="myinput" type="text" value=<%=user.getStuName()%> name="stuName" readonly="readonly" /></li>
                                             <li>性别 <input class="myinput" type="text" value=<%=user.getStuSex()%> name="stuSex"  readonly="readonly" /></li>
-                                            <li>学校 <input class="myinput" type="text" value=<%=user.getStuSchool()%> name="stuSchool" /></li>
+                                            <li>学校 <input class="myinput" type="text" value=<%=user.getStuSchool()%> name="stuSchool" readonly="readonly" /></li>
                                             <li>专业 <input class="myinput" type="text" value=<%=user.getStuProfess()%> name="stuProfess" /></li>
                                             <li>学号 <input class="myinput" type="text" value=<%=user.getStuNum()%> name="stuNum" readonly="readonly" /></li>
                                             <li>电话 <input class="myinput" type="text" value=<%=user.getStuNumber()%> name="stuNumber" /></li>

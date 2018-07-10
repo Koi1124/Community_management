@@ -156,9 +156,12 @@
                     <%
                         for (int i=0;i<communityList.size();i++) {
                             Community community=communityList.get(i);
+                            int cState=community.getState();
                             int state=communityService.getUStateByNum(client.getStuNum(),community.getcNum());
                             if (state==3){}
                             else {
+                                if (cState==0) {}
+                                else {
                     %>
                     <div class="panel" style="border-radius: 5px 5px 0 0;">
                         <div style="background-color: #CCCCCC ;border-radius: 5px 5px 0 0;">
@@ -218,7 +221,8 @@
                         </div>
                     </div>
                     <%
-                        }
+                                }
+                            }
                         }
                     %>
                     </form>
