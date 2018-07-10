@@ -133,6 +133,18 @@ public class doLogin extends HttpServlet {
             dispatcher.forward(request,response);
         }
 
+         if(op.equals("createComm"))
+        {
+            boolean createResult = createApply(request,response,communityService);
+            if(createResult)
+            {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Community.jsp");
+                dispatcher.forward(request,response);
+            }
+            else response.sendRedirect("createCom.jsp?error=yes");
+
+        }
+
 
     }
 
