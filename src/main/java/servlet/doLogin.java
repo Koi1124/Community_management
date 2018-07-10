@@ -35,7 +35,7 @@ public class doLogin extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String op = request.getParameter("action");
         List<Activity> alist = new ArrayList<>();
-        List<User> ulist = new ArrayList<>()
+        List<User> ulist = new ArrayList<>();
         User user = new User();
 
         if(op.equals("注册"))
