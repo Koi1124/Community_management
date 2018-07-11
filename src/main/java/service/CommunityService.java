@@ -93,5 +93,26 @@ public class CommunityService {
         return communities;
     }
 
+    public List<Community> commToAudit(){
+        List<Community> communities = communityDAO.getCommunities();
+        Iterator<Community> it = communities.iterator();
+        while(it.hasNext()){
+            Community x = it.next();
+            if(x.getState()==1){
+                it.remove();
+            }
+        }
+
+        return communities;
+    }
+
+    public int deleteComm(String cNum){
+        return communityDAO.deleteCommunity(cNum);
+    }
+
+    public int changeState(String cNum){
+        return communityDAO.changeState(cNum);
+    }
+
 
 }
