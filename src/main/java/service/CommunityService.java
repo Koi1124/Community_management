@@ -6,6 +6,7 @@ import model.Community;
 import model.User;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CommunityService {
@@ -39,9 +40,9 @@ public class CommunityService {
         return community;
     }
 
-    public String getCommIDByCName(String cName) {
-        String cNum=communityDAO.getCommIDByCName(cName);
-        return cNum;
+    public String getCNameByCommID(String cNum) {
+        String cName=communityDAO.getCNameByCommID(cNum);
+        return cName;
     }
 
     public List<Community> getManCommByID(String stuNum){
@@ -93,6 +94,12 @@ public class CommunityService {
         return communities;
     }
 
+    public boolean doReviseSyn(String syn,String cNum){
+        if (communityDAO.updateCommunity(syn,cNum)>0){
+            return true;
+        }else return false;
+    }
+
     public List<Community> commToAudit(){
         List<Community> communities = communityDAO.getCommunities();
         Iterator<Community> it = communities.iterator();
@@ -113,6 +120,5 @@ public class CommunityService {
     public int changeState(String cNum){
         return communityDAO.changeState(cNum);
     }
-
 
 }

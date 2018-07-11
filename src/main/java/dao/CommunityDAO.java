@@ -22,7 +22,7 @@ public interface CommunityDAO {
      *@Return: int
      *@Author:
      */
-    int updateCommunity(Community community);
+    int updateCommunity(String syn,String cNum);
 
     /**
      *@Discription: 操作社团，进行删
@@ -80,8 +80,7 @@ public interface CommunityDAO {
     List<User> getMumbers(String cNum);
 
 
-
-    String getCommIDByCName(String cName);
+    String getCNameByCommID(String cNum);
 
     /**
      *@Discription: 根据学号获取学生管理的社团列表（管理社团页用）
@@ -142,6 +141,7 @@ public interface CommunityDAO {
      *@Author: 
      */
     int addMum(String cNum,String stuNum);
+
 
     int changeState(String cNum);
 }

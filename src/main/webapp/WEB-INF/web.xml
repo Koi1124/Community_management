@@ -60,4 +60,23 @@
         <servlet-name>Search</servlet-name>
         <url-pattern>/Search</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CommReviewServlet</servlet-name>
+        <servlet-class>servlet.CommReviewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CommReviewServlet</servlet-name>
+        <url-pattern>/CommReviewServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteCommServlet</servlet-name>
+        <servlet-class>servlet.DeleteCommServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteCommServlet</servlet-name>
+        <url-pattern>/DeleteCommServlet</url-pattern>
+    </servlet-mapping>
+
 </web-app>

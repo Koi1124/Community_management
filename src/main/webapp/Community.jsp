@@ -2,10 +2,12 @@
 <%@ page import="model.User" %>
 <%@ page import="model.Community" %>
 <%@ page import="java.util.List" %>
+<%@ page import="service.UserService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     CommunityService communityService=new CommunityService();
+    UserService userService=new UserService();
     User client=(User)session.getAttribute("curUser");
     String stuNum=client.getStuNum();
     List<Community>communities=communityService.getCommByUID(stuNum);
@@ -243,6 +245,9 @@
                                                 <span class="label label-warning">成立时间</span>
                                                 <a><%=community.getcStartTime() %></a>
                                                 </br>
+                                                <span class="label label-danger">社长</span>
+                                                <a><%=userService.getStuName(community.getcStuNum())%></a>
+                                                </br>
                                
                                             </div>
                                             <div></br>
@@ -302,6 +307,9 @@
                                                 </br>
                                                 <span class="label label-warning">成立时间</span>
                                                 <a><%=community.getcStartTime()%></a>
+                                                </br>
+                                                <span class="label label-danger">社长</span>
+                                                <a><%=userService.getStuName(community.getcStuNum())%></a>
                                                 </br>
                                             </div>
                                             <div></br>

@@ -31,7 +31,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
                 activity.setaContent(rs.getString("aContent"));
                 activity.setaDate(rs.getString("aDate"));
                 activity.setaTitle(rs.getString("aTitle"));
-                activity.setcName(rs.getString("cName"));
+                activity.setcNum(rs.getString("cNum"));
                 activities.add(activity);
             }
         }catch (Exception e){
@@ -42,13 +42,13 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
 
 
     @Override
-    public List<Activity> getActByComm(String cName) {
-        String sql="select * from activity where cName=?";
+    public List<Activity> getActByComm(String cNum) {
+        String sql="select * from activity where cNum=?";
         List<Activity> activities=new ArrayList<>();
         try {
             getConnection();
             ps=conn.prepareStatement(sql);
-            ps.setString(1,cName);
+            ps.setString(1,cNum);
             rs=ps.executeQuery();
             while (rs.next()){
                 Activity activity=new Activity();
@@ -56,7 +56,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
                 activity.setaContent(rs.getString("aContent"));
                 activity.setaDate(rs.getString("aDate"));
                 activity.setaTitle(rs.getString("aTitle"));
-                activity.setcName(rs.getString("cName"));
+                activity.setcNum(rs.getString("cNum"));
                 activities.add(activity);
             }
         }catch (Exception e){
@@ -80,7 +80,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
                 activity.setaContent(rs.getString("aContent"));
                 activity.setaDate(rs.getString("aDate"));
                 activity.setaTitle(rs.getString("aTitle"));
-                activity.setcName(rs.getString("cName"));
+                activity.setcNum(rs.getString("cNum"));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -96,19 +96,19 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
         objects[1]=activity.getaContent();
         objects[2]=activity.getaDate();
         objects[3]=activity.getaTitle();
-        objects[4]=activity.getcName();
+        objects[4]=activity.getcNum();
 
         return executeUpdata(sql,objects);
     }
 
     @Override
     public int updateActivity(Activity activity) {
-        String sql="update Activity set aContent=?,aDate=?,aTitle=?,cName=? where aNum=?";
+        String sql="update Activity set aContent=?,aDate=?,aTitle=?,cNum=? where aNum=?";
         Object[] objects=new Object[5];
         objects[0]=activity.getaContent();
         objects[1]=activity.getaDate();
         objects[2]=activity.getaTitle();
-        objects[3]=activity.getcName();
+        objects[3]=activity.getcNum();
         objects[4]=activity.getaNum();
 
 
@@ -128,7 +128,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
 
     @Override
     public Community getCommInfo(String aNum) {
-        String sql="select c.* from Community c,Activity a where c.cName=a.cName and aNum=?";
+        String sql="select c.* from Community c,Activity a where c.cNum=a.cNum and aNum=?";
         Connection connection=getConn();
         Community community=new Community();
         try{

@@ -5,7 +5,9 @@ import model.User;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
@@ -54,8 +56,12 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
     }
 
     @Override
-    public int updateCommunity(Community community) {
-        return 0;
+    public int updateCommunity(String syn,String cNum) {
+        String sql="update community set Syn=? where cNum=?";
+        Object[] objects=new Object[2];
+        objects[0]=syn;
+        objects[1]=cNum;
+        return executeUpdata(sql,objects);
     }
 
     @Override
@@ -178,21 +184,21 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
     }
 
     @Override
-    public String getCommIDByCName(String cName) {
-        String sql="select cNum from community where cName=?";
-        String cNum="";
+    public String getCNameByCommID(String cNum) {
+        String sql="select cName from community where cNum=?";
+        String cName="";
         try{
             getConnection();
             ps=conn.prepareStatement(sql);
-            ps.setString(1,cName);
+            ps.setString(1,cNum);
             rs=ps.executeQuery();
             while (rs.next()) {
-                cNum=rs.getString("cNum");
+                cName=rs.getString("cName");
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-        return cNum;
+        return cName;
     }
 
     @Override
@@ -370,16 +376,19 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
         return executeUpdata(sql,objects);
     }
 
+    @Override
     public int changeState(String cNum){
-        Date d = new Date();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date=new Date();
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
         String publishTime=simpleDateFormat.format(date);
-        //System.out.println("Date"+date);
+
         String sql = "update community set state = 1,cStartTime=? where cNum = ?";
-        Object[] objects = {date,cNum};
+        Object[] objects = {publishTime,cNum};
+
+        String sql2 = "update stu_comm set state=1 where cNum=?";
+        Object[] objects2={cNum};
+        executeUpdata(sql2,objects2);
+
         return executeUpdata(sql, objects);
     }
 }

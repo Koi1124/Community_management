@@ -9,8 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     User user=(User)session.getAttribute("curUser");
-    String cName=request.getParameter("cName");
-    cName= URLDecoder.decode(URLDecoder.decode(cName,"UTF8"),"UTF-8");
+    String cNum=request.getParameter("cNum");
 %>
 
 <!doctype html>
@@ -136,7 +135,7 @@
             <div class="container-fluid">
                 <div class="panel panel-headline">
                     <form action="Activity" method="post">
-                        <input type="hidden" name="cName" value="<%=cName%>">
+                        <input type="hidden" name="cNum" value="<%=cNum%>">
                         <div class="panel-body">
                             <h3>创建活动</h3>
                             </br>

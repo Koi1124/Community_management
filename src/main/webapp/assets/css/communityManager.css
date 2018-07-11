@@ -4,7 +4,11 @@
 	background:transparent;
 	border:none;
 	resize:none;
-	padding: 0;
+	padding: 0;	
+}
+
+.intro[readonly] {
+	background:transparent;
 }
 
 
@@ -40,4 +44,15 @@
 	border:none;
 }
 
+.btn-red{
+
+	color:red;
+	background:transparent;
+	border:none;
+}
+
+.glyphicon{
+
+	font-size:24px;
+}
 

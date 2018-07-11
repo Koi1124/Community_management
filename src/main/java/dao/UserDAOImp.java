@@ -162,14 +162,13 @@ public class UserDAOImp extends DBconnImp implements UserDAO {
         Object[] obj=new Object[1];
         obj[0]=deleteNum;
 
-        String sql2="delete from stu_comm where stuNum=?";
-        Object[] obj2 =new Object[1];
-        obj[0]=deleteNum;
-        executeUpdata(sql2,obj2);
+        String sql2="delete from remark where stuNum=?";
+        executeUpdata(sql2,obj);
 
         return executeUpdata(sql,obj);
     }
 
+    @Override
     public void searchUser(List<User>searchList,String uName)
     {
         String sql = "select * from userforcomm WHERE uName LIKE '%"+uName+"%'"+"or stuName LIKE '%"+uName+"%'";
@@ -191,6 +190,7 @@ public class UserDAOImp extends DBconnImp implements UserDAO {
 
     }
 
+    @Override
     public String getStuName(String stuNum) {
         String sql="select stuName from userforcomm where stuNum='"+stuNum+"'";
         String stuName=null;

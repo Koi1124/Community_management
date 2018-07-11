@@ -26,7 +26,7 @@
     List<User> users=communityService.getUserByComm(cNum);
     ActivityService activityService=new ActivityService();
     Community community=communityService.getCommByID(cNum);
-    List<Activity> activities=activityService.getAcByComm(community.getcName());
+    List<Activity> activities=activityService.getAcByComm(cNum);
 
 %>
 <!doctype html>

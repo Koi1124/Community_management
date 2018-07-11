@@ -5,7 +5,7 @@ public class Activity {
     private String aContent;
     private String aDate;
     private String aTitle;
-    private String cName;
+    private String cNum;
 
     public void setaNum(String aNum) {
         this.aNum = aNum;
@@ -23,8 +23,8 @@ public class Activity {
         this.aTitle = aTitle;
     }
 
-    public void setcName(String cName) {
-        this.cName = cName;
+    public void setcNum(String cNum) {
+        this.cNum = cNum;
     }
 
     public String getaNum() {
@@ -43,7 +43,7 @@ public class Activity {
         return aTitle;
     }
 
-    public String getcName() {
-        return cName;
+    public String getcNum() {
+        return cNum;
     }
 }

@@ -19,15 +19,15 @@ public interface ActivityDAO {
     List<Activity> getActivities();
     
     /**
-     *@Discription: 根据社团名获取社团活动集合（社团详情页用）
+     *@Discription: 根据社团号获取社团活动集合（社团详情页用）
      *@Param: [cName]
      *@Return: java.util.List<model.Activity>
      *@Author: 
      */
-    List<Activity> getActByComm(String cName);
+    List<Activity> getActByComm(String cNum);
 
     /**
-     *@Discription: 根据社团号获取社团活动（社团详情页用）
+     *@Discription: 根据活动号获取社团活动（社团详情页用）
      *@Param: [aNum]
      *@Return: model.Activity
      *@Author:

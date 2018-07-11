@@ -17,8 +17,7 @@ public class UserService {
     {
         return userDAO.isHave(userI);
     }
-    public boolean doLogin(User userI)
-    {
+    public boolean doLogin(User userI) {
         return userDAO.checkUser(userI);
 
     }
@@ -43,8 +42,7 @@ public class UserService {
         }
     }
 
-    public void searchUser(List<User> searchList, String uName)
-    {
+    public void searchUser(List<User> searchList, String uName) {
         userDAO.searchUser(searchList,uName);
 
     }
@@ -61,8 +59,7 @@ public class UserService {
         return users;
     }
 
-     public String getStuName(String stuNum){
+    public String getStuName(String stuNum){
         return userDAO.getStuName(stuNum);
     }
-
 }

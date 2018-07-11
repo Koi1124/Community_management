@@ -26,9 +26,7 @@
     List<User> users=communityService.getUserByComm(cNum);
     ActivityService activityService=new ActivityService();
     Community community=communityService.getCommByID(cNum);
-    List<Activity> activities=activityService.getAcByComm(community.getcName());
-    String cName=community.getcName();
-    cName= URLEncoder.encode(URLEncoder.encode(cName,"UTF-8"),"UTF-8");
+    List<Activity> activities=activityService.getAcByComm(cNum);
 %>
 <!doctype html>
 <html lang="en">
@@ -171,8 +169,17 @@
                 <div class="panel panel-headline">
                     <div class="panel-body">
                         <h3>简介</h3>
-                        <hr>
-                        <p><%=community.getSyn()%></p>
+                        <form action="Community" method="post">
+                            <input type="hidden" name="type" value="manage">
+                            <div class="newact">
+                                <span id="alter" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';"><i class="lnr lnr-pencil"></i>&nbsp修改简介</span>
+
+                                <button type="submit" name="reviseSyn" value="<%=community.getcNum()%>" id="alterConfirm" class="btn btn-success" style="display:none">确认修改</button>
+                            </div>
+                            <hr>
+                            <textarea id="intro" class="form-control intro"  name="getSyn" readonly="readonly" style="height:120px;"><%=community.getSyn()%>
+                            </textarea>
+                        </form>
                     </div>
                 </div>
                 <!--
@@ -183,7 +190,7 @@
                     <div class="panel-heading" style="padding-bottom: 0;">
                         <h2 class="panel-title">活动</h2>
                         <div class="newact">
-                            <a href="createAct.jsp?cName=<%=cName%>">发布活动</a>
+                            <a href="createAct.jsp?cNum=<%=cNum%>">发布活动</a>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -209,9 +216,21 @@
                                     <td><a href="Activity?aNum=<%=activity.getaNum()%>"><%=activity.getaTitle()%></a></td>
                                     <td><%=activity.getaDate()%></td>
                                     <td style="width:100px;">
-                                        <button  type="submit" name="aNum" value="<%=activity.getaNum()%>" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';">删除
-                                        </button>
+												  <span id="activityDel<%=i%>" class="trans">删除
+												  </span>
                                     </td>
+                                </tr>
+
+                                <tr id="tr-activityDel<%=i%>" style="display:none;">
+                                    <td colspan="2" style="color:black">确定删除活动吗？</td>
+
+                                    <td style="text-align: left;">
+                                        <button type="submit" name="aNum" class="btn-agree" value="<%=activity.getaNum()%>" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                        <span id="activityDel-cancel<%=i%>" class="btn-red glyphicon glyphicon-remove"></span>
+                                    </td>
+
                                 </tr>
                                 <%
                                     }
@@ -239,13 +258,13 @@
                                             <th>用户</th>
                                             <th>姓名</th>
                                             <th>职务</th>
-                                            <th style="width:80px;"></th>
+                                            <th style="width:140px;"></th>
                                         </tr>
                                         </thead>
 
                                         <form action="Community">
                                             <input type="hidden" name="type" value="manage">
-                                            <tbody>
+                                            <tbody  id="tbody-member">
                                             <%
                                                 for (int i=0;i<users.size();i++) {
                                                     User user=users.get(i);
@@ -264,18 +283,52 @@
                                                 <td><a href=User?stuNum=<%=user.getStuNum()%>><%=user.getuName()%></a></td>
                                                 <td><%=user.getStuName()%></td>
                                                 <td><%=iden%></td>
-                                                <td style="width:80px;">
                                                 <%
-                                                    if (iden.equals("成员")) {
+                                                    if (iden.equals("社长")) {
                                                 %>
-
-                                                    <button type="submit" name="memberDel" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';">删除
-                                                    </button>
-                                                <%
-                                                        }
-                                                %>
+                                                <td style=""></td>
+                                            </tr>
+                                            <%
+                                                }else if (iden.equals("成员")) {
+                                            %>
+                                                <td>
+                                                    <span id="manage<%=i%>" class="btn-agree" style="padding-right:15px">授权
+												  </span>
+                                                    <span id="remove<%=i%>" class="trans" >移出
+												  </span>
                                                 </td>
                                             </tr>
+                                            <!-- 授予管理员 -->
+                                            <tr id="tr-manage<%=i%>" style="display:none;">
+                                                <td colspan="3" style="color:black">确定授予"<%=user.getuName()%>"管理员吗？</td>
+
+                                                <td style="text-align: right;">
+                                                    <button type="submit" name="" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
+                                                        <span class="glyphicon glyphicon-ok"></span>
+                                                    </button>
+                                                    <span id="manage-cancel<%=i%>" class="btn-red glyphicon glyphicon-remove"></span>
+                                                </td>
+
+                                            </tr>
+                                            <!-- END 授予管理员 -->
+
+                                            <!-- 移出社员 -->
+                                            <tr id="tr-remove<%=i%>" style="display:none;">
+                                                <td colspan="3" style="color:black">确定将"<%=user.getuName()%>"移出社团吗？</td>
+
+                                                <td style="text-align: right;">
+                                                    <button type="submit" name="memberDel" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
+                                                        <span class="glyphicon glyphicon-ok"></span>
+                                                    </button>
+                                                    <span id="remove-cancel<%=i%>" class="btn-red glyphicon glyphicon-remove"></span>
+                                                </td>
+
+                                            </tr>
+                                            <%
+                                                }
+                                            %>
+                                            <!-- END 移出社员 -->
+                                            <!-- END 普通成员 -->
                                                     <%
                                                     }else {
                                                 %>
@@ -283,13 +336,41 @@
                                                 <td><a href=User?stuNum=<%=user.getStuNum()%>><%=user.getuName()%></a></td>
                                                 <td><%=user.getStuName()%></td>
                                                 <td>待审核</td>
-                                                <td style="width:120px;">
-                                                    <button type="submit" name="agree" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">同意
-                                                    </button>
-                                                    <button type="submit" name="memberDel" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';">拒绝
-                                                    </button>
+                                                <td>
+												  <span id="agree<%=i%>" class="btn-agree" style="padding-right:15px">同意
+												  </span>
+                                                    <span id="refuse<%=i%>" class="trans">拒绝
+												  </span>
                                                 </td>
                                             </tr>
+                                            <!-- 同意申请 -->
+                                            <tr id="tr-agree<%=i%>" style="display:none;">
+                                                <td colspan="3" style="color:black">同意"<%=user.getuName()%>"加入社团吗？</td>
+
+                                                <td style="text-align: right;">
+                                                    <button type="submit" name="agree" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
+                                                        <span class="glyphicon glyphicon-ok"></span>
+                                                    </button>
+                                                    <span id="agree-cancel<%=i%>" class="btn-red glyphicon glyphicon-remove"></span>
+                                                </td>
+
+                                            </tr>
+                                            <!-- END 同意申请 -->
+
+                                            <!-- 拒绝申请 -->
+                                            <tr id="tr-refuse<%=i%>" style="display:none;">
+                                                <td colspan="3" style="color:black">拒绝"<%=user.getuName()%>"加入社团吗？</td>
+
+                                                <td style="text-align: right;">
+                                                    <button type="submit" name="memberDel" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
+                                                        <span class="glyphicon glyphicon-ok"></span>
+                                                    </button>
+                                                    <span id="refuse-cancel<%=i%>" class="btn-red glyphicon glyphicon-remove"></span>
+                                                </td>
+
+                                            </tr>
+                                            <!-- END 拒绝申请 -->
+                                            <!-- END 待审核 -->
                                                 <%
                                                         }
                                                 }
@@ -336,12 +417,27 @@
                                             <td><a href="Remark?rNum=<%=remark.getrNum()%>&type=normal"><%=remarker.getuName()%></a></td>
                                             <td><%=remark.getrContent()%></td>
                                             <td><%=remark.getrDate()%></td>
-                                            <td style="width:80px;">
-                                                <input type="hidden" name="type" value="remarkDel">
-                                                <button type="submit" name="remarkDel" value="<%=remark.getrNum()%>" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';">删除
-                                                </button>
+                                            <td style="width:100px;">
+												  <span id="messageDel<%=i%>" class="trans">删除
+												  </span>
                                             </td>
                                         </tr>
+
+                                        <!-- 删除留言 -->
+                                        <tr id="tr-messageDel<%=i%>" style="display:none;">
+                                            <td colspan="3" style="color:black">确定删除留言吗？</td>
+
+                                            <td>
+                                                <input type="hidden" name="type" value="remarkDel">
+                                                <button type="submit" name="remarkDel" value="<%=remark.getrNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
+                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                </button>
+                                                <span id="messageDel-cancel<%=i%>" class="btn-red glyphicon glyphicon-remove"></span>
+                                            </td>
+
+                                        </tr>
+                                        <!-- END 删除留言 -->
+
                                         <%
                                             }
                                         %>
@@ -376,6 +472,198 @@
     <script src="assets/vendor/chartist/js/chartist.min.js"></script>
     <script src="assets/scripts/klorofil-common.js"></script>
     <script>
+
+        $("#alter").click(function(){
+
+            $("#alter").hide();
+            $("#alterConfirm").show();
+            $("#intro").removeAttr("readonly");
+
+        });
+        // 活动
+        // 删除活动
+        <%
+        for (int i=0;i<activities.size();i++){
+        %>
+
+        $("#activityDel<%=i%>").mouseover(function(){
+
+            $("#activityDel<%=i%>").css("color","#3287B2");
+
+            $("#tr-activityDel<%=i%>").show();
+        });
+
+        // 取消删除活动
+
+        $("#activityDel-cancel<%=i%>").mouseover(function(){
+
+            $("#activityDel<%=i%>").css("color","#00AAFF");
+            $("#tr-activityDel<%=i%>").hide();
+        });
+        <%
+                }
+        %>
+
+
+        // 留言
+        // 删除留言
+
+        <%
+        for (int i=0;i<remarks.size();i++) {
+        %>
+
+        $("#messageDel<%=i%>").mouseover(function(){
+
+            $("#messageDel<%=i%>").css("color","#3287B2");
+
+            $("#tr-messageDel<%=i%>").show();
+        });
+
+        // 取消删除留言
+
+        $("#messageDel-cancel<%=i%>").mouseover(function(){
+
+            $("#messageDel<%=i%>").css("color","#00AAFF");
+            $("#tr-messageDel<%=i%>").hide();
+        });
+
+        <%
+        }
+        %>
+
+        // 对普通成员的操作
+        // 授予管理员权限
+
+        <%
+        for (int i=0;i<users.size();i++) {
+        %>
+        $("#manage<%=i%>").mouseover(function(){
+
+            $("#revoke<%=i%>").css("color","#00AAFF");
+            $("#remove<%=i%>").css("color","#00AAFF");
+            $("#refuse<%=i%>").css("color","#00AAFF");
+            $("#grant<%=i%>").css("color","#41B314");
+            $("#manage<%=i%>").css("color","#006600");
+            $("#agree<%=i%>").css("color","#41B314");
+
+            $("#tr-revoke<%=i%>").hide();
+            $("#tr-grant<%=i%>").hide();
+
+            $("#tr-refuse<%=i%>").hide();
+            $("#tr-agree<%=i%>").hide();
+
+            $("#tr-remove<%=i%>").hide();
+            $("#tr-manage<%=i%>").show();
+        });
+
+        // 取消授予管理员
+
+        $("#manage-cancel<%=i%>").mouseover(function(){
+
+            $("#manage<%=i%>").css("color","#41B314");
+            $("#tr-manage<%=i%>").hide();
+            $("#tr-remove<%=i%>").hide();
+        });
+
+        // 成员移出社团
+
+        $("#remove<%=i%>").mouseover(function(){
+
+            $("#revoke<%=i%>").css("color","#00AAFF");
+            $("#remove<%=i%>").css("color","#3287B2");
+            $("#refuse<%=i%>").css("color","#00AAFF");
+            $("#grant<%=i%>").css("color","#41B314");
+            $("#manage<%=i%>").css("color","#41B314");
+            $("#agree<%=i%>").css("color","#41B314");
+
+            $("#tr-revoke<%=i%>").hide();
+            $("#tr-grant<%=i%>").hide();
+
+            $("#tr-refuse<%=i%>").hide();
+            $("#tr-agree<%=i%>").hide();
+
+            $("#tr-manage<%=i%>").hide();
+            $("#tr-remove<%=i%>").show();
+        });
+
+        // 取消移出社员
+
+        $("#remove-cancel<%=i%>").mouseover(function(){
+
+            $("#remove<%=i%>").css("color","#00AAFF");
+            $("#tr-manage<%=i%>").hide();
+            $("#tr-remove<%=i%>").hide();
+        });
+        <%
+        }
+        %>
+
+        // 对申请人的操作
+        // 同意申请
+
+        <%
+        for (int i=0;i<users.size();i++) {
+        %>
+        $("#agree<%=i%>").mouseover(function(){
+
+            $("#revoke<%=i%>").css("color","#00AAFF");
+            $("#remove<%=i%>").css("color","#00AAFF");
+            $("#refuse<%=i%>").css("color","#00AAFF");
+            $("#grant<%=i%>").css("color","#41B314");
+            $("#manage<%=i%>").css("color","#41B314");
+            $("#agree<%=i%>").css("color","#006600");
+
+            $("#tr-revoke<%=i%>").hide();
+            $("#tr-grant<%=i%>").hide();
+
+            $("#tr-remove<%=i%>").hide();
+            $("#tr-manage<%=i%>").hide();
+
+            $("#tr-refuse<%=i%>").hide();
+            $("#tr-agree<%=i%>").show();
+        });
+
+        // 取消同意申请
+
+        $("#agree-cancel<%=i%>").mouseover(function(){
+
+            $("#agree<%=i%>").css("color","#41B314");
+            $("#tr-agree<%=i%>").hide();
+            $("#tr-refuse<%=i%>").hide();
+        });
+
+        // 拒绝申请
+
+        $("#refuse<%=i%>").mouseover(function(){
+
+            $("#revoke<%=i%>").css("color","#00AAFF");
+            $("#remove<%=i%>").css("color","#00AAFF");
+            $("#refuse<%=i%>").css("color","#3287B2");
+            $("#grant<%=i%>").css("color","#41B314");
+            $("#manage<%=i%>").css("color","#41B314");
+            $("#agree<%=i%>").css("color","#41B314");
+
+            $("#tr-revoke<%=i%>").hide();
+            $("#tr-grant<%=i%>").hide();
+
+            $("#tr-remove<%=i%>").hide();
+            $("#tr-manage<%=i%>").hide();
+
+            $("#tr-agree<%=i%>").hide();
+            $("#tr-refuse<%=i%>").show();
+        });
+
+        // 取消拒绝申请
+
+        $("#refuse-cancel<%=i%>").mouseover(function(){
+
+            $("#refuse<%=i%>").css("color","#00AAFF");
+            $("#tr-agree<%=i%>").hide();
+            $("#tr-refuse<%=i%>").hide();
+        });
+        <%
+        }
+        %>
         $(function() {
             var data, options;
 

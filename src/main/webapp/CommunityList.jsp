@@ -1,7 +1,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.Community" %>
 <%@ page import="service.CommunityService" %>
-<%@ page import="model.User" %><%--
+<%@ page import="model.User" %>
+<%@ page import="service.UserService" %><%--
   Created by IntelliJ IDEA.
   User: Administrator
   Date: 2018/7/8
@@ -12,6 +13,7 @@
 <%
     User client=(User)session.getAttribute("curUser");
     CommunityService communityService=new CommunityService();
+    UserService userService=new UserService();
     List<Community>communityList=communityService.getCommFromDB();
 %>
 <!DOCTYPE html>
@@ -198,14 +200,14 @@
                             </div>
 
                             <div style="display: inline-block  " align="left" >
-                                <span class="label label-primary">编号</span>
-                                <a><%=community.getcNum()%></a>
-                                </br>
                                 <span class="label label-success">类型</span>
                                 <a><%=community.getcType()%></a>
                                 </br>
                                 <span class="label label-warning">成立时间</span>
                                 <a><%=community.getcStartTime()%></a>
+                                </br>
+                                <span class="label label-danger">社长</span>
+                                <a><%=userService.getStuName(community.getcStuNum())%></a>
                                 </br>
                             </div>
 

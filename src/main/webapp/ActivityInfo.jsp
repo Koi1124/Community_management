@@ -12,8 +12,8 @@
 <%
     Activity activity=(Activity)request.getAttribute("selectedActInfo");
     CommunityService communityService=new CommunityService();
-    String cNum= communityService.getCommIDByCName(activity.getcName());
     User client=(User)session.getAttribute("curUser");
+    String cNum=activity.getcNum();
 %>
 
 
@@ -148,7 +148,7 @@
 
                     <div class="panel-body">
                         <h1><%=activity.getaTitle()%></h1>
-                        <a href="Community?getCNum=<%=cNum%>&type=normal"><h3><%=activity.getcName()%></h3></a>
+                        <a href="Community?getCNum=<%=cNum%>&type=normal"><h3><%=communityService.getCNameByCommID(cNum)%></h3></a>
                         <h5><%=activity.getaDate()%></h5>
                         <p><%=activity.getaContent()%></p>
 

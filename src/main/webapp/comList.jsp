@@ -11,16 +11,15 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    List<Community> communities = new ArrayList<>();
     CommunityService communityService = new CommunityService();
-    communities = communityService.getCommFromDB();
+    List<Community> communities = communityService.getCommFromDB();
     UserService userService = new UserService();
 
 %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>community List</title>
+    <title>社团管理</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
@@ -102,6 +101,7 @@
                 <h3 class="page-title">社团列表</h3>
 
                 <%for(int i = 0; i < communities.size(); i++){
+                    if (communities.get(i).getState()==1){
                 %>
                 <div class="col-md-8"><!--社团列表-->
 
@@ -118,7 +118,7 @@
                         </div>
 
                         <div class="panel-heading">
-                            <h3 class="panel-title"><%out.print(communities.get(i).getcName());%></h3>
+                            <h3 class="panel-title"><%=communities.get(i).getcName()%></h3>
                         </div>
 
                         <div class="panel-body" style="display: none;">
@@ -128,10 +128,10 @@
 
                             <div style="display: inline-block  " align="left" >
                                 <span class="label label-success">类型</span>
-                                <a><%out.print(communities.get(i).getcType());%></a>
+                                <a><%=communities.get(i).getcType()%></a>
                                 </br>
                                 <span class="label label-warning">成立时间</span>
-                                <a><%out.print(communities.get(i).getcStartTime());%></a>
+                                <a><%=communities.get(i).getcStartTime()%></a>
                                 </br>
                                 <span class="label label-danger">社长</span>
                                 <a><%=userService.getStuName(communities.get(i).getcStuNum())%></a>
@@ -140,7 +140,7 @@
 
                             <div></br>
                                 <span class="label label-info">简介</span>
-                                <a><%out.print(communities.get(i).getSyn());%></a>
+                                <a><%=communities.get(i).getSyn()%></a>
                             </div>
                         </div>
 
@@ -151,7 +151,10 @@
                         </div>
                     </div>
                 </div>
-                <%}%>
+                <%
+                    }
+                    }
+                %>
             </div>
         </div>
     </div>
@@ -169,7 +172,6 @@
 
 
        function edit(id){
-
             $.get("DeleteCommServlet?cNum="+id,function(msg)
             {
                 location.reload();

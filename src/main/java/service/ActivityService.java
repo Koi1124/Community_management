@@ -23,8 +23,8 @@ public class ActivityService {
         return activities;
     }
 
-    public List<Activity> getAcByComm(String cName){
-        List<Activity> activities=activityDAO.getActByComm(cName);
+    public List<Activity> getAcByComm(String cNum){
+        List<Activity> activities=activityDAO.getActByComm(cNum);
         return activities;
     }
 

@@ -75,14 +75,14 @@ public class ActivityServlet extends HttpServlet {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        String cName=req.getParameter("cName");
+        String cNum=req.getParameter("cNum");
 
         Activity activity=new Activity();
         activity.setaNum(aNum);
         activity.setaTitle(aTitle);
         activity.setaContent(aContent);
         activity.setaDate(publishTime);
-        activity.setcName(cName);
+        activity.setcNum(cNum);
 
 
 

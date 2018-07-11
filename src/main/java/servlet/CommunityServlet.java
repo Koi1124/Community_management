@@ -67,6 +67,18 @@ public class CommunityServlet extends HttpServlet {
                 memberAgree(comNum,stuNum,req,resp);
                 return;
             }
+            String reviseNum=req.getParameter("reviseSyn");
+            if (reviseNum!=null){
+                String syn=req.getParameter("getSyn");
+                PrintWriter out=resp.getWriter();
+                if (syn.equals("")){
+                    out.println("<script language = javascript>alert('SYN EMPTY NOT ALLOWED');");
+                    out.println("location.href='CommunityManage.jsp'</script>");
+                }else {
+                    reviseSyn(syn,reviseNum,out,req,resp);
+                }
+                return;
+            }
         }
 
 
@@ -127,6 +139,16 @@ public class CommunityServlet extends HttpServlet {
         }else {
             out.println("<script language = javascript>alert('QUIT FAILED');");
             out.println("location.href='Community.jsp'</script>");
+        }
+    }
+
+    public void reviseSyn(String syn,String cNum,PrintWriter out,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
+        if (communityService.doReviseSyn(syn,cNum)){
+            out.println("<script language = javascript>alert('UPDATE SUCCESS');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }else {
+            out.println("<script language = javascript>alert('UPDATE FAILED');");
+            out.println("location.href='CommunityManage.jsp'</script>");
         }
     }
 

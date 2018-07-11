@@ -74,6 +74,4 @@ public interface UserDAO {
 
     String getStuName(String cNum);
 
-
-
 }
