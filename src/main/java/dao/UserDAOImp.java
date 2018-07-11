@@ -190,4 +190,19 @@ public class UserDAOImp extends DBconnImp implements UserDAO {
         }
 
     }
+
+    public String getStuName(String stuNum) {
+        String sql="select stuName from userforcomm where stuNum='"+stuNum+"'";
+        String stuName=null;
+        try {
+            getConnection();
+            ps=conn.prepareStatement(sql);
+            rs=ps.executeQuery();
+            if(rs.next())stuName=rs.getString("stuName");
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return stuName;
+    }
 }
