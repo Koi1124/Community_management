@@ -142,4 +142,6 @@ public interface CommunityDAO {
      *@Author: 
      */
     int addMum(String cNum,String stuNum);
+
+    int changeState(String cNum);
 }
