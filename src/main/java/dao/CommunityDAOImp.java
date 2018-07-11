@@ -60,7 +60,9 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
 
     @Override
     public int deleteCommunity(String cNum) {
-        return 0;
+        String sql = "delete from community where cNum = ?";
+        Object[] objects = {cNum};
+        return executeUpdata(sql, objects);
     }
 
     @Override
@@ -366,5 +368,18 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
         objects[2]="2";// 默认身份为2
         objects[3]="0";// 默认状态为0，即申请状态
         return executeUpdata(sql,objects);
+    }
+
+    public int changeState(String cNum){
+        Date d = new Date();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date=new Date();
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        String publishTime=simpleDateFormat.format(date);
+        //System.out.println("Date"+date);
+        String sql = "update community set state = 1,cStartTime=? where cNum = ?";
+        Object[] objects = {date,cNum};
+        return executeUpdata(sql, objects);
     }
 }
