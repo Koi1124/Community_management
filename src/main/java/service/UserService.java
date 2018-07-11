@@ -61,4 +61,8 @@ public class UserService {
         return users;
     }
 
+     public String getStuName(String stuNum){
+        return userDAO.getStuName(stuNum);
+    }
+
 }
