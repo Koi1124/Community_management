@@ -72,6 +72,8 @@ public interface UserDAO {
     int deleteUser(String deleteNum);
     void searchUser(List<User>searchList,String uName);
 
+    String getStuName(String cNum);
+
 
 
 }
