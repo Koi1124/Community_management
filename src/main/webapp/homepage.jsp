@@ -2,6 +2,7 @@
 <%@ page import="model.User" %>
 <%@ page import="model.Activity" %>
 <%@ page import="java.net.URLEncoder" %>
+<%@ page import="service.ActivityService" %>
 <!doctype html>
 <html lang="en">
     
@@ -27,8 +28,10 @@
     <body>
 	<%
         User user=(User)session.getAttribute("curUser");
-        List<Activity> alist = (List<Activity>)session.getAttribute("alist");
-        java.util.Date date=new java.util.Date();
+        List<Activity> alist = new ArrayList<>();
+        ActivityService acs = new ActivityService();
+        acs.initActivityList(alist);
+
     %>
         <!-- WRAPPER -->
         <div id="wrapper">

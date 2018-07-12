@@ -4,6 +4,7 @@ import model.Activity;
 import model.Community;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -160,5 +161,30 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
 
 
         return community;
+    }
+
+
+    @Override
+    public List<Activity> getActByKeyword(String keyword) {
+        String sql = "select * from activity where aTitle like ? ";
+        List<Activity> activities=new ArrayList<>();
+        try {
+            getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, "%"+keyword+"%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Activity activity=new Activity();
+                activity.setaNum(rs.getString("aNum"));
+                activity.setaContent(rs.getString("aContent"));
+                activity.setaDate(rs.getString("aDate"));
+                activity.setaTitle(rs.getString("aTitle"));
+                activity.setcNum(rs.getString("cNum"));
+                activities.add(activity);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return activities;
     }
 }

@@ -223,9 +223,8 @@
                                                 <%
                                                     } else if (identity.equals("1")) {
                                                 %>
-                                                <button type="button" class="btn btn-danger">
+                                                <button type="button" class="btn btn-danger" onclick="edit('<%=community.getcNum()%>')">
                                                     <i class="btn-danger"></i>解散</button>
-                                                </button>
                                                 <%
                                                     }
                                                 %>
@@ -349,7 +348,18 @@
         <script src="assets/vendor/chartist/js/chartist.min.js"></script>
         <script src="assets/scripts/klorofil-common.js"></script>
         <script src="test.js"></script>
-        <script>$(function() {
+        <script>
+            function edit(id){
+                $.get("DeleteCommServlet?cNum="+id,function(msg)
+                {
+                    location.reload();
+                    alert("SUCCEED");
+                })
+            }
+
+
+
+            $(function() {
                 var options;
 
                 var data = {

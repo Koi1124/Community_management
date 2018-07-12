@@ -67,4 +67,6 @@ public interface ActivityDAO {
      *@Author:
      */
     Community getCommInfo(String aNum);
+
+    List<Activity> getActByKeyword(String keyword);
 }

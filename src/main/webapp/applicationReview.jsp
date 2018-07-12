@@ -118,7 +118,7 @@
 
                         <div class="panel-body" style="display: none;">
                             <div style="display: inline-block ">
-                                <img src="assets/img/symbol.jpg" height="120" width="120" style="vertical-align: -120%" />
+                                <img src="<%=communities.get(i).getcSrc()%>" height="120" width="120" style="vertical-align: -120%" />
                             </div>
 
                             <div style="display: inline-block  " align="left" >

@@ -102,7 +102,7 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
     @Override
     public List<Community> getCommByUID(String stuNum) {
         List<Community> commlist=new ArrayList<>();
-        String sql="SELECT c.* from community c,stu_comm sc where c.cNum=sc.cNum and sc.stuNum=? and sc.state=1";
+        String sql="SELECT c.* from community c,stu_comm sc where c.cNum=sc.cNum and sc.stuNum=? and sc.state=1 ORDER  BY sc.stuIden";
         try {
             getConnection();
             ps=conn.prepareStatement(sql);
@@ -204,7 +204,7 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
     @Override
     public List<Community> getManCommByUID(String stuNum) {
 
-        String sql="select c.* from community c,stu_comm sc where c.cNum=sc.cNum and stuIden IN ('1','2') and sc.stuNum=?";
+        String sql="select c.* from community c,stu_comm sc where c.cNum=sc.cNum and stuIden IN ('1','2') and sc.stuNum=? ORDER BY sc.stuIden ";
         List<Community> commlist=new ArrayList<>();
         try{
             getConnection();

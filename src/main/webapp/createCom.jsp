@@ -23,6 +23,9 @@
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+	<link rel="stylesheet" href="assets/css/cropper.min.css">
+	<link rel="stylesheet" href="assets/css/ImgCropping.css">
+
 </head>
 
 <body>
@@ -225,7 +228,7 @@
 		</script>
 
 		<script src="assets/vendor/jquery/jquery.min.js"></script>
-	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="assets/scripts/cropper.min.js"></script>
 		<script type="text/javascript">//弹出框水平垂直居中
         (window.onresize = function() {
@@ -311,9 +314,9 @@
                     newImg.src=cas.toDataURL("image/png");
 //
                     var img = $('#imgId').attr("src");
-                    var alink = document.createElement("a");
-                    alink.href = newImg.src;
-					alert("=============="+alink.href);
+                    //var alink = document.createElement("a");
+                    //alink.href = newImg.src;
+                    //alert("=============="+alink.href);
 //                  alink.download = "testImg.jpg";
 //                  alink.click();
 

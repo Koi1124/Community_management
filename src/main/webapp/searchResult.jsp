@@ -176,6 +176,42 @@
                         </div>
                     </form>
                 </div>
+                <!-- 搜索到的活动 -->
+                <div class="col-md-10">
+                    <h4>活动</h4></br>
+                    <form method="post" action="Activity">
+                        <div class="panel">
+                            <div class="panel-body">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th >标题</th>
+                                        <th >发布社团</th>
+                                        <th style="width:200px;">发布时间</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <%
+                                        for(int k=0;k<(Integer)request.getAttribute("actcount");k++){ String commName=communityService.getCNameByCommID((String)request.getAttribute("coNum"+k));
+                                    %>
+                                    <tr>
+                                        <td>
+                                            <a href="Activity?aNum=<%=request.getAttribute("actNum"+k)%>" target="_blank"> <%=request.getAttribute("actTitle"+k)%></a>
+                                        </td>
+                                        <td><%=commName%></td>
+                                        <td><%=request.getAttribute("actDate"+k)%></td>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
                 <!-- 搜索到的社团 -->
 
                 <div class="col-md-10">

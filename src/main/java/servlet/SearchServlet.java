@@ -1,7 +1,9 @@
 package servlet;
 
+import model.Activity;
 import model.Community;
 import model.User;
+import service.ActivityService;
 import service.CommunityService;
 import service.UserService;
 
@@ -19,6 +21,7 @@ import java.util.List;
 public class SearchServlet extends HttpServlet {
     CommunityService communityService=new CommunityService();
     UserService userService=new UserService();
+    ActivityService activityService=new ActivityService();
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=utf-8");
         resp.setCharacterEncoding("UTF-8");
@@ -27,6 +30,7 @@ public class SearchServlet extends HttpServlet {
         String keyword=req.getParameter("search");
         List<Community> commlist= searchInfoFromComm(keyword,req,resp);
         List<User> userList=searchUser(keyword,req,resp);
+        List<Activity> activities=searchActivity(keyword,req,resp);
         int comcount =0;
         for(int i=0;i<commlist.size();i++){
             Community comm=commlist.get(i);
@@ -39,6 +43,18 @@ public class SearchServlet extends HttpServlet {
             comcount++;
         }
         req.setAttribute("comcount",comcount);
+        int actcount=0;
+        for(int k=0;k<activities.size();k++){
+            Activity activity=activities.get(k);
+            req.setAttribute("actNum"+k,activity.getaNum());
+            req.setAttribute("actDate"+k,activity.getaDate());
+            req.setAttribute("actTitle"+k,activity.getaTitle());
+            req.setAttribute("coNum"+k,activity.getcNum());
+            actcount++;
+        }
+        req.setAttribute("actcount",actcount);
+
+
         int usercount=0;
         for(int j=0;j<userList.size();j++){
            User user=userList.get(j);
@@ -49,7 +65,7 @@ public class SearchServlet extends HttpServlet {
            usercount++;
         }
         req.setAttribute("usercount",usercount);
-        if(usercount!=0||comcount!=0){
+        if(usercount!=0||comcount!=0||actcount!=0){
             RequestDispatcher dispatcher = req.getRequestDispatcher("searchResult.jsp");
             dispatcher.forward(req,resp);
         }else{
@@ -68,5 +84,9 @@ public class SearchServlet extends HttpServlet {
     public List<Community> searchInfoFromComm(String keyword,HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Community> communityList=communityService.communityInformation(keyword);
         return communityList;
+    }
+    public List<Activity> searchActivity(String keyword, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Activity> activities=activityService.searchActivity(keyword);
+        return activities;
     }
 }

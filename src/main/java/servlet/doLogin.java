@@ -9,7 +9,9 @@ import model.User;
 import service.ActivityService;
 import service.CommunityService;
 import service.UserService;
+import sun.misc.BASE64Decoder;
 
+import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +19,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -63,10 +69,10 @@ public class doLogin extends HttpServlet {
             boolean isCheck=login(request,response,user,userService);
             if(isCheck)
             {
-                initAlist(request,response,alist,activityService);
+
                 HttpSession session = request.getSession();
                 session.setAttribute("curUser",user);
-                session.setAttribute("alist",alist);
+
                 RequestDispatcher dispatcher = request.getRequestDispatcher("homepage.jsp");
                 dispatcher.forward(request,response);
             }
@@ -216,20 +222,21 @@ public class doLogin extends HttpServlet {
         User cur = (User)session.getAttribute("curUser");
         comm.setcStuNum(cur.getStuNum());
 
-        String path ="D:\\tomcat\\apache-tomcat-8.0.50\\webapps\\ROOT\\assets\\img\\"+cNum+".png";
+        String path ="D:\\tomcat\\apache-tomcat-7.0.73\\webapps\\ROOT\\assets\\img\\"+cNum+".png";
+        String workPath = "C:\\Users\\Administrator\\Desktop\\stg\\CommunityTest\\src\\main\\webapp\\assets\\img\\"+cNum+".png";
         String imgUrl = request.getParameter("fileUrl");
         String relPath=path.substring(44);
         String base64img = imgUrl.substring(imgUrl.indexOf(",")+1);
         comm.setcSrc(relPath);
         boolean createResult=communityService.createApply(comm);
         if(createResult) {
-            SaveCutImage(base64img,path);
+            SaveCutImage(base64img,path,workPath);
         }
 
         return createResult;
     }
 
-    public  BufferedImage toBufferedImage(Image image) {
+    public BufferedImage toBufferedImage(Image image) {
         if (image instanceof BufferedImage) {
             return (BufferedImage) image;
         }
@@ -263,7 +270,7 @@ public class doLogin extends HttpServlet {
 
 
     //保存裁剪图片
-    public  void SaveCutImage (String base64, String address)
+    public  void SaveCutImage (String base64, String address,String workPath)
     {
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] b = new byte[0];//转码得到图片byte数组
@@ -281,7 +288,9 @@ public class doLogin extends HttpServlet {
             Image imageTookit = Toolkit.getDefaultToolkit().createImage(b);
             BufferedImage bi = toBufferedImage(imageTookit);
             File w2 = new File(address);
+            File ww= new File(workPath);
             ImageIO.write(bi, "png", w2);
+            ImageIO.write(bi, "png", ww);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -45,4 +45,10 @@ public class ActivityService {
         }else return false;
     }
 
+    public List<Activity> searchActivity(String keyword){
+        List<Activity> activities=activityDAO.getActByKeyword(keyword);
+        return activities;
+    }
+
+
 }
