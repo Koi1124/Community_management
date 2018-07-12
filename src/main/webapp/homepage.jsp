@@ -226,10 +226,8 @@
         <script src="assets/vendor/jquery/jquery.min.js"></script>
         <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
         <script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-        <script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
-        <script src="assets/vendor/chartist/js/chartist.min.js"></script>
         <script src="assets/scripts/klorofil-common.js"></script>
-        <script type="text/javascript" src="assets/scripts/jquery1.42.min.js"></script>
+        
         <script type="text/javascript" src="assets/scripts/jquery.SuperSlide.2.1.1.js"></script>
         <script type="text/javascript">jQuery(".rolling").slide({
                 titCell: ".roll-title ul",
