@@ -67,6 +67,33 @@ public class CommunityServlet extends HttpServlet {
                 memberAgree(comNum,stuNum,req,resp);
                 return;
             }
+            String promote=req.getParameter("promote");
+            if (promote!=null) {
+                String[] temp=promote.split("&");
+                String comNum=temp[0];
+                String stuNum=temp[1];
+                String iden="2";
+                memberUpdate(comNum,stuNum,iden,req,resp);
+                return;
+            }
+            String takeover=req.getParameter("takeover");
+            if (takeover!=null) {
+                String[] temp=takeover.split("&");
+                String comNum=temp[0];
+                String stuNum=temp[1];
+                String leadNum=temp[2];
+                leadTakeover(comNum,stuNum,leadNum,req,resp);
+                return;
+            }
+            String demote=req.getParameter("demote");
+            if (demote!=null) {
+                String[] temp=demote.split("&");
+                String comNum=temp[0];
+                String stuNum=temp[1];
+                String iden="3";
+                memberUpdate(comNum,stuNum,iden,req,resp);
+                return;
+            }
             String reviseNum=req.getParameter("reviseSyn");
             if (reviseNum!=null){
                 String syn=req.getParameter("getSyn");
@@ -111,7 +138,7 @@ public class CommunityServlet extends HttpServlet {
 
     public void memberAgree(String cNum,String stuNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();
-        if (communityService.doAgreeMum(cNum,stuNum)){
+        if (communityService.doAgreeMum(cNum,stuNum)) {
             out.println("<script language = javascript>alert('AGREE SUCCESS');");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
@@ -119,6 +146,29 @@ public class CommunityServlet extends HttpServlet {
             out.println("location.href='CommunityManage.jsp'</script>");
         }
     }
+
+    public void leadTakeover(String cNum,String adminNum,String leadNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
+        PrintWriter out=resp.getWriter();
+        if (communityService.doTakeover(cNum,adminNum,leadNum,"3")){
+            out.println("<script language = javascript>alert('TAKEOVER SUCCESS');");
+            out.println("location.href='remark.jsp'</script>");
+        }else {
+            out.println("<script language = javascript>alert('TAKEOVER FAILED');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }
+    }
+
+    public void memberUpdate(String cNum,String stuNum,String iden,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
+        PrintWriter out=resp.getWriter();
+        if (communityService.doUpdateStuIden(cNum,stuNum,iden)){
+            out.println("<script language = javascript>alert('UPDATE SUCCESS');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }else {
+            out.println("<script language = javascript>alert('UPDATE FAILED');");
+            out.println("location.href='CommunityManage.jsp'</script>");
+        }
+    }
+
 
     public void commApply(String cNum,String stuNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();

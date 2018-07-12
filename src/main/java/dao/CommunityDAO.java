@@ -106,6 +106,22 @@ public interface CommunityDAO {
      *@Author: 
      */
     int updateUState(String cNum,String stuNum);
+    
+    /**
+     *@Discription: 根据社团号与学号更改用户身份（管理社团页用）
+     *@Param: [cNum, stuNum, iden]
+     *@Return: int
+     *@Author: 
+     */
+    int updateUIden(String cNum,String stuNum,String iden);
+
+    /**
+     *@Discription: 根据社团号与学号更改社团表中团长号（管理社团页用）
+     *@Param: [cNum, stuNum]
+     *@Return: int
+     *@Author:
+     */
+    int takeoverLead(String cNum,String adminNum,String leadNum);
 
     /**
      *@Discription: 根据用户获取用户加入社团数量

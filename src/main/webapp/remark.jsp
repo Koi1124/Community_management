@@ -250,7 +250,8 @@
                                                 String iden=communityService.getIdenByNum(user.getStuNum(),cNum);
                                                 if (iden.equals("1")){
                                                     iden="社长";
-                                                }else iden="成员";
+                                                }else if (iden.equals("2")) iden="管理员";
+                                                else if (iden.equals("3")) iden="成员";
                                             %>
                                             <td><%=iden%></td>
                                         </tr>

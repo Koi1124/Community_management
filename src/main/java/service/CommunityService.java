@@ -77,6 +77,19 @@ public class CommunityService {
         }else return false;
     }
 
+    public boolean doUpdateStuIden(String cNum,String stuNum,String iden) {
+        if (communityDAO.updateUIden(cNum,stuNum,iden)>0){
+            return true;
+        }else return false;
+    }
+
+    public boolean doTakeover(String cNum,String adminNum,String leadNum,String leadToMum) {
+        if (communityDAO.updateUIden(cNum,leadNum,leadToMum)>0&&communityDAO.takeoverLead(cNum,adminNum,leadNum)>0){
+            return true;
+        }else return false;
+    }
+
+
     public boolean doApply(String cNum,String stuNum) {
         if (communityDAO.addMum(cNum,stuNum)>0){
             return true;

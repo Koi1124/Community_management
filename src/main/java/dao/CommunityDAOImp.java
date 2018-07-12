@@ -155,7 +155,7 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
 
     @Override
     public List<User> getMumbers(String cNum) {
-        String sql="select u.* from userforcomm u,stu_comm sc where u.stuNum=sc.stuNum and cNum=?";
+        String sql="select u.* from userforcomm u,stu_comm sc where u.stuNum=sc.stuNum and cNum=? ORDER BY sc.stuIden,sc.state";
         List<User> users=new ArrayList<>();
         try{
             getConnection();
@@ -204,7 +204,7 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
     @Override
     public List<Community> getManCommByUID(String stuNum) {
 
-        String sql="select c.* from community c,stu_comm sc where c.cNum=sc.cNum and stuIden='1' and c.stuNum=?";
+        String sql="select c.* from community c,stu_comm sc where c.cNum=sc.cNum and stuIden IN ('1','2') and sc.stuNum=?";
         List<Community> commlist=new ArrayList<>();
         try{
             getConnection();
@@ -247,6 +247,25 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
         objects[0]=cNum;
         objects[1]=stuNum;
 
+        return executeUpdata(sql,objects);
+    }
+
+    @Override
+    public int updateUIden(String cNum, String stuNum, String iden) {
+        String sql="update stu_comm set stuIden='"+iden+"' where cNum=? and stuNum=?";
+        Object[] objects={cNum,stuNum};
+        return executeUpdata(sql,objects);
+    }
+
+    @Override
+    public int takeoverLead(String cNum, String adminNum,String leadNum) {
+        String sql="";
+        Object[] objects=new Object[2];
+        if (updateUIden(cNum,adminNum,"1")>0) {// 首先将管理员身份升为1
+            sql="update community set stuNum=? where cNum=?";
+            objects[0]=adminNum;
+            objects[1]=cNum;
+        }
         return executeUpdata(sql,objects);
     }
 
@@ -371,7 +390,7 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
         Object[] objects=new Object[4];
         objects[0]=stuNum;
         objects[1]=cNum;
-        objects[2]="2";// 默认身份为2
+        objects[2]="3";// 默认身份为3
         objects[3]="0";// 默认状态为0，即申请状态
         return executeUpdata(sql,objects);
     }

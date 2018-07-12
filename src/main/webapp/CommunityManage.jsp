@@ -27,6 +27,7 @@
     ActivityService activityService=new ActivityService();
     Community community=communityService.getCommByID(cNum);
     List<Activity> activities=activityService.getAcByComm(cNum);
+    String manageIden=communityService.getIdenByNum(client.getStuNum(),cNum);
 %>
 <!doctype html>
 <html lang="en">
@@ -276,7 +277,8 @@
                                                         String iden=communityService.getIdenByNum(user.getStuNum(),cNum);
                                                         if (iden.equals("1")){
                                                             iden="社长";
-                                                        }else iden="成员";
+                                                        }else if (iden.equals("2")) iden="管理员";
+                                                        else if (iden.equals("3")) iden="成员";
                                                 %>
 
                                             <tr>
@@ -286,14 +288,74 @@
                                                 <%
                                                     if (iden.equals("社长")) {
                                                 %>
-                                                <td style=""></td>
+                                                <td style="width:120px;"></td>
                                             </tr>
                                             <%
-                                                }else if (iden.equals("成员")) {
+                                                }else if (iden.equals("管理员")){
+                                                        if (manageIden.equals("1")) {
+                                            %>
+                                            <td style="width:120px;">
+												  <span id="grant<%=i%>" class="btn-agree" style="padding-right:15px">
+												     交接</span>
+                                                <span id="revoke<%=i%>" class="trans">撤职
+												  </span>
+                                            </td>
+                                            <%
+                                                } else {
+                                            %>
+                                            <td style="width:120px;"></td>
+                                            <%
+                                                }
+                                            %>
+                                            </tr>
+
+                                            <!-- 社长交接 -->
+                                            <tr id="tr-grant<%=i%>" style="display:none;">
+                                                <td colspan="3" style="color:black">确定将社长职位交予<%=user.getuName()%>吗？</td>
+
+                                                <td style="text-align: right;">
+                                                    <button type="submit" name="takeover" value="<%=community.getcNum()%>&<%=user.getStuNum()%>&<%=client.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
+                                                        <span class="glyphicon glyphicon-ok"></span>
+                                                    </button>
+                                                    <span id="grant-cancel<%=i%>" class="btn-red glyphicon glyphicon-remove"></span>
+                                                </td>
+
+                                            </tr>
+                                            <!-- END 社长交接 -->
+
+                                            <!-- 收回管理员权限 -->
+                                            <tr id="tr-revoke<%=i%>" style="display:none;">
+                                                <td colspan="3" style="color:black">确定收回<%=user.getuName()%>的管理权限吗？</td>
+
+                                                <td style="text-align: right;">
+                                                    <button type="submit" name="demote" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
+                                                        <span class="glyphicon glyphicon-ok"></span>
+                                                    </button>
+                                                    <span id="revoke-cancel<%=i%>" class="btn-red glyphicon glyphicon-remove"></span>
+                                                </td>
+
+                                            </tr>
+                                            <!-- END 收回管理员权限 -->
+                                            <!-- END 管理员 -->
+
+
+                                            <%
+                                                }
+                                                else if (iden.equals("成员")) {
                                             %>
                                                 <td>
+                                                    <%
+                                                        if (manageIden.equals("1")) {
+                                                    %>
                                                     <span id="manage<%=i%>" class="btn-agree" style="padding-right:15px">授权
 												  </span>
+                                                    <%
+                                                        }else if (manageIden.equals("2")) {
+                                                    %>
+                                                    <span style="padding-right:15px"></span>
+                                                    <%
+                                                        }
+                                                    %>
                                                     <span id="remove<%=i%>" class="trans" >移出
 												  </span>
                                                 </td>
@@ -303,7 +365,7 @@
                                                 <td colspan="3" style="color:black">确定授予"<%=user.getuName()%>"管理员吗？</td>
 
                                                 <td style="text-align: right;">
-                                                    <button type="submit" name="" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
+                                                    <button type="submit" name="promote" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
                                                         <span class="glyphicon glyphicon-ok"></span>
                                                     </button>
                                                     <span id="manage-cancel<%=i%>" class="btn-red glyphicon glyphicon-remove"></span>
@@ -455,8 +517,6 @@
                     </div>
                 </div>
 
-                <
-
             </div>
         </div>
         <!-- END MAIN CONTENT -->
@@ -530,6 +590,77 @@
         <%
         }
         %>
+
+
+        // 对管理员的操作
+        // 社长交接
+
+        <%
+        for (int i=0;i<users.size();i++) {
+        %>
+
+        $("#grant<%=i%>").mouseover(function(){
+
+            $("#revoke<%=i%>").css("color","#00AAFF");
+            $("#remove<%=i%>").css("color","#00AAFF");
+            $("#refuse<%=i%>").css("color","#00AAFF");
+            $("#grant<%=i%>").css("color","#006600");
+            $("#manage<%=i%>").css("color","#41B314");
+            $("#agree<%=i%>").css("color","#41B314");
+
+            $("#tr-remove<%=i%>").hide();
+            $("#tr-manage<%=i%>").hide();
+
+            $("#tr-refuse<%=i%>").hide();
+            $("#tr-agree<%=i%>").hide();
+
+            $("#tr-revoke<%=i%>").hide();
+            $("#tr-grant<%=i%>").show();
+
+        });
+
+        // 取消社长交接
+
+        $("#grant-cancel<%=i%>").mouseover(function(){
+
+            $("#grant<%=i%>").css("color","#41B314");
+            $("#tr-grant<%=i%>").hide();
+            $("#tr-revoke<%=i%>").hide();
+        });
+
+        // 收回管理员
+
+        $("#revoke<%=i%>").mouseover(function(){
+
+            $("#revoke<%=i%>").css("color","#3287B2");
+            $("#remove<%=i%>").css("color","#00AAFF");
+            $("#refuse<%=i%>").css("color","#00AAFF");
+            $("#grant<%=i%>").css("color","#41B314");
+            $("#manage<%=i%>").css("color","#41B314");
+            $("#agree<%=i%>").css("color","#41B314");
+
+            $("#tr-remove<%=i%>").hide();
+            $("#tr-manage<%=i%>").hide();
+
+            $("#tr-refuse<%=i%>").hide();
+            $("#tr-agree<%=i%>").hide();
+
+            $("#tr-grant<%=i%>").hide();
+            $("#tr-revoke<%=i%>").show();
+        });
+
+        // 取消收回管理员
+
+        $("#revoke-cancel<%=i%>").mouseover(function(){
+
+            $("#revoke<%=i%>").css("color","#00AAFF");
+            $("#tr-grant<%=i%>").hide();
+            $("#tr-revoke<%=i%>").hide();
+        });
+        <%
+        }
+        %>
+
 
         // 对普通成员的操作
         // 授予管理员权限

@@ -216,7 +216,7 @@
                                             <div align="right">
                                                 <input type="hidden" name="type" value="normal">
                                                 <%
-                                                    if (identity.equals("2")) {
+                                                    if (identity.equals("2")||identity.equals("3")) {
                                                 %>
                                                 <button type="submit" name="quit" value="<%=community.getcNum()%>&<%=stuNum%>" class="btn btn-danger">
                                                     <i class="btn-danger"></i>退出</button>
