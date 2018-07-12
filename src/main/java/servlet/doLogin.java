@@ -216,8 +216,76 @@ public class doLogin extends HttpServlet {
         User cur = (User)session.getAttribute("curUser");
         comm.setcStuNum(cur.getStuNum());
 
-        return communityService.createApply(comm);
+        String path ="D:\\tomcat\\apache-tomcat-8.0.50\\webapps\\ROOT\\assets\\img\\"+cNum+".png";
+        String imgUrl = request.getParameter("fileUrl");
+        String relPath=path.substring(44);
+        String base64img = imgUrl.substring(imgUrl.indexOf(",")+1);
+        comm.setcSrc(relPath);
+        boolean createResult=communityService.createApply(comm);
+        if(createResult) {
+            SaveCutImage(base64img,path);
+        }
+
+        return createResult;
     }
 
+    public  BufferedImage toBufferedImage(Image image) {
+        if (image instanceof BufferedImage) {
+            return (BufferedImage) image;
+        }
+        image = new ImageIcon(image).getImage();
+        BufferedImage bimage = null;
+        GraphicsEnvironment ge = GraphicsEnvironment
+                .getLocalGraphicsEnvironment();
+        try {
+            int transparency = Transparency.OPAQUE;
+            GraphicsDevice gs = ge.getDefaultScreenDevice();
+            GraphicsConfiguration gc = gs.getDefaultConfiguration();
+            bimage = gc.createCompatibleImage(image.getWidth(null),
+                    image.getHeight(null), transparency);
+        } catch (HeadlessException e) {
+            // The system does not have a screen
+        }
+        if (bimage == null) {
+            // Create a buffered image using the default color model
+            int type = BufferedImage.TYPE_INT_RGB;
+            bimage = new BufferedImage(image.getWidth(null),
+                    image.getHeight(null), type);
+        }
+        // Copy image to buffered image
+        Graphics g = bimage.createGraphics();
+        // Paint the image onto the buffered image
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+        return bimage;
+    }
+
+
+
+    //保存裁剪图片
+    public  void SaveCutImage (String base64, String address)
+    {
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] b = new byte[0];//转码得到图片byte数组
+        try {
+            b = decoder.decodeBuffer(base64);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        try {
+            Image imageTookit = Toolkit.getDefaultToolkit().createImage(b);
+            BufferedImage bi = toBufferedImage(imageTookit);
+            File w2 = new File(address);
+            ImageIO.write(bi, "png", w2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
