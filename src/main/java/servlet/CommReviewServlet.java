@@ -30,6 +30,7 @@ public class CommReviewServlet extends HttpServlet {
         //System.out.println("in");
 
         CommunityService communityService = new CommunityService();
+        MessageService messageService=new MessageService();
         String cNum = req.getParameter("cNum");
         String value = req.getParameter("value");
 
@@ -64,57 +65,6 @@ public class CommReviewServlet extends HttpServlet {
             message.setmSrc("#");
             messageService.addMessage(message);
         }
-
-
     }
 
-    public static class DeleteCommServlet extends HttpServlet {
-        protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            doPost(req, resp);
-        }
-
-
-        protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            resp.setContentType("text/html;charset=utf-8");
-            resp.setCharacterEncoding("UTF-8");
-            req.setCharacterEncoding("UTF-8");
-
-            String cNum = req.getParameter("cNum");
-            deleteCommunity(cNum,req,resp);
-
-        }
-
-        public void deleteCommunity(String cNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
-
-            PrintWriter out=resp.getWriter();
-            CommunityService communityService = new CommunityService();
-            if(communityService.deleteComm(cNum) > 0){
-                MessageService messageService = new MessageService();
-                String cName = communityService.getCNameByCommID(cNum);
-                String content = "社团"+cName+"已解散";
-                Message message = new Message();
-                message.setIsRead(0);
-                message.setmContent(content);
-                String mNum= UUID.randomUUID().toString().replaceAll("-","");
-                message.setmNum(mNum);
-                message.setmSrc("#");
-                Date date=new Date();
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String publishTime=simpleDateFormat.format(date);
-                message.setmTime(publishTime);
-                List<User> users = communityService.getUserByComm(cNum);
-                for(User u:users){
-                    message.setStuNum(u.getStuNum());
-                    messageService.addMessage(message);
-                }
-                out.println("<script language = javascript>alert('SUCCEED');");
-                out.println("location.href='comList.jsp'</script>");
-            }
-            else{
-                out.println("<script language = javascript>alert('FAIL');");
-                out.println("location.href='comList.jsp'</script>");
-            }
-
-        }
-    }
 }

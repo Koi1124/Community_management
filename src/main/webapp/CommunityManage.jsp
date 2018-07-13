@@ -1,14 +1,8 @@
-<%@ page import="model.User" %>
-<%@ page import="model.Community" %>
-<%@ page import="service.RemarkService" %>
-<%@ page import="service.UserService" %>
-<%@ page import="service.CommunityService" %>
-<%@ page import="model.Remark" %>
 <%@ page import="java.util.List" %>
-<%@ page import="service.ActivityService" %>
-<%@ page import="model.Activity" %>
 <%@ page import="org.omg.IOP.Encoding" %>
-<%@ page import="java.net.URLEncoder" %><%--
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="service.*" %>
+<%@ page import="model.*" %><%--
   Created by IntelliJ IDEA.
   User: Administrator
   Date: 2018/7/9
@@ -21,13 +15,21 @@
     RemarkService remarkService=new RemarkService();
     UserService userService=new UserService();
     CommunityService communityService=new CommunityService();
-    String cNum=(String) session.getAttribute("cNum");
+    String cNum="";
+    if (request.getParameter("cNumByPara")!=null) {
+        cNum=request.getParameter("cNumByPara");
+        session.setAttribute("cNum",cNum);
+    }else cNum=(String) session.getAttribute("cNum");
     List<Remark> remarks=remarkService.getRMByComm(cNum);
     List<User> users=communityService.getUserByComm(cNum);
     ActivityService activityService=new ActivityService();
     Community community=communityService.getCommByID(cNum);
     List<Activity> activities=activityService.getAcByComm(cNum);
     String manageIden=communityService.getIdenByNum(client.getStuNum(),cNum);
+
+    MessageService messageService=new MessageService();
+    String stuNum = client.getStuNum();
+    List<Message> messages = messageService.getMessagesNotRead(stuNum);
 %>
 <!doctype html>
 <html lang="en">
@@ -85,15 +87,29 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
                             <i class="lnr lnr-alarm"></i>
-                            <span class="badge bg-danger">5</span>
-                        </a>
-                        <ul class="dropdown-menu notifications">
-                            <li><a href="#" class="notification-item"><span class="dot bg-warning"></span>System space is almost full</a></li>
-                            <li><a href="#" class="notification-item"><span class="dot bg-danger"></span>You have 9 unfinished tasks</a></li>
-                            <li><a href="#" class="notification-item"><span class="dot bg-success"></span>Monthly report is available</a></li>
-                            <li><a href="#" class="notification-item"><span class="dot bg-warning"></span>Weekly meeting in 1 hour</a></li>
-                            <li><a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a></li>
-                            <li><a href="#" class="more">See all notifications</a></li>
+                            <span class="badge bg-danger" id="NoticeCount"><%=messageService.getCount(stuNum)%></span></a>
+                        <ul class="dropdown-menu notifications" style="overflow-y:auto;width:320px; max-height:400px;">
+                            <div class="panel-heading b-light bg-light">
+                                <strong>通知</strong>
+                            </div>
+                            <%
+                                for(int i = 0; i < messages.size(); i++){%>
+                            <li id="<%=i%>" class="media list-group-item" style="display: block" data-stopPropagation="true">
+                                        <span class="pull-left thumb-sm text-center">
+                                            <a href="<%=messages.get(i).getmSrc()%>" onclick="setNoticeReaded('<%=i%>','<%=messages.get(i).getmNum()%>','0')">
+
+                                                <i class="fa fa-check fa-2x text-success"></i>
+                                            </a>
+                                        </span>
+                                <span class="media-body m-b-none"><%=messages.get(i).getmContent()%>
+                                            <br>
+                                            <small class="text-muted"><%=messages.get(i).getmTime()%></small></span>
+                            </li>
+                            <%}
+                            %>
+                            <div class="panel-footer text-sm">
+                                <a href="javascript:void(0)" onclick="setAllNoticeReaded('1','<%=stuNum%>')">全部标记为已读</a>
+                            </div>
                         </ul>
                     </li>
 
@@ -246,9 +262,10 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>用户</th>
-                                            <th>姓名</th>
-                                            <th>职务</th>
+                                            <th style="width:60px;">用户</th>
+                                            <th style="width:170px;"></th>
+                                            <th style="width:90px;">姓名</th>
+                                            <th style="width:70px;">职务</th>
                                             <th style="width:140px;"></th>
                                         </tr>
                                         </thead>
@@ -272,6 +289,7 @@
                                                 %>
 
                                             <tr>
+                                                <td><img src="<%=user.getStuSrc()%>" class="img-circle" alt="Avatar" style="width: 35px;height:35px"></td>
                                                 <td><a href=User?stuNum=<%=user.getStuNum()%>><%=user.getuName()%></a></td>
                                                 <td><%=user.getStuName()%></td>
                                                 <td><%=iden%></td>
@@ -301,7 +319,7 @@
 
                                             <!-- 社长交接 -->
                                             <tr id="tr-grant<%=i%>" style="display:none;">
-                                                <td colspan="3" style="color:black">确定将社长职位交予<%=user.getuName()%>吗？</td>
+                                                <td colspan="4" style="color:black">确定将社长职位交予<%=user.getuName()%>吗？</td>
 
                                                 <td style="text-align: right;">
                                                     <button type="submit" name="takeover" value="<%=community.getcNum()%>&<%=user.getStuNum()%>&<%=client.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
@@ -315,7 +333,7 @@
 
                                             <!-- 收回管理员权限 -->
                                             <tr id="tr-revoke<%=i%>" style="display:none;">
-                                                <td colspan="3" style="color:black">确定收回<%=user.getuName()%>的管理权限吗？</td>
+                                                <td colspan="4" style="color:black">确定收回<%=user.getuName()%>的管理权限吗？</td>
 
                                                 <td style="text-align: right;">
                                                     <button type="submit" name="demote" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
@@ -352,7 +370,7 @@
                                             </tr>
                                             <!-- 授予管理员 -->
                                             <tr id="tr-manage<%=i%>" style="display:none;">
-                                                <td colspan="3" style="color:black">确定授予"<%=user.getuName()%>"管理员吗？</td>
+                                                <td colspan="4" style="color:black">确定授予"<%=user.getuName()%>"管理员吗？</td>
 
                                                 <td style="text-align: right;">
                                                     <button type="submit" name="promote" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
@@ -366,7 +384,7 @@
 
                                             <!-- 移出社员 -->
                                             <tr id="tr-remove<%=i%>" style="display:none;">
-                                                <td colspan="3" style="color:black">确定将"<%=user.getuName()%>"移出社团吗？</td>
+                                                <td colspan="4" style="color:black">确定将"<%=user.getuName()%>"移出社团吗？</td>
 
                                                 <td style="text-align: right;">
                                                     <button type="submit" name="memberDel" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
@@ -385,6 +403,7 @@
                                                     }else {
                                                 %>
                                             <tr style="color:red;">
+                                                <td><img src="<%=user.getStuSrc()%>" class="img-circle" alt="Avatar" style="width: 35px;height:35px"></td>
                                                 <td><a href=User?stuNum=<%=user.getStuNum()%>><%=user.getuName()%></a></td>
                                                 <td><%=user.getStuName()%></td>
                                                 <td>待审核</td>
@@ -397,7 +416,7 @@
                                             </tr>
                                             <!-- 同意申请 -->
                                             <tr id="tr-agree<%=i%>" style="display:none;">
-                                                <td colspan="3" style="color:black">同意"<%=user.getuName()%>"加入社团吗？</td>
+                                                <td colspan="4" style="color:black">同意"<%=user.getuName()%>"加入社团吗？</td>
 
                                                 <td style="text-align: right;">
                                                     <button type="submit" name="agree" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
@@ -411,7 +430,7 @@
 
                                             <!-- 拒绝申请 -->
                                             <tr id="tr-refuse<%=i%>" style="display:none;">
-                                                <td colspan="3" style="color:black">拒绝"<%=user.getuName()%>"加入社团吗？</td>
+                                                <td colspan="4" style="color:black">拒绝"<%=user.getuName()%>"加入社团吗？</td>
 
                                                 <td style="text-align: right;">
                                                     <button type="submit" name="memberDel" value="<%=community.getcNum()%>&<%=user.getStuNum()%>" class="btn-agree" onmouseover="this.style.color='#006600';" onmouseout="this.style.color='';">
@@ -447,10 +466,11 @@
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>用户</th>
-                                        <th>留言</th>
-                                        <th>时间</th>
-                                        <td style="width:80px;"></td>
+                                        <th style="width:60px;">用户</th>
+                                        <th></th>
+                                        <th style="width:170px;">留言</th>
+                                        <th style="width:100px;">时间</th>
+                                        <td style="width:90px;"></td>
                                     </tr>
                                     </thead>
 
@@ -466,6 +486,7 @@
                                             <%
                                                 User remarker=userService.getUserByID(remark.getStuNum());
                                             %>
+                                            <td><img src="<%=remarker.getStuSrc()%>" class="img-circle" alt="Avatar" style="width: 35px;height:35px"></td>
                                             <td><a href="Remark?rNum=<%=remark.getrNum()%>&type=normal"><%=remarker.getuName()%></a></td>
                                             <td><%=remark.getrContent()%></td>
                                             <td><%=remark.getrDate()%></td>
@@ -477,7 +498,7 @@
 
                                         <!-- 删除留言 -->
                                         <tr id="tr-messageDel<%=i%>" style="display:none;">
-                                            <td colspan="3" style="color:black">确定删除留言吗？</td>
+                                            <td colspan="4" style="color:black">确定删除留言吗？</td>
 
                                             <td>
                                                 <input type="hidden" name="type" value="remarkDel">
@@ -901,6 +922,41 @@
             }
 
         });
+    </script>
+    <script>
+        //标记1条已读
+        function setNoticeReaded(noticeId, mNum, btn) {
+            $("#" + noticeId).slideUp();
+            event.stopPropagation();
+            document.getElementById("NoticeCount").innerText-=1;
+
+            $.ajax({
+                url:"MessageServlet?mNum="+mNum+"&btn="+btn,
+                type:"POST",
+                success:function(e){
+
+                }
+            });
+        }
+
+        //全部标记为已读
+        function setAllNoticeReaded(btn, stuNum){
+            $.ajax({
+                url:"MessageServlet?btn="+btn+"&stuNum="+stuNum,
+                type:"POST",
+                success:function(e){
+                    location.reload();
+                }
+            });
+        }
+        //下拉框查询组件点击区域不关闭下拉框
+        //              $("body").on('click','[data-stopPropagation]',function (e) {
+        //              e.stopPropagation();
+        //  });
+        $('.dropdown-menu').on('click', '[data-stopPropagation]', function(e) {
+            e.stopPropagation();
+        });
+
     </script>
 </body>
 

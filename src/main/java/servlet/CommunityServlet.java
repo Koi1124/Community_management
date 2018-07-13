@@ -219,7 +219,15 @@ public class CommunityServlet extends HttpServlet {
         PrintWriter out=resp.getWriter();
         if (communityService.doUpdateStuIden(cNum,stuNum,iden)){
             String cName = communityService.getCNameByCommID(cNum);
-            String content = "您已成为社团"+cName+"的"+communityService.getIdenByNum(stuNum, cNum);
+            String identity=communityService.getIdenByNum(stuNum, cNum);
+            if (identity.equals("1")){
+                identity="社长";
+            }else if (identity.equals("2")){
+                identity="管理员";
+            }else if (identity.equals("3")){
+                identity="成员";
+            }
+            String content = "您已成为社团"+cName+"的"+identity;
             Message message = new Message();
             message.setmContent(content);
             message.setIsRead(0);
@@ -245,21 +253,23 @@ public class CommunityServlet extends HttpServlet {
         PrintWriter out=resp.getWriter();
         String cName = communityService.getCNameByCommID(cNum);
         String content = "有人申请加入社团"+cName;
-        Message message = new Message();
-        message.setmContent(content);
-        message.setIsRead(0);
-        String src = "CommunityManage.jsp";
-        message.setmSrc(src);
+
         Date date=new Date();
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String publishTime=simpleDateFormat.format(date);
-        message.setmTime(publishTime);
+        String src = "CommunityManage.jsp?cNumByPara="+cNum;
+
         List<User> users = communityService.getAdministrators(cNum);
         if (communityService.doApply(cNum,stuNum)){
             for(User u:users){
+                Message message = new Message();
+                message.setmContent(content);
+                message.setIsRead(0);
+                message.setmSrc(src);
                 message.setStuNum(u.getStuNum());
                 String mNum= UUID.randomUUID().toString().replaceAll("-","");
                 message.setmNum(mNum);
+                message.setmTime(publishTime);
                 messageService.addMessage(message);
             }
             out.println("<script language = javascript>alert('APPLY SUCCESS');");

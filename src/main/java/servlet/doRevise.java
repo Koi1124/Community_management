@@ -77,13 +77,12 @@ public class doRevise extends HttpServlet {
         String imgUrl = req.getParameter("fileUrl");
         if (!imgUrl.equals("")) {
             String base64img = imgUrl.substring(imgUrl.indexOf(",")+1);
-            String tomcatPath ="D:\\tomcat\\apache-tomcat-7.0.73\\webapps\\ROOT\\assets\\img\\"+stuNum+".png";
-            String workPath = "C:\\Users\\Administrator\\Desktop\\stg\\CommunityTest\\src\\main\\webapp\\assets\\img\\"+stuNum+".png";
-            String relPath=tomcatPath.substring(44);
+            String relPath = "assets\\img\\" + stuNum + ".png";
+            String tomcatPath = req.getSession().getServletContext().getRealPath("/") + relPath;
 
             updateUser.setStuSrc(relPath);
 
-            uploadService.SaveCutImage(base64img,tomcatPath,workPath);
+            uploadService.SaveCutImage(base64img,tomcatPath);
         }
         if (userService.doRevise(updateUser)){
             session.setAttribute("curUser",updateUser);

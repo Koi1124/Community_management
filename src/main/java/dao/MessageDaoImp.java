@@ -33,7 +33,7 @@ public class MessageDaoImp extends DBconnImp implements MessageDao{
     }
 
     public int getCount(String stuNum){
-        String sql = "select stuNum,count(*) from message where stuNum = ? group by stuNum";
+        String sql = "select stuNum,count(*) from message where stuNum = ? and isRead=0 group by stuNum";
         int count = 0;
         getConnection();
         try {

@@ -412,7 +412,7 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
     }
 
     public List<User> getAdministrators(String cNum){
-        String sql="select u.* from userforcomm u,stu_comm sc where u.stuNum=sc.stuNum and cNum=? and sc.stuIden in(1,2)";
+        String sql="select u.* from userforcomm u,stu_comm sc where u.stuNum=sc.stuNum and cNum=? and sc.stuIden in('1','2')";
         List<User> users=new ArrayList<>();
         try{
             getConnection();

@@ -2,7 +2,10 @@
 <%@ page import="dao.UserDAO" %>
 <%@ page import="dao.UserDAOImp" %>
 <%@ page import="service.UserService" %>
-<%@ page import="service.CommunityService" %><%--
+<%@ page import="service.CommunityService" %>
+<%@ page import="service.MessageService" %>
+<%@ page import="model.Message" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: ThinkPad
   Date: 2018/7/8
@@ -17,6 +20,9 @@
     String stuNum=client.getStuNum();
     User user=userService.getUserByID(stuNum);
     int commCount=communityService.getCountByUser(client);
+
+    MessageService messageService=new MessageService();
+    List<Message> messages = messageService.getMessagesNotRead(stuNum);
 %>
 <!doctype html>
 <html lang="en">
@@ -71,15 +77,29 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
                             <i class="lnr lnr-alarm"></i>
-                            <span class="badge bg-danger">5</span>
-                        </a>
-                        <ul class="dropdown-menu notifications">
-                            <li><a href="#" class="notification-item"><span class="dot bg-warning"></span>System space is almost full</a></li>
-                            <li><a href="#" class="notification-item"><span class="dot bg-danger"></span>You have 9 unfinished tasks</a></li>
-                            <li><a href="#" class="notification-item"><span class="dot bg-success"></span>Monthly report is available</a></li>
-                            <li><a href="#" class="notification-item"><span class="dot bg-warning"></span>Weekly meeting in 1 hour</a></li>
-                            <li><a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a></li>
-                            <li><a href="#" class="more">See all notifications</a></li>
+                            <span class="badge bg-danger" id="NoticeCount"><%=messageService.getCount(stuNum)%></span></a>
+                        <ul class="dropdown-menu notifications" style="overflow-y:auto;width:320px; max-height:400px;">
+                            <div class="panel-heading b-light bg-light">
+                                <strong>通知</strong>
+                            </div>
+                            <%
+                                for(int i = 0; i < messages.size(); i++){%>
+                            <li id="<%=i%>" class="media list-group-item" style="display: block" data-stopPropagation="true">
+                                        <span class="pull-left thumb-sm text-center">
+                                            <a href="<%=messages.get(i).getmSrc()%>" onclick="setNoticeReaded('<%=i%>','<%=messages.get(i).getmNum()%>','0')">
+
+                                                <i class="fa fa-check fa-2x text-success"></i>
+                                            </a>
+                                        </span>
+                                <span class="media-body m-b-none"><%=messages.get(i).getmContent()%>
+                                            <br>
+                                            <small class="text-muted"><%=messages.get(i).getmTime()%></small></span>
+                            </li>
+                            <%}
+                            %>
+                            <div class="panel-footer text-sm">
+                                <a href="javascript:void(0)" onclick="setAllNoticeReaded('1','<%=stuNum%>')">全部标记为已读</a>
+                            </div>
                         </ul>
                     </li>
 
@@ -329,6 +349,41 @@
 
 
 		</script>
+<script>
+    //标记1条已读
+    function setNoticeReaded(noticeId, mNum, btn) {
+        $("#" + noticeId).slideUp();
+        event.stopPropagation();
+        document.getElementById("NoticeCount").innerText-=1;
+
+        $.ajax({
+            url:"MessageServlet?mNum="+mNum+"&btn="+btn,
+            type:"POST",
+            success:function(e){
+
+            }
+        });
+    }
+
+    //全部标记为已读
+    function setAllNoticeReaded(btn, stuNum){
+        $.ajax({
+            url:"MessageServlet?btn="+btn+"&stuNum="+stuNum,
+            type:"POST",
+            success:function(e){
+                location.reload();
+            }
+        });
+    }
+    //下拉框查询组件点击区域不关闭下拉框
+    //              $("body").on('click','[data-stopPropagation]',function (e) {
+    //              e.stopPropagation();
+    //  });
+    $('.dropdown-menu').on('click', '[data-stopPropagation]', function(e) {
+        e.stopPropagation();
+    });
+
+</script>
 </body>
 
 </html>

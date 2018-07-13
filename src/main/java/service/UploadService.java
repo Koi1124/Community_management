@@ -44,7 +44,7 @@ public class UploadService {
 
 
     //保存裁剪图片
-    public  void SaveCutImage (String base64, String address,String workAddress)   //将图片保存到tomcat目录和项目工作目录下
+    public  void SaveCutImage (String base64, String address)   //将图片保存到tomcat目录和项目工作目录下
     {
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] b = new byte[0];//转码得到图片byte数组
@@ -62,9 +62,10 @@ public class UploadService {
             Image imageTookit = Toolkit.getDefaultToolkit().createImage(b);
             BufferedImage bi = toBufferedImage(imageTookit);
             File w2 = new File(address);
-            File ww=new File(workAddress);
+            if (!w2.exists()){
+                w2.mkdir();
+            }
             ImageIO.write(bi, "png", w2);
-            ImageIO.write(bi, "png", ww);
         } catch (IOException e) {
             e.printStackTrace();
         }

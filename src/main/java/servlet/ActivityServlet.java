@@ -4,6 +4,8 @@ import model.Activity;
 import model.Message;
 import model.User;
 import service.ActivityService;
+import service.CommunityService;
+import service.MessageService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,6 +25,9 @@ import java.util.UUID;
 public class ActivityServlet extends HttpServlet {
     ActivityService activityService=new ActivityService();
     List<Activity> activities=new ArrayList<>();
+    CommunityService communityService=new CommunityService();
+    MessageService messageService=new MessageService();
+
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=utf-8");
@@ -89,14 +94,15 @@ public class ActivityServlet extends HttpServlet {
         List<User> users = communityService.getUserByComm(cNum);
         String cName = communityService.getCNameByCommID(cNum);
         String content = "社团"+cName+"发布新活动";
-        Message message = new Message();
-        message.setmContent(content);
-        message.setIsRead(0);
-        message.setmSrc("ActivityInfo.jsp");
-        message.setmTime(publishTime);
+
 
         if (activityService.doAddActivity(activity)) {
             for(User u:users){
+                Message message = new Message();
+                message.setmContent(content);
+                message.setIsRead(0);
+                message.setmSrc("ActivityInfo.jsp?act="+activity.getaNum());
+                message.setmTime(publishTime);
                 String mNum= UUID.randomUUID().toString().replaceAll("-","");
                 message.setmNum(mNum);
                 message.setStuNum(u.getStuNum());
