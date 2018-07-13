@@ -79,4 +79,13 @@
         <url-pattern>/DeleteCommServlet</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>MessageServlet</servlet-name>
+        <servlet-class>servlet.MessageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MessageServlet</servlet-name>
+        <url-pattern>/MessageServlet</url-pattern>
+    </servlet-mapping>
+
 </web-app>
