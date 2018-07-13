@@ -5,6 +5,7 @@
 <%@ page import="service.ActivityService" %>
 <%@ page import="service.MessageService" %>
 <%@ page import="model.Message" %>
+<%@ page import="service.CommunityService" %>
 <!doctype html>
 <html lang="en">
     
@@ -33,6 +34,7 @@
         List<Activity> alist = new ArrayList<>();
         ActivityService acs = new ActivityService();
         acs.initActivityList(alist);
+        CommunityService communityService=new CommunityService();
         MessageService messageService = new MessageService();
         String stuNum = user.getStuNum();
         List<Message> messages = messageService.getMessagesNotRead(stuNum);
@@ -173,8 +175,11 @@
                                                          {
                                                     %>
                                                     <li>
-                                                        <a href="Activity?aNum=<%=temp.getaNum()%>" target="_blank"><%=temp.getaTitle()%></a>
-                                                        <span><%=temp.getaDate()%></span></li>
+                                                        <a href="Activity?aNum=<%=temp.getaNum()%>" target="_blank"><%=temp.getaTitle()%></a> &emsp; ——
+                                                        <a href="Community?getCNum=<%=temp.getcNum()%>&type=normal"><%=communityService.getCNameByCommID(temp.getcNum())%></a>
+                                                        <span><%=temp.getaDate()%></span>
+                                                        <h5 style="max-width: 150px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><%=temp.getaContent()%></h5>
+                                                    </li>
                                                     <%
                                                         }
                                                     %>
