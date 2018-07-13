@@ -134,4 +134,8 @@ public class CommunityService {
         return communityDAO.changeState(cNum);
     }
 
+    public List<User> getAdministrators(String cNum){
+        return communityDAO.getAdministrators(cNum);
+    }
+
 }

@@ -1,6 +1,10 @@
 package servlet;
 
+import model.Message;
+import model.User;
 import service.CommunityService;
+import service.MessageService;
+import service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,10 +14,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 public class CommunityServlet extends HttpServlet {
 
     CommunityService communityService=new CommunityService();
+    MessageService messageService = new MessageService();
+    UserService userService = new UserService();
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=utf-8");
         resp.setCharacterEncoding("UTF-8");
@@ -128,6 +138,16 @@ public class CommunityServlet extends HttpServlet {
     public void memberDel(String cNum,String stuNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();
         if (communityService.doDeleteMum(cNum,stuNum)) {
+            String cName = communityService.getCNameByCommID(cNum);
+            String content = "您已被移出社团"+cName;
+            Message message = new Message();
+            message.setStuNum(stuNum);
+            message.setIsRead(0);
+            message.setmContent(content);
+            message.setmSrc("#");
+            String mNum= UUID.randomUUID().toString().replaceAll("-","");
+            message.setmNum(mNum);
+            messageService.addMessage(message);
             out.println("<script language = javascript>alert('DELETE SUCCESS');");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
@@ -138,10 +158,30 @@ public class CommunityServlet extends HttpServlet {
 
     public void memberAgree(String cNum,String stuNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();
+        String cName = communityService.getCNameByCommID(cNum);
+        String content = "社团"+cName+"加入申请";
+        Message message = new Message();
+        message.setStuNum(stuNum);
+        message.setIsRead(0);
+        message.setmSrc("#");
+        Date date=new Date();
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String publishTime=simpleDateFormat.format(date);
+        message.setmTime(publishTime);
         if (communityService.doAgreeMum(cNum,stuNum)) {
+            content+="已通过";
+            message.setmContent(content);
+            String mNum= UUID.randomUUID().toString().replaceAll("-","");
+            message.setmNum(mNum);
+            messageService.addMessage(message);
             out.println("<script language = javascript>alert('AGREE SUCCESS');");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
+            content+="被拒绝";
+            message.setmContent(content);
+            String mNum= UUID.randomUUID().toString().replaceAll("-","");
+            message.setmNum(mNum);
+            messageService.addMessage(message);
             out.println("<script language = javascript>alert('AGREE FAILED');");
             out.println("location.href='CommunityManage.jsp'</script>");
         }
@@ -149,7 +189,24 @@ public class CommunityServlet extends HttpServlet {
 
     public void leadTakeover(String cNum,String adminNum,String leadNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();
+        List<User> users = communityService.getUserByComm(cNum);
+        String cName = communityService.getCNameByCommID(cNum);
+        String content = "社团"+cName+"的团长变更为"+userService.getStuName(adminNum);
+        Message message = new Message();
+        message.setIsRead(0);
+        message.setmContent(content);
+        message.setmSrc("#");
+        Date date=new Date();
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String publishTime=simpleDateFormat.format(date);
+        message.setmTime(publishTime);
         if (communityService.doTakeover(cNum,adminNum,leadNum,"3")){
+            for(User u:users){
+                message.setStuNum(u.getStuNum());
+                String mNum= UUID.randomUUID().toString().replaceAll("-","");
+                message.setmNum(mNum);
+                messageService.addMessage(message);
+            }
             out.println("<script language = javascript>alert('TAKEOVER SUCCESS');");
             out.println("location.href='remark.jsp'</script>");
         }else {
@@ -161,6 +218,20 @@ public class CommunityServlet extends HttpServlet {
     public void memberUpdate(String cNum,String stuNum,String iden,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();
         if (communityService.doUpdateStuIden(cNum,stuNum,iden)){
+            String cName = communityService.getCNameByCommID(cNum);
+            String content = "您已成为社团"+cName+"的"+communityService.getIdenByNum(stuNum, cNum);
+            Message message = new Message();
+            message.setmContent(content);
+            message.setIsRead(0);
+            message.setStuNum(stuNum);
+            message.setmSrc("#");
+            Date date=new Date();
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String publishTime=simpleDateFormat.format(date);
+            message.setmTime(publishTime);
+            String mNum= UUID.randomUUID().toString().replaceAll("-","");
+            message.setmNum(mNum);
+            messageService.addMessage(message);
             out.println("<script language = javascript>alert('UPDATE SUCCESS');");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
@@ -172,7 +243,25 @@ public class CommunityServlet extends HttpServlet {
 
     public void commApply(String cNum,String stuNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();
+        String cName = communityService.getCNameByCommID(cNum);
+        String content = "有人申请加入社团"+cName;
+        Message message = new Message();
+        message.setmContent(content);
+        message.setIsRead(0);
+        String src = "CommunityManage.jsp";
+        message.setmSrc(src);
+        Date date=new Date();
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String publishTime=simpleDateFormat.format(date);
+        message.setmTime(publishTime);
+        List<User> users = communityService.getAdministrators(cNum);
         if (communityService.doApply(cNum,stuNum)){
+            for(User u:users){
+                message.setStuNum(u.getStuNum());
+                String mNum= UUID.randomUUID().toString().replaceAll("-","");
+                message.setmNum(mNum);
+                messageService.addMessage(message);
+            }
             out.println("<script language = javascript>alert('APPLY SUCCESS');");
             out.println("location.href='CommunityList.jsp'</script>");
         }else {

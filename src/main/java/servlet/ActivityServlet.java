@@ -1,6 +1,8 @@
 package servlet;
 
 import model.Activity;
+import model.Message;
+import model.User;
 import service.ActivityService;
 
 import javax.servlet.RequestDispatcher;
@@ -84,9 +86,22 @@ public class ActivityServlet extends HttpServlet {
         activity.setaDate(publishTime);
         activity.setcNum(cNum);
 
-
+        List<User> users = communityService.getUserByComm(cNum);
+        String cName = communityService.getCNameByCommID(cNum);
+        String content = "社团"+cName+"发布新活动";
+        Message message = new Message();
+        message.setmContent(content);
+        message.setIsRead(0);
+        message.setmSrc("ActivityInfo.jsp");
+        message.setmTime(publishTime);
 
         if (activityService.doAddActivity(activity)) {
+            for(User u:users){
+                String mNum= UUID.randomUUID().toString().replaceAll("-","");
+                message.setmNum(mNum);
+                message.setStuNum(u.getStuNum());
+                messageService.addMessage(message);
+            }
             activities=activityService.getAcFromDB();
             HttpSession session=req.getSession();
             session.setAttribute("alist",activities);

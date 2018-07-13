@@ -410,4 +410,33 @@ public class CommunityDAOImp extends DBconnImp implements CommunityDAO {
 
         return executeUpdata(sql, objects);
     }
+
+    public List<User> getAdministrators(String cNum){
+        String sql="select u.* from userforcomm u,stu_comm sc where u.stuNum=sc.stuNum and cNum=? and sc.stuIden in(1,2)";
+        List<User> users=new ArrayList<>();
+        try{
+            getConnection();
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,cNum);
+            rs=ps.executeQuery();
+            while (rs.next()){
+                User user=new User();
+                user.setStuNum(rs.getString(1));
+                user.setStuName(rs.getString(2));
+                user.setStuSchool(rs.getString(3));
+                user.setStuBirth(rs.getString(4));
+                user.setStuSex(rs.getString(5));
+                user.setStuProfess(rs.getString(6));
+                user.setuName(rs.getString(7));
+                user.setuPassword(rs.getString(8));
+                user.setStuSrc(rs.getString(9));
+                user.setStuNumber(rs.getString(10));
+                users.add(user);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return users;
+    }
 }

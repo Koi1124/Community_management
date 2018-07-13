@@ -102,9 +102,9 @@
                         <div style="background-color: #CCCCCC ;border-radius: 5px 5px 0 0;">
 
                             <div align="right">
-                                <button type="button" class="btn btn-success" onclick="audit('<%=communities.get(i).getcNum()%>','1')">
+                                <button type="button" class="btn btn-success" onclick="audit('<%=communities.get(i).getcNum()%>','1','<%=communities.get(i).getcStuNum()%>')">
                                     同意</button>
-                                <button type="button" class="btn btn-danger" onclick="audit('<%=communities.get(i).getcNum()%>','0')">
+                                <button type="button" class="btn btn-danger" onclick="audit('<%=communities.get(i).getcNum()%>','0','<%=communities.get(i).getcStuNum()%>')">
                                     拒绝</button>
 
 
@@ -169,9 +169,9 @@
     <script>
 
 
-        function audit(cNum, value){
+        function audit(cNum, value, stuNum){
             //alert("==="+cNum)
-            $.get("/CommReviewServlet?cNum="+cNum+"&value="+value,function(msg)
+            $.get("/CommReviewServlet?cNum="+cNum+"&value="+value+"&stuNum="+stuNum,function(msg)
             {
                 location.reload();
                 alert("SUCCEED");

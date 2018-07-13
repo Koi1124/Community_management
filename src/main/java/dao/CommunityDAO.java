@@ -160,4 +160,6 @@ public interface CommunityDAO {
 
 
     int changeState(String cNum);
+
+    List<User> getAdministrators(String cNum);
 }
