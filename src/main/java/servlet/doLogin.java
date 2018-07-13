@@ -8,6 +8,7 @@ import model.Community;
 import model.User;
 import service.ActivityService;
 import service.CommunityService;
+import service.UploadService;
 import service.UserService;
 import sun.misc.BASE64Decoder;
 
@@ -36,7 +37,7 @@ public class doLogin extends HttpServlet {
     UserService userService = new UserService();
     ActivityService activityService = new ActivityService();
     CommunityService communityService=new CommunityService();
-    UploadService uploadService = new UploadService();
+    UploadService uploadService=new UploadService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //UserDAOImp muImp = new UserDAOImp();
         response.setContentType("text/html;charset=utf-8");
@@ -223,20 +224,21 @@ public class doLogin extends HttpServlet {
         User cur = (User)session.getAttribute("curUser");
         comm.setcStuNum(cur.getStuNum());
 
-        String path ="D:\\tomcat\\apache-tomcat-7.0.73\\webapps\\ROOT\\assets\\img\\"+cNum+".png";
-        String workPath = "C:\\Users\\Administrator\\Desktop\\stg\\CommunityTest\\src\\main\\webapp\\assets\\img\\"+cNum+".png";
         String imgUrl = request.getParameter("fileUrl");
-        String relPath=path.substring(44);
-        String base64img = imgUrl.substring(imgUrl.indexOf(",")+1);
-        comm.setcSrc(relPath);
         boolean createResult=communityService.createApply(comm);
-        if(createResult) {
-            uploadService.SaveCutImage(base64img,path,workPath);
+        if (!imgUrl.equals("")) {
+            String path ="D:\\tomcat\\apache-tomcat-7.0.73\\webapps\\ROOT\\assets\\img\\"+cNum+".png";
+            String workPath = "C:\\Users\\Administrator\\Desktop\\stg\\CommunityTest\\src\\main\\webapp\\assets\\img\\"+cNum+".png";
+
+            String relPath=path.substring(44);
+            String base64img = imgUrl.substring(imgUrl.indexOf(",")+1);
+            comm.setcSrc(relPath);
+            if(createResult) {
+                uploadService.SaveCutImage(base64img,path,workPath);
+            }
         }
 
         return createResult;
     }
-
-   
 
 }

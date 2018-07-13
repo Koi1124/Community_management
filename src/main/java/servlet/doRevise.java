@@ -1,6 +1,7 @@
 package servlet;
 
 import model.User;
+import service.UploadService;
 import service.UserService;
 
 import javax.servlet.ServletException;
@@ -17,6 +18,7 @@ public class doRevise extends HttpServlet {
 
 
     UserService userService=new UserService();
+    UploadService uploadService = new UploadService();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -27,6 +29,7 @@ public class doRevise extends HttpServlet {
 
         HttpSession session=req.getSession();
         User client=(User) session.getAttribute("curUser");
+
 
         String op=req.getParameter("type");
         if (op.equals("infoRevise")) {
@@ -48,7 +51,8 @@ public class doRevise extends HttpServlet {
 
     public void reviseFundInfo(User client,HttpServletRequest req,HttpServletResponse resp,HttpSession session) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();
-        String stuNum=req.getParameter("stuNum");
+        client = (User)session.getAttribute("curUser");
+        String stuNum = client.getStuNum();
         String stuName=req.getParameter("stuName");
         String stuSchool=req.getParameter("stuSchool");
         String stuBirth=req.getParameter("stuBirth");
@@ -69,6 +73,18 @@ public class doRevise extends HttpServlet {
         updateUser.setStuBirth(stuBirth);
         updateUser.setStuProfess(stuProfess);
         updateUser.setuName(uName);
+
+        String imgUrl = req.getParameter("fileUrl");
+        if (!imgUrl.equals("")) {
+            String base64img = imgUrl.substring(imgUrl.indexOf(",")+1);
+            String tomcatPath ="D:\\tomcat\\apache-tomcat-7.0.73\\webapps\\ROOT\\assets\\img\\"+stuNum+".png";
+            String workPath = "C:\\Users\\Administrator\\Desktop\\stg\\CommunityTest\\src\\main\\webapp\\assets\\img\\"+stuNum+".png";
+            String relPath=tomcatPath.substring(44);
+
+            updateUser.setStuSrc(relPath);
+
+            uploadService.SaveCutImage(base64img,tomcatPath,workPath);
+        }
         if (userService.doRevise(updateUser)){
             session.setAttribute("curUser",updateUser);
             out.println("<script language = javascript>alert('SUCCEED');");

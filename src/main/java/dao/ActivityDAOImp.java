@@ -44,7 +44,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
 
     @Override
     public List<Activity> getActByComm(String cNum) {
-        String sql="select * from activity where cNum=?";
+        String sql="select * from activity where cNum=? ORDER BY aDate DESC";
         List<Activity> activities=new ArrayList<>();
         try {
             getConnection();

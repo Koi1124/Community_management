@@ -81,7 +81,7 @@ public class RemarkDAOImp extends DBconnImp implements RemarkDAO {
 
     @Override
     public List<Remark> getRemarkInfo(String cNum) {
-        String sql="SELECT * FROM remark WHERE cNum=?";
+        String sql="SELECT * FROM remark WHERE cNum=? ORDER BY rDate DESC";
         List<Remark> remarks=new ArrayList<>();
         try {
             getConnection(); // need revising

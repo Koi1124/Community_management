@@ -48,14 +48,15 @@ public class UserDAOImp extends DBconnImp implements UserDAO {
 
     @Override
     public int updateUser(User user) {
-        String sql="update userforcomm set uName=?,stuProfess=?,stuNumber=?,stuBirth=?,uPassword=? where stuNum=?";
-        Object[] objects=new Object[6];
+        String sql="update userforcomm set uName=?,stuProfess=?,stuNumber=?,stuBirth=?,uPassword=?,stuSrc=? where stuNum=?";
+        Object[] objects=new Object[7];
         objects[0]=user.getuName();
         objects[1]=user.getStuProfess();
         objects[2]=user.getStuNumber();
         objects[3]=user.getStuBirth();
         objects[4]=user.getuPassword();
-        objects[5]=user.getStuNum();
+        objects[5]=user.getStuSrc();
+        objects[6]=user.getStuNum();
 
 
 
