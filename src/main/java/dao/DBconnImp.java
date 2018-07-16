@@ -137,6 +137,7 @@ public class DBconnImp implements DBconn {
                 tacv.setaDate(rs.getString("aDate"));
                 tacv.setaTitle(rs.getString("aTitle"));
                 tacv.setcNum(rs.getString("cNum"));
+                tacv.setView(rs.getInt("view"));
                 alist.add(tacv);
             }
         }catch (Exception e){

@@ -1,0 +1,46 @@
+ @charset "utf-8";
+
+ input::-webkit-input-placeholder{
+         
+            font-size:18px;
+        }
+
+.input{
+
+    background-color:rgba(252,252,252,0.8);
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.manage{
+
+    height:30px;
+    margin-bottom:20px;
+    border:none;
+    background: transparent;
+}
+
+.trans{
+
+    background:transparent;
+    border:none;
+    font-size:22px;
+    height:34px; 
+}
+
+.check{
+
+    width:15px;
+    height:15px;
+}
+
+.date{
+
+    background-color:rgba(252,252,252,0.8);
+    border-radius:2px;
+    border: 1px solid #ccc;
+    border-color:#eaeaea;
+    color:#555555;
+    width:70%;
+    height:30px;
+}

@@ -1,0 +1,210 @@
+@charset "utf-8";
+
+body{
+
+	background-color:#F3F5F8;
+}
+
+.wrapper{
+
+	text-align:center;
+	vertical-align: center;
+}
+
+.chatbox{
+
+	background: #fff;
+	width:650px;
+	height:500px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:0px;
+}
+
+#friends{
+
+	width:200px;
+	height:500px;
+	border: 1px solid #e7ebee;
+	float:left;
+	overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.friend{
+
+	height:60px;
+	border-bottom: 1px solid #e7ebee;
+    position: relative;
+    vertical-align:center;
+    text-align:left;
+    color:#597a96;
+}
+
+.friend::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 0px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 1px;
+}
+
+.friend img {
+
+    width: 40px;
+    margin: 10px;
+    border-radius: 50%;  
+}
+
+.badge{
+
+	background-color: #F9354C;
+	border-radius: 50%;
+	height:18px;
+	width:18px;
+	margin-top:20px;
+	margin-right:5px;
+	float:right;
+}
+
+.chatview{
+
+	width:450px;
+	float:right;
+
+}
+
+#profile{
+
+}
+
+.profile label{
+
+	margin-top:10px;
+	font-size:20px;
+	font-weight:normal;
+	
+}
+
+#chat-messages{
+
+	text-align:left;
+	height:350px;
+	margin-top:0;
+	overflow-y: auto;
+    overflow-x: hidden;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+#chat-messages label {
+
+    color: #aab8c2;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;  
+    display: block;
+}
+
+.message{
+
+	float:left;
+	margin-bottom:10px;
+	margin-left:10px;
+	width:350px;
+}
+
+.message img {
+
+    width: 30px;
+    margin-right: 5px;
+    border-radius: 50%;  
+}
+
+.message .bubble {
+
+    background: #f0f4f7;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 5px 8px;
+    border-radius: 5px 5px 5px 0px;
+    color: #8495a3;
+    position: relative;
+    float: left;
+    max-width:300px;
+}
+
+.right{
+
+	float:right;
+	margin-left: 30px;
+}
+
+.message img {
+
+    float: left;   
+    border-radius: 50%;
+    width: 30px;
+    
+}
+
+.right .bubble {
+
+    background-color:#41B314;
+    color:black;
+    margin-right:5px;
+    float:right;
+}
+
+.right img {
+
+    float: right;
+    margin-left: 0;
+    margin-right:10px;
+   
+}
+
+#sendmessage {
+
+    height: 100px;
+    margin-bottom:0px;
+ }
+
+ #sendmessage hr {
+
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#sendmessage textarea {
+
+    padding: 1px 5px;
+    overflow:hidden;
+    resize:none;
+}
+
+#send{
+
+	width:100px;
+	height:20px;
+	padding:0;
+	margin-top:5px;
+	float:right;
+}
+
+::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 2px;     
+        height: 1px;
+}
+::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        border-radius: 10px;
+         -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        background: silver;
+}
+::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        border-radius: 10px;
+        background: white;
+}

@@ -49,7 +49,7 @@ public interface ActivityDAO {
      *@Return: int
      *@Author: 
      */
-    int updateActivity(Activity activity);
+    int updateView(Activity activity);
     
     
     /**

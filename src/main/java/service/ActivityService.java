@@ -50,5 +50,11 @@ public class ActivityService {
         return activities;
     }
 
+    public boolean doUpdateView(Activity activity){
+        if (activityDAO.updateView(activity)>0){
+            return true;
+        }else return false;
+    }
+
 
 }

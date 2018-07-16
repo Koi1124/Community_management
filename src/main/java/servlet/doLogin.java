@@ -226,15 +226,17 @@ public class doLogin extends HttpServlet {
 
         String imgUrl = request.getParameter("fileUrl");
 
-        boolean createResult=communityService.createApply(comm);
+        boolean createResult=false;
         if (!imgUrl.equals("")) {
-            String relPath = "assets\\img\\" + cNum + ".png";
-            String tomcatPath = request.getSession().getServletContext().getRealPath("/") + relPath;
+            String path ="D:\\tomcat\\apache-tomcat-7.0.73\\webapps\\ROOT\\assets\\img\\"+cNum+".png";
+            String workPath = "D:\\IDEA\\CommunityTest\\src\\main\\webapp\\assets\\img\\"+cNum+".png";
 
+            String relPath=path.substring(44);
             String base64img = imgUrl.substring(imgUrl.indexOf(",")+1);
             comm.setcSrc(relPath);
+            createResult=communityService.createApply(comm);
             if(createResult) {
-                uploadService.SaveCutImage(base64img,tomcatPath);
+                uploadService.SaveCutImage(base64img,path,workPath);
             }
         }
 

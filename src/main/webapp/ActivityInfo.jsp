@@ -15,19 +15,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     Activity activity=new Activity();
+    ActivityService activityService=new ActivityService();
     String act=request.getParameter("act");
     if (act!=null){
-        ActivityService activityService=new ActivityService();
         Activity activityByPara=activityService.getAcByID(act);
         activity.setaNum(act);
         activity.setaContent(activityByPara.getaContent());
         activity.setaTitle(activityByPara.getaTitle());
         activity.setaDate(activityByPara.getaDate());
         activity.setcNum(activityByPara.getcNum());
+        activity.setView(activityByPara.getView());
     }else activity=(Activity)request.getAttribute("selectedActInfo");
     CommunityService communityService=new CommunityService();
     User client=(User)session.getAttribute("curUser");
     String cNum=activity.getcNum();
+    activity.setView(activity.getView()+1);
+    activityService.doUpdateView(activity);
 
     MessageService messageService=new MessageService();
     String stuNum = client.getStuNum();
@@ -172,7 +175,7 @@
                         <a href="Community?getCNum=<%=cNum%>&type=normal"><h3><%=communityService.getCNameByCommID(cNum)%></h3></a>
                         <h5><%=activity.getaDate()%></h5>
                         <p><%=activity.getaContent()%></p>
-
+                        <p>访问量：<%=activity.getView()%></p>
                     </div>
                 </div>
             </div>

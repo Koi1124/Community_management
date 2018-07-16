@@ -33,6 +33,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
                 activity.setaDate(rs.getString("aDate"));
                 activity.setaTitle(rs.getString("aTitle"));
                 activity.setcNum(rs.getString("cNum"));
+                activity.setView(rs.getInt("view"));
                 activities.add(activity);
             }
         }catch (Exception e){
@@ -58,6 +59,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
                 activity.setaDate(rs.getString("aDate"));
                 activity.setaTitle(rs.getString("aTitle"));
                 activity.setcNum(rs.getString("cNum"));
+                activity.setView(rs.getInt("view"));
                 activities.add(activity);
             }
         }catch (Exception e){
@@ -82,6 +84,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
                 activity.setaDate(rs.getString("aDate"));
                 activity.setaTitle(rs.getString("aTitle"));
                 activity.setcNum(rs.getString("cNum"));
+                activity.setView(rs.getInt("view"));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -91,27 +94,22 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
 
     @Override
     public int addActivity(Activity activity) {
-        String sql="insert into Activity values(?,?,?,?,?)";
+        String sql="insert into Activity values(?,?,?,?,?,?)";
         Object[] objects=new Object[5];
         objects[0]=activity.getaNum();
         objects[1]=activity.getaContent();
         objects[2]=activity.getaDate();
         objects[3]=activity.getaTitle();
         objects[4]=activity.getcNum();
+        objects[5]=activity.getView();
 
         return executeUpdata(sql,objects);
     }
 
     @Override
-    public int updateActivity(Activity activity) {
-        String sql="update Activity set aContent=?,aDate=?,aTitle=?,cNum=? where aNum=?";
-        Object[] objects=new Object[5];
-        objects[0]=activity.getaContent();
-        objects[1]=activity.getaDate();
-        objects[2]=activity.getaTitle();
-        objects[3]=activity.getcNum();
-        objects[4]=activity.getaNum();
-
+    public int updateView(Activity activity) {
+        String sql="update Activity set view=? where aNum=?";
+        Object[] objects={activity.getView(),activity.getaNum()};
 
         return executeUpdata(sql,objects);
     }
@@ -180,6 +178,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
                 activity.setaDate(rs.getString("aDate"));
                 activity.setaTitle(rs.getString("aTitle"));
                 activity.setcNum(rs.getString("cNum"));
+                activity.setView(rs.getInt("view"));
                 activities.add(activity);
             }
         } catch (SQLException e) {

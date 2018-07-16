@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.UUID;
 
 
 public class doRevise extends HttpServlet {
@@ -77,12 +78,14 @@ public class doRevise extends HttpServlet {
         String imgUrl = req.getParameter("fileUrl");
         if (!imgUrl.equals("")) {
             String base64img = imgUrl.substring(imgUrl.indexOf(",")+1);
-            String relPath = "assets\\img\\" + stuNum + ".png";
-            String tomcatPath = req.getSession().getServletContext().getRealPath("/") + relPath;
+            String tomcatPath ="D:\\tomcat\\apache-tomcat-7.0.73\\webapps\\ROOT\\assets\\img\\"+stuNum+ UUID.randomUUID().toString()+".png";
 
+            String relPath=tomcatPath.substring(44);
             updateUser.setStuSrc(relPath);
+            String workPath = "D:\\IDEA\\CommunityTest\\src\\main\\webapp\\"+relPath;
 
-            uploadService.SaveCutImage(base64img,tomcatPath);
+
+            uploadService.SaveCutImage(base64img,tomcatPath,workPath);
         }
         if (userService.doRevise(updateUser)){
             session.setAttribute("curUser",updateUser);

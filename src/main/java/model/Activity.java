@@ -6,6 +6,7 @@ public class Activity {
     private String aDate;
     private String aTitle;
     private String cNum;
+    private int view;
 
     public void setaNum(String aNum) {
         this.aNum = aNum;
@@ -27,6 +28,10 @@ public class Activity {
         this.cNum = cNum;
     }
 
+    public void setView(int view) {
+        this.view = view;
+    }
+
     public String getaNum() {
         return aNum;
     }
@@ -45,5 +50,9 @@ public class Activity {
 
     public String getcNum() {
         return cNum;
+    }
+
+    public int getView() {
+        return view;
     }
 }
