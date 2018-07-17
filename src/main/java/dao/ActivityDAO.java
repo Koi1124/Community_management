@@ -1,8 +1,6 @@
 package dao;
 
-import model.Activity;
-import model.Community;
-import model.User;
+import model.*;
 
 import java.util.List;
 
@@ -69,4 +67,51 @@ public interface ActivityDAO {
     Community getCommInfo(String aNum);
 
     List<Activity> getActByKeyword(String keyword);
+
+    /**
+     *@Discription: 添加活动留言
+     *@Param: [actComment]
+     *@Return: int
+     *@Author:
+     */
+    int addComment(ActComment actComment);
+
+
+
+    /**
+     *@Discription: 根据活动号获取留言列表
+     *@Param: [aNum]
+     *@Return: java.util.List<model.ActComment>
+     *@Author:
+     */
+    List<ActComment> getCommentByANum(String aNum);
+
+
+    /**
+     *@Discription: 添加回复
+     *@Param: [actReply]
+     *@Return: int
+     *@Author:
+     */
+    int addReply(ActReply actReply);
+
+
+    /**
+     *@Discription: 根据活动评论号获取回复列表
+     *@Param: [acNum]
+     *@Return: java.util.List<model.ActComment>
+     *@Author:
+     */
+    List<ActReply> getReplyByUNum(String acNum);
+
+
+    /**
+     *@Discription: 根据活动号获取评论数
+     *@Param: [aNum]
+     *@Return: int
+     *@Author:
+     */
+    int getCommentCount(String aNum);
+
+
 }

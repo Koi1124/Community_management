@@ -1,5 +1,7 @@
 package dao;
 
+import model.ActComment;
+import model.ActReply;
 import model.Activity;
 import model.Community;
 
@@ -185,5 +187,104 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
             e.printStackTrace();
         }
         return activities;
+    }
+
+
+    @Override
+    public int addComment(ActComment actComment) {
+        String sql="insert into activity_comment(aNum,stuNum,content,acDate,acNum) values(?,?,?,?,?)";
+        Object[] objects=new Object[5];
+        objects[0]=actComment.getaNum();
+        objects[1]=actComment.getStuNum();
+        objects[2]=actComment.getContent();
+        objects[3]=actComment.getAcDate();
+        objects[4]=actComment.getAcNum();
+
+        return executeUpdata(sql,objects);
+    }
+
+    @Override
+    public List<ActComment> getCommentByANum(String aNum) {
+        String sql="select * from activity_comment where aNum=? order by acDate desc";
+        List<ActComment> actCommentList=new ArrayList<>();
+        try {
+            getConnection();
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,aNum);
+            rs=ps.executeQuery();
+            while (rs.next()){
+                ActComment actComment=new ActComment();
+                actComment.setaNum(rs.getString("aNum"));
+                actComment.setStuNum(rs.getString("stuNum"));
+                actComment.setContent(rs.getString("content"));
+                actComment.setAcDate(rs.getString("acDate"));
+                actComment.setAcNum(rs.getString("acNum"));
+                actCommentList.add(actComment);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return actCommentList;
+    }
+
+    @Override
+    public int addReply(ActReply actReply) {
+        String sql="insert into activity_comment_reply(fromID,toID,content,acrDate,acNum,acrNum) values(?,?,?,?,?,?)";
+        Object[] objects=new Object[6];
+        objects[0]=actReply.getFromID();
+        objects[1]=actReply.getToID();
+        objects[2]=actReply.getContent();
+        objects[3]=actReply.getAcrDate();
+        objects[4]=actReply.getAcNum();
+        objects[5]=actReply.getAcrNum();
+        return executeUpdata(sql,objects);
+    }
+
+    @Override
+    public List<ActReply> getReplyByUNum(String acNum) {
+        String sql="select * from activity_comment_reply where acNum=? order by acrDate";
+        List<ActReply> actReplyList=new ArrayList<>();
+        try{
+            getConnection();
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,acNum);
+            rs=ps.executeQuery();
+            while (rs.next()){
+                ActReply actReply=new ActReply();
+                actReply.setFromID(rs.getString("fromID"));
+                actReply.setToID(rs.getString("toID"));
+                actReply.setContent(rs.getString("content"));
+                actReply.setAcrDate(rs.getString("acrDate"));
+                actReply.setAcNum(rs.getString("acNum"));
+                actReply.setAcrNum(rs.getString("acrNum"));
+                actReplyList.add(actReply);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return actReplyList;
+    }
+
+    @Override
+    public int getCommentCount(String aNum) {
+        String sql1="SELECT COUNT(*) FROM activity_comment WHERE aNum=?";
+        String sql2="SELECT COUNT(acr.acNum) FROM activity_comment ac,activity_comment_reply acr WHERE ac.aNum=? AND ac.acNum=acr.acNum";
+        int count1=0;
+        int count2=0;
+        try{
+            getConnection();
+            ps=conn.prepareStatement(sql1);
+            ps.setString(1,aNum);
+            rs=ps.executeQuery();
+            if (rs.next())count1=rs.getInt(1);
+            ps=conn.prepareStatement(sql2);
+            ps.setString(1,aNum);
+            rs=ps.executeQuery();
+            if (rs.next())count2=rs.getInt(1);
+            count1+=count2;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return count1;
     }
 }

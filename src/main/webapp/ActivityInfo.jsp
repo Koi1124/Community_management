@@ -1,11 +1,9 @@
-<%@ page import="model.Activity" %>
-<%@ page import="model.Community" %>
 <%@ page import="service.CommunityService" %>
-<%@ page import="model.User" %>
 <%@ page import="service.ActivityService" %>
 <%@ page import="service.MessageService" %>
-<%@ page import="model.Message" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="model.*" %>
+<%@ page import="service.UserService" %><%--
   Created by IntelliJ IDEA.
   User: Administrator
   Date: 2018/7/5
@@ -31,7 +29,9 @@
     String cNum=activity.getcNum();
     activity.setView(activity.getView()+1);
     activityService.doUpdateView(activity);
+    session.setAttribute("passAct",activity);
 
+    UserService userService=new UserService();
     MessageService messageService=new MessageService();
     String stuNum = client.getStuNum();
     List<Message> messages = messageService.getMessagesNotRead(stuNum);
@@ -59,6 +59,7 @@
     <!-- ICONS -->
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
     <link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+    <link href= "assets/css/activityCom.css" type="text/css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -179,11 +180,105 @@
                     </div>
                 </div>
             </div>
+
+            <%
+                List<ActComment> commentList=activityService.getCommentByANum(activity.getaNum());
+            %>
+
+            <div class="container-fluid">
+                <div class="common">
+                    <div class="col-md-12">
+                        <div class="panel panel-headline">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">评论<font style="margin-left: 20px;"><%=activityService.getCommentCountByANum(activity.getaNum())%></font></h3>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="" style="width:85%;margin-left:auto;margin-right: auto;">
+                                    <div style="height:140px;">
+                                        <form action="Comment" method="post">
+                                            <input type="hidden" name="commentInfo" value="<%=client.getStuNum()%>&<%=activity.getaNum()%>">
+                                            <textarea class="form-control" style="" name="comment" placeholder="write here..." rows="4" style=""></textarea>
+                                            <button type="submit" id="send" style="margin-top:10px;float: right;" class="btn btn-success">发送</button>
+                                        </form>
+                                    </div>
+                                    <div id="c1" class="">
+                                        <!-- 一楼 -->
+                                        <%
+                                            for (int i=0;i<commentList.size();i++) {
+                                                ActComment comment=commentList.get(i);
+                                                User commentUser=userService.getUserByID(comment.getStuNum());
+                                                List<ActReply> replyList=activityService.getReplyByACNum(comment.getAcNum());
+                                        %>
+                                        <div class="common-body">
+                                            <hr class="hr_1">
+                                            <a href=User?stuNum=<%=commentUser.getStuNum()%>><img src="<%=commentUser.getStuSrc()%>" class="user-icon"></a>
+                                            <div class="name">
+                                                <a href=User?stuNum=<%=commentUser.getStuNum()%>><%=commentUser.getuName()%></a>
+                                            </div>
+                                            <div class="text">
+                                                <span class="cont"><%=comment.getContent()%></span>
+                                            </div>
+                                            <div class="cominfo" ><!---->
+                                                <span><%=i+1%>楼&nbsp;</span>
+                                                <time datetime><%=comment.getAcDate()%>&nbsp;</time>
+
+                                                <span id="reply<%=i%>" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';">回复</span>
+                                                <span id="cancel<%=i%>" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';" style="display:none;">取消</span>
+                                            </div>
+                                        </div>
+                                        <!-- END 一楼 -->
+                                        <%
+                                            for (int j=0;j<replyList.size();j++) {
+                                                ActReply reply=replyList.get(j);
+                                                User replyUser=userService.getUserByID(reply.getFromID());
+
+                                        %>
+                                        <div class="replybody">
+                                            <hr class="hr_2">
+                                            <a href="User?stuNum=<%=replyUser.getStuNum()%>"><img src="<%=replyUser.getStuSrc()%>" class="replyicon"></a>
+                                            <div class="replyname name">
+                                                <a href="User?stuNum=<%=replyUser.getStuNum()%>"><%=replyUser.getuName()%></a>
+                                            </div>
+                                            <br>
+                                            <div class="replytext">
+                                                <%
+                                                    if (reply.getToID().equals(commentUser.getStuNum())) {
+                                                %>
+                                                <span><%=reply.getContent()%></span>
+                                                <%
+                                                }else {
+                                                %>
+                                                <span>回复 <a href="User?stuNum=<%=reply.getToID()%>">@<%=userService.getUserByID(reply.getToID()).getuName()%></a> :<%=reply.getContent()%></span>
+                                                <%
+                                                    }
+                                                %>
+                                            </div>
+                                            <div class="replyinfo" ><!---->
+                                                <time datetime><%=reply.getAcrDate()%>&nbsp;</time>
+                                                <span id="reply<%=i%><%=j%>" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';">回复</span>
+                                                <span id="cancel<%=i%><%=j%>" class="trans" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';" style="display:none;">取消</span>
+                                            </div>
+                                        </div>
+
+                                        <%
+                                                }
+                                            }
+                                        %>
+
+                                        <!-- END 一条私信 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- END MAIN CONTENT -->
     </div>
     <!-- END MAIN -->
-
+</div>
 <!-- END WRAPPER -->
 <!-- Javascript -->
 <script src="assets/vendor/jquery/jquery.min.js"></script>
@@ -223,6 +318,64 @@
         $('.dropdown-menu').on('click', '[data-stopPropagation]', function(e) {
             e.stopPropagation();
         });
+
+    </script>
+
+    <script>
+
+        <%
+        for (int i=0;i<commentList.size();i++) {
+        %>
+    $("#reply<%=i%>").click(function(){
+
+    $("#reply<%=i%>").hide();
+    $("#cancel<%=i%>").show();
+    $("#cancel<%=i%>").after("<div id='add<%=i%>'style='height:140px;margin-top:15px;'><form action='Comment' method='post'>" +
+    "<input type='hidden' name='replyInfo' value='<%=client.getStuNum()%>&<%=commentList.get(i).getStuNum()%>&<%=commentList.get(i).getAcNum()%>'>" +
+    "<textarea class='form-control' name='reply' style='' placeholder='write here...' rows='4' style=''></textarea>" +
+    "<button id='send' type='submit' style='float:right;margin-top:10px;' class='btn btn-success'>发送</button>" +
+    "</form></div>");
+
+    });
+
+    $("#cancel<%=i%>").click(function(){
+
+    $("#add<%=i%>").remove();
+    $("#cancel<%=i%>").hide();
+    $("#reply<%=i%>").show();
+    });
+
+        <%
+        }
+        for (int i=0;i<commentList.size();i++) {
+            List<ActReply> actReplyList=activityService.getReplyByACNum(commentList.get(i).getAcNum());
+            for (int j=0;j<actReplyList.size();j++) {
+        %>
+    $("#reply<%=i%><%=j%>").click(function(){
+
+    $("#reply<%=i%><%=j%>").hide();
+    $("#cancel<%=i%><%=j%>").show();
+    $("#cancel<%=i%><%=j%>").after("<div id='add<%=i%><%=j%>'style='height:140px;margin-top:15px;'><form action='Comment' method='post'>" +
+    "<input type='hidden' name='replyInfo' value='<%=client.getStuNum()%>&<%=actReplyList.get(j).getFromID()%>&<%=commentList.get(i).getAcNum()%>'>" +
+    "<textarea class='form-control' name='reply' style='' placeholder='write here...' rows='4' style=''></textarea>" +
+    "<button id='send' type='submit' style='float:right;margin-top:10px;' class='btn btn-success'>发送</button>" +
+    "</form></div>");
+
+    });
+
+    $("#cancel<%=i%><%=j%>").click(function(){
+
+    $("#add<%=i%><%=j%>").remove();
+    $("#cancel<%=i%><%=j%>").hide();
+    $("#reply<%=i%><%=j%>").show();
+    });
+
+
+        <%
+            }
+        }
+        %>
+
 
     </script>
 </body>

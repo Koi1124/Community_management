@@ -2,6 +2,8 @@ package service;
 
 import dao.ActivityDAO;
 import dao.ActivityDAOImp;
+import model.ActComment;
+import model.ActReply;
 import model.Activity;
 
 import java.util.List;
@@ -54,6 +56,33 @@ public class ActivityService {
         if (activityDAO.updateView(activity)>0){
             return true;
         }else return false;
+    }
+
+    public boolean doAddComment(ActComment actComment){
+        if (activityDAO.addComment(actComment)>0){
+            return true;
+        }else return false;
+    }
+
+    public boolean doAddReply(ActReply actReply){
+        if (activityDAO.addReply(actReply)>0){
+            return true;
+        }else return false;
+    }
+
+    public List<ActComment> getCommentByANum(String aNum){
+        List<ActComment> actCommentList=activityDAO.getCommentByANum(aNum);
+        return actCommentList;
+    }
+
+    public List<ActReply> getReplyByACNum(String acNum){
+        List<ActReply> actReplyList=activityDAO.getReplyByUNum(acNum);
+        return actReplyList;
+    }
+
+    public int getCommentCountByANum(String aNum){
+        int count=activityDAO.getCommentCount(aNum);
+        return count;
     }
 
 

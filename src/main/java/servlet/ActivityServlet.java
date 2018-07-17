@@ -77,11 +77,6 @@ public class ActivityServlet extends HttpServlet {
         Date date=new Date();
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String publishTime=simpleDateFormat.format(date);
-        try {
-            Date aPublishTime=simpleDateFormat.parse(publishTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         String cNum=req.getParameter("cNum");
 
         Activity activity=new Activity();

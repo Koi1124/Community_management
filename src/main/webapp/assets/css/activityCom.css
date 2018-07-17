@@ -1,0 +1,175 @@
+@charset "utf-8";
+
+body{
+
+	background-color:#F3F5F8;
+}
+
+
+.wrapper{
+
+	text-align:center;
+	vertical-align: center;
+}
+
+.badge{
+
+	background-color: #F9354C;
+	border-radius: 50%;
+	height:18px;
+	width:18px;
+	margin-top:20px;
+	margin-right:5px;
+	float:right;
+}
+
+.profile label{
+
+	margin-top:10px;
+	font-size:20px;
+	font-weight:normal;
+}
+
+#chat-messages{
+
+	text-align:left;
+	
+	margin-top:50px;
+	overflow-y: auto;
+    overflow-x: hidden;
+}
+
+hr {
+    
+    margin-bottom: 5px;
+}
+
+#chat-messages label {
+
+    color: #aab8c2;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;  
+    display: block;
+}
+
+#chat-messages img{
+
+    width:40px;
+    height:40px;
+    border-radius: 50%;
+    margin-top: 20px;
+}
+
+.name{
+	margin-top: 1px;
+	margin-left: 5px;
+	display: inline;
+	font-size:14px ;
+}
+
+.text{
+    margin-left:75px; 
+    font-size:14px;
+    margin-top:-25px;
+}
+
+.trans{
+
+    color:#00AAFF;
+    background:transparent;
+    border:none;
+    float:right;
+}
+
+.delete{
+
+    float:right;
+}
+
+#sendmessage hr {
+
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#sendmessage textarea {
+
+    overflow:hidden;
+    resize:none;
+}
+
+
+
+.btn-agree{
+
+    color:#41B314;
+    background:transparent;
+    border:none;
+}
+
+img.user-icon{
+
+	border-radius: 50%;
+	width: 48px;
+	margin-top: 10px;
+	margin-left: 20px;
+}
+
+.cominfo{
+	margin-top: 5px;
+	margin-left:75px;
+	font-size:10px;
+}
+
+.hr_1{
+	margin-top: 2px;
+	display: block;	
+}
+
+.hr_2{
+
+	width: 88%;
+	margin-left: 80px;
+	margin-top: 1px;
+}
+
+.replyname{
+
+	margin-top: 5px;
+	margin-left: 5px;
+	display: inline;
+	font-size: 15px;
+}
+
+.replyicon{
+
+	border-radius: 50%;
+	width: 30px;
+	margin-top: 5px;
+	margin-left: 80px;
+}
+
+.replytext{
+
+	margin-left:118px;
+    font-size:14px;
+    margin-top: -10px;
+   
+}
+
+.replyinfo{
+	margin-top: 5px;
+	margin-left:118px;
+	font-size:10px;	
+}
+
+.icon{
+
+	border-radius: 50%;
+	width: 40px;
+	margin-top: 20px;
+	margin-left: 20px;
+}
