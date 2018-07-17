@@ -64,16 +64,16 @@ hr {
 }
 
 .name{
-	margin-top: 1px;
+	margin-top: -1px;
 	margin-left: 5px;
 	display: inline;
-	font-size:14px ;
+	font-size:15px ;
 }
 
 .text{
     margin-left:75px; 
-    font-size:14px;
-    margin-top:-25px;
+    font-size:15px;
+    margin-top:-23px;
 }
 
 .trans{
@@ -125,7 +125,7 @@ img.user-icon{
 }
 
 .hr_1{
-	margin-top: 2px;
+	margin-top: 5px;
 	display: block;	
 }
 
@@ -133,7 +133,7 @@ img.user-icon{
 
 	width: 88%;
 	margin-left: 80px;
-	margin-top: 1px;
+	margin-top: 3px;
 }
 
 .replyname{
@@ -147,14 +147,14 @@ img.user-icon{
 .replyicon{
 
 	border-radius: 50%;
-	width: 30px;
+	width: 35px;
 	margin-top: 5px;
 	margin-left: 80px;
 }
 
 .replytext{
 
-	margin-left:118px;
+	margin-left:123px;
     font-size:14px;
     margin-top: -10px;
    
@@ -162,7 +162,7 @@ img.user-icon{
 
 .replyinfo{
 	margin-top: 5px;
-	margin-left:118px;
+	margin-left:123px;
 	font-size:10px;	
 }
 
