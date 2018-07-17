@@ -62,4 +62,11 @@ public class UserService {
     public String getStuName(String stuNum){
         return userDAO.getStuName(stuNum);
     }
+
+    public String getStuSrc(String stuName){return  userDAO.getStuSrc(stuName);}
+
+    public String getstuNum(String stuName)
+    {
+        return userDAO.getStuNum(stuName);
+    }
 }
