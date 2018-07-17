@@ -174,9 +174,10 @@
                     <div class="panel-body">
                         <h1><%=activity.getaTitle()%></h1>
                         <a href="Community?getCNum=<%=cNum%>&type=normal"><h3><%=communityService.getCNameByCommID(cNum)%></h3></a>
-                        <h5><%=activity.getaDate()%></h5>
-                        <p><%=activity.getaContent()%></p>
-                        <p>访问量：<%=activity.getView()%></p>
+                        <h5><%=activity.getaDate()%>&emsp;&emsp;&emsp;&emsp;&emsp;访问量：<%=activity.getView()%></h5>
+                        <div class="aContent" style="padding:15px; border: 1px solid #ccc;">
+                            <%=activity.getaContent()%>
+                        </div>
                     </div>
                 </div>
             </div>

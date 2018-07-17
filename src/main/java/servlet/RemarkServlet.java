@@ -99,7 +99,7 @@ public class RemarkServlet extends HttpServlet {
     public void deleteRemark(String rNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();
         if (remarkService.doDeleteRemark(rNum)) {
-            out.println("<script language = javascript>alert('DELETE SUCCESS');");
+            out.println("<script language = javascript>");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
             out.println("<script language = javascript>alert('DELETE FAILED');");

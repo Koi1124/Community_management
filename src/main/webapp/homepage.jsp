@@ -159,9 +159,6 @@
                                     <div class="col-md-9">
                                         <div class="rolling">
                                             <div class="roll-title roll-title clearfix">
-                                            	<div align="right">
-                                            	<a href="#">查看更多</a>
-                                            	</div>
                                                 <a class="next">
                                                     <img src="assets/img/arrow-fr.png" alt=""></a>
                                                 <a class="prev">
@@ -175,10 +172,9 @@
                                                          {
                                                     %>
                                                     <li>
-                                                        <a href="Activity?aNum=<%=temp.getaNum()%>" target="_blank"><%=temp.getaTitle()%></a> &emsp; ——
+                                                        <a href="Activity?aNum=<%=temp.getaNum()%>" target="_blank"><%=temp.getaTitle()%></a> &emsp; &emsp;&emsp;——
                                                         <a href="Community?getCNum=<%=temp.getcNum()%>&type=normal"><%=communityService.getCNameByCommID(temp.getcNum())%></a>
                                                         <span><%=temp.getaDate()%></span>
-                                                        <h5 style="max-width: 150px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><%=temp.getaContent()%></h5>
                                                     </li>
                                                     <%
                                                         }

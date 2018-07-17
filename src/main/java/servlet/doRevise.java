@@ -78,18 +78,19 @@ public class doRevise extends HttpServlet {
         String imgUrl = req.getParameter("fileUrl");
         if (!imgUrl.equals("")) {
             String base64img = imgUrl.substring(imgUrl.indexOf(",")+1);
-            String tomcatPath ="D:\\tomcat\\apache-tomcat-7.0.73\\webapps\\ROOT\\assets\\img\\"+stuNum+ UUID.randomUUID().toString()+".png";
-
-            String relPath=tomcatPath.substring(44);
+            //String tomcatPath ="D:\\tomcat\\apache-tomcat-7.0.73\\webapps\\ROOT\\assets\\img\\"+stuNum+ UUID.randomUUID().toString()+".png";
+            //String relPath=tomcatPath.substring(44);
+            //String workPath = "D:\\IDEA\\CommunityTest\\src\\main\\webapp\\"+relPath;
+            String relPath = "assets\\img\\" + stuNum+UUID.randomUUID().toString() + ".png";
+            String tomcatPath = req.getSession().getServletContext().getRealPath("/") + relPath;
             updateUser.setStuSrc(relPath);
-            String workPath = "D:\\IDEA\\CommunityTest\\src\\main\\webapp\\"+relPath;
 
-
-            uploadService.SaveCutImage(base64img,tomcatPath,workPath);
+            uploadService.SaveCutImage(base64img,tomcatPath);
+            //uploadService.SaveCutImage(base64img,tomcatPath,workPath);
         }
         if (userService.doRevise(updateUser)){
             session.setAttribute("curUser",updateUser);
-            out.println("<script language = javascript>alert('SUCCEED');");
+            out.println("<script language = javascript>");
             out.println("location.href='UserInfo.jsp'</script>");
         }else {
             out.println("<script language = javascript>alert('FAIL');");

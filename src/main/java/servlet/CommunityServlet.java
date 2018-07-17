@@ -148,7 +148,7 @@ public class CommunityServlet extends HttpServlet {
             String mNum= UUID.randomUUID().toString().replaceAll("-","");
             message.setmNum(mNum);
             messageService.addMessage(message);
-            out.println("<script language = javascript>alert('DELETE SUCCESS');");
+            out.println("<script language = javascript>");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
             out.println("<script language = javascript>alert('DELETE FAILED');");
@@ -174,7 +174,7 @@ public class CommunityServlet extends HttpServlet {
             String mNum= UUID.randomUUID().toString().replaceAll("-","");
             message.setmNum(mNum);
             messageService.addMessage(message);
-            out.println("<script language = javascript>alert('AGREE SUCCESS');");
+            out.println("<script language = javascript>");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
             content+="被拒绝";
@@ -207,7 +207,7 @@ public class CommunityServlet extends HttpServlet {
                 message.setmNum(mNum);
                 messageService.addMessage(message);
             }
-            out.println("<script language = javascript>alert('TAKEOVER SUCCESS');");
+            out.println("<script language = javascript>");
             out.println("location.href='remark.jsp'</script>");
         }else {
             out.println("<script language = javascript>alert('TAKEOVER FAILED');");
@@ -240,7 +240,7 @@ public class CommunityServlet extends HttpServlet {
             String mNum= UUID.randomUUID().toString().replaceAll("-","");
             message.setmNum(mNum);
             messageService.addMessage(message);
-            out.println("<script language = javascript>alert('UPDATE SUCCESS');");
+            out.println("<script language = javascript>");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
             out.println("<script language = javascript>alert('UPDATE FAILED');");
@@ -272,7 +272,7 @@ public class CommunityServlet extends HttpServlet {
                 message.setmTime(publishTime);
                 messageService.addMessage(message);
             }
-            out.println("<script language = javascript>alert('APPLY SUCCESS');");
+            out.println("<script language = javascript>");
             out.println("location.href='CommunityList.jsp'</script>");
         }else {
             out.println("<script language = javascript>alert('APPLY FAILED');");
@@ -283,7 +283,7 @@ public class CommunityServlet extends HttpServlet {
     public void quitComm(String cNum,String stuNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();
         if (communityService.doDeleteMum(cNum,stuNum)) {
-            out.println("<script language = javascript>alert('QUIT SUCCESS');");
+            out.println("<script language = javascript>");
             out.println("location.href='Community.jsp'</script>");
         }else {
             out.println("<script language = javascript>alert('QUIT FAILED');");
@@ -293,7 +293,7 @@ public class CommunityServlet extends HttpServlet {
 
     public void reviseSyn(String syn,String cNum,PrintWriter out,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         if (communityService.doReviseSyn(syn,cNum)){
-            out.println("<script language = javascript>alert('UPDATE SUCCESS');");
+            out.println("<script language = javascript>");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
             out.println("<script language = javascript>alert('UPDATE FAILED');");

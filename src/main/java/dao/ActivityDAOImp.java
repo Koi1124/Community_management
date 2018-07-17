@@ -97,7 +97,7 @@ public class ActivityDAOImp extends DBconnImp implements ActivityDAO {
     @Override
     public int addActivity(Activity activity) {
         String sql="insert into Activity values(?,?,?,?,?,?)";
-        Object[] objects=new Object[5];
+        Object[] objects=new Object[6];
         objects[0]=activity.getaNum();
         objects[1]=activity.getaContent();
         objects[2]=activity.getaDate();

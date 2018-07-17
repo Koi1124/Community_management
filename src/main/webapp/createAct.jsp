@@ -39,6 +39,27 @@
     <!-- ICONS -->
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
     <link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+
+
+
+    <!--->
+
+    <link rel="stylesheet" type="text/css" href="wangEditor/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="wangEditor/css/HideScrollBar.css">
+
+    <link rel="stylesheet" type="text/css" href="wangEditor/css/common.css">
+    <link rel="stylesheet" type="text/css" href="wangEditor/css/index.css">
+
+
+    <style type="text/css">
+        .toolbar {
+            border: 1px solid #ccc;
+        }
+        .text {
+            border: 1px solid #ccc;
+            height: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -145,17 +166,23 @@
         <div class="main-content">
             <div class="container-fluid">
                 <div class="panel panel-headline">
-                    <form action="Activity" method="post">
+                    <form action="Activity" method="post" id="form1" name="form1">
                         <input type="hidden" name="cNum" value="<%=cNum%>">
                         <div class="panel-body">
                             <h3>创建活动</h3>
                             </br>
                             <input class="form-control input-lg" placeholder="活动名称" name="aTitle" type="text">
                             </br>
-                            <textarea class="form-control" placeholder="活动详情" name="aContent" rows="10"></textarea>
+
+                            <input type="hidden" name="aContent" id="aContent">
+                            <div id="div1" class="toolbar">
+                            </div>
+                            <div id="div2" class="text" style="height: 400px;">
+                                <p>请编辑活动详情</p>
+                            </div>
                             </br>
                             <div style="float: right;">
-                                <button type="submit" class="btn btn-primary">提交</button>
+                                <button  type="button" onclick="submitContent()" class="btn btn-primary">提交</button>
                             </div>
                         </div>
                     </form>
@@ -171,7 +198,50 @@
     <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <script src="assets/scripts/klorofil-common.js"></script>
+
+        <!--   -->
+    <script type="text/javascript" src="wangEditor/js/wangEditor.min.js"></script>
+    <script type="text/javascript" src='wangEditor/js/jquery-1.10.2.min.js'></script>
+    <script type="text/javascript" src='wangEditor/js/bootstrap.min.js'></script>
+    <script type="text/javascript" src="wangEditor/js/index.js"></script>
+    <script type="text/javascript">
+        var E = window.wangEditor;
+        var editor = new E('#div1', '#div2');
+        editor.customConfig.zIndex=100;
+        editor.customConfig.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',  // 字号
+            'fontName',  // 字体
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'list',  // 列表
+            'strikeThrough',  // 删除线
+            'foreColor',  // 文字颜色
+            'backColor',  // 背景颜色
+            'link',  // 插入链接
+            'justify',  // 对齐方式
+            'quote',  // 引用
+            'image',  // 插入图片
+            'undo',  // 撤销
+            'redo'  // 重复
+        ];
+        editor.customConfig.uploadImgShowBase64 = true;
+        editor.customConfig.showLinkImg = false;
+        editor.create()
+    </script>
     <script>
+        function submitContent()
+        {
+            var str=editor.txt.html()
+            document.getElementById("aContent").value = str;
+            document.forms["form1"].submit();
+        }
+    </script>
+        <!--  -->
+
+    <script>
+
         //标记1条已读
         function setNoticeReaded(noticeId, mNum, btn) {
             $("#" + noticeId).slideUp();

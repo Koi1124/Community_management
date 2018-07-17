@@ -58,7 +58,7 @@ public class DeleteCommServlet extends HttpServlet {
                 message.setStuNum(u.getStuNum());
                 messageService.addMessage(message);
             }
-            out.println("<script language = javascript>alert('SUCCEED');");
+            out.println("<script language = javascript>");
             out.println("location.href='comList.jsp'</script>");
         }
         else{

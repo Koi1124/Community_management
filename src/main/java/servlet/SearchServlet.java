@@ -69,7 +69,7 @@ public class SearchServlet extends HttpServlet {
             RequestDispatcher dispatcher = req.getRequestDispatcher("searchResult.jsp");
             dispatcher.forward(req,resp);
         }else{
-            out.println("<script language = javascript>alert('NOT FIND');");
+            out.println("<script language = javascript>alert('NOT FOUND');");
             out.println("location.href='homepage.jsp'</script>");
         }
     }

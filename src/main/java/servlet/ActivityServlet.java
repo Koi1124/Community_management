@@ -106,7 +106,7 @@ public class ActivityServlet extends HttpServlet {
             activities=activityService.getAcFromDB();
             HttpSession session=req.getSession();
             session.setAttribute("alist",activities);
-            out.println("<script language = javascript>alert('CREATE SUCCESS');");
+            out.println("<script language = javascript>");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
             out.println("<script language = javascript>alert('CREATE FAILED');");
@@ -122,7 +122,7 @@ public class ActivityServlet extends HttpServlet {
     public void deleteActivity(String aNum,HttpServletRequest req,HttpServletResponse resp) throws ServletException,IOException{
         PrintWriter out=resp.getWriter();
         if (activityService.doDeleteActivity(aNum)) {
-            out.println("<script language = javascript>alert('DELETE SUCCESS');");
+            out.println("<script language = javascript>");
             out.println("location.href='CommunityManage.jsp'</script>");
         }else {
             out.println("<script language = javascript>alert('DELETE FAILED');");
