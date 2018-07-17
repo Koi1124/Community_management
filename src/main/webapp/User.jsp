@@ -158,7 +158,13 @@
                                 <!--头像-->
                                 <img src=<%=user.getStuSrc()%> class="img-circle" alt="你的头像" width="100px" height="100px">
                                 <!--用户名-->
-                                <h3 class="name"><%=user.getuName()%></h3>
+                                <form action="/chatnews.do" method="post">
+                                <h3 class="name"><%=user.getuName()%>
+                                    <button name="action" value="私信,<%=user.getStuNum()%>" style="border:none;background: transparent;" onmouseover="this.style.color='#3287B2';" onmouseout="this.style.color='';">
+                                        <i class="lnr lnr-envelope"></i>
+                                    </button>
+                                </h3>
+                                </form>
                             </div>
 
                             <div class="profile-stat">
